@@ -3,6 +3,7 @@ version: '3.9'
 services:
   db:
     build: ./db
+    image: ebayclone_buyer_db:latest 
     container_name: ebayclone_buyer_db
     environment:
       MYSQL_ROOT_PASSWORD: root
