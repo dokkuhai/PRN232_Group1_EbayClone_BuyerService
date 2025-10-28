@@ -39,27 +39,31 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             echo "=== Update project ==="
-            cd /home/ec2-user/Group1_EbayClone_BuyerService || git clone https://github.com/<your-org>/Group1_EbayClone_BuyerService.git /home/ec2-user/Group1_EbayClone_BuyerService
+            if [ ! -d "/home/ec2-user/Group1_EbayClone_BuyerService" ]; then
+              git clone https://github.com/dokkuhai/PRN232_Group1_EbayClone_BuyerService.git /home/ec2-user/Group1_EbayClone_BuyerService
+            fi
             cd /home/ec2-user/Group1_EbayClone_BuyerService
             git pull origin main
-
-            echo "===  Ensure Docker installed ==="
+          
+            echo "=== Ensure Docker installed ==="
             if ! command -v docker &> /dev/null; then
               sudo yum update -y
               sudo yum install -y docker
               sudo systemctl enable --now docker
               sudo usermod -aG docker ec2-user
             fi
-
-            echo "===  Ensure Docker Compose installed ==="
+          
+            echo "=== Ensure Docker Compose installed ==="
             if ! command -v docker-compose &> /dev/null; then
               sudo curl -L "https://github.com/docker/compose/releases/download/v2.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
               sudo chmod +x /usr/local/bin/docker-compose
             fi
-
+          
             echo "=== Deploy containers ==="
-            docker-compose down
+            cd /home/ec2-user/Group1_EbayClone_BuyerService
+            docker-compose down || true
             docker-compose pull || true
             docker-compose up -d --build
-
+          
             echo "=== Deployment done ==="
+
