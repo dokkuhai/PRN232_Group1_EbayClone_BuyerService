@@ -14,6 +14,8 @@ builder.Services.ConfigureCors();
 builder.Services.ConfigureLoggerManager();  
 builder.Services.AddSwaggerGen();
 builder.Services.AddAuthorization();
+builder.Services.AddOutputCache();
+builder.Services.AddMemoryCache();
 
 
 var app = builder.Build();
@@ -30,7 +32,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseOutputCache();
 app.UseAuthorization();
 app.UseCors("CorsPolicy");
 
