@@ -12,11 +12,12 @@ services:
     ports:
       - "3307:3306"
     restart: always
-    
+
   api1:
     build:
       context: .                                 
-      dockerfile: ./EbayClone.BuyerService/Dockerfile  
+      dockerfile: ./EbayClone.BuyerService/Dockerfile
+    image: ebayclone_buyer_api1:latest    
     container_name: ebayclone_buyer_api1
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
@@ -32,6 +33,7 @@ services:
     build:
       context: .                                 
       dockerfile: ./EbayClone.BuyerService/Dockerfile
+    image: ebayclone_buyer_api2:latest
     container_name: ebayclone_buyer_api2
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
