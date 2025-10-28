@@ -12,8 +12,8 @@ services:
     ports:
       - "3307:3306"
     restart: always
-
-    api1:
+    
+  api1:
     build:
       context: .                                 
       dockerfile: ./EbayClone.BuyerService/Dockerfile  
@@ -26,7 +26,7 @@ services:
       - "8081"
     depends_on:
       - db
-    restart: always
+    restart: always  
 
   api2:
     build:
