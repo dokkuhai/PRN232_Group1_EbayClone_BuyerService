@@ -1,21 +1,24 @@
-# ./EbayClone.BuyerService/Dockerfile
-# ---- Base build image ----
+# =========================
+# Build stage
+# =========================
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copy 
 COPY . .
 
-# Restore 
 WORKDIR /src/EbayClone.BuyerService
+
+# Restore dependencies
 RUN dotnet restore "EbayClone.BuyerService.csproj"
 
-# Publish app
+# Publish project
 RUN dotnet publish "EbayClone.BuyerService.csproj" -c Release -o /app/publish
 
-# ---- Final runtime image ----
+# =========================
+# Runtime stage
+# =========================
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "EbayClone.BuyerService.dll"]
-
