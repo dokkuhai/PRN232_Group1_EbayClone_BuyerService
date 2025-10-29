@@ -1,96 +1,215 @@
-# PRN232_Group1_EbayClone_BuyerService
-EbayClone is an online marketplace system inspired by eBay, built with .NET 8 Web API following Clean Architecture. It includes modules such as WebApi, Service, Service.Contracts, Repository, Contracts, Shared, and LoggerService, supporting RESTful APIs, JWT authentication, Swagger/OpenAPI, logging, exception handling, and validation.
+#  PRN232_Group1_EbayClone_BuyerService
 
-This project is part of the **EbayClone Microservices System**, focusing on the **Buyer Service**.  
-The Buyer Service handles user interactions related to browsing, searching, and purchasing products.
+**EbayClone BuyerService** is a microservice within the **EbayClone System** – an e-commerce platform inspired by eBay, built with **.NET 8 Web API** using **Clean Architecture** and containerized for deployment.
 
-This README provides an **overview of the solution architecture** and explains the purpose of each core component.  
-Each component will later have its own detailed documentation.
+The BuyerService manages all operations for **Buyer** users, including:
+- Browsing and searching products  
+- Managing shopping carts and orders  
+- Handling buyer profiles  
+- Communicating with other microservices in the EbayClone ecosystem
 
----
-
-## 📂 Project Structure
-
-## 🧩 Components Overview
-
-### 1. Contracts
-- Contains **interfaces** that define the core contracts for repositories and services.
-- Ensures **loose coupling** between layers.
-- Allows easy unit testing and dependency injection.
-
-> Example: `IProductRepository`, `IBuyerService`.
+The project is fully Dockerized, using **Nginx Reverse Proxy** for load balancing multiple API instances, and **GitHub Actions** for automated CI/CD deployment to **Amazon EC2**.
 
 ---
 
-### 2. Entities
-- Represents the **domain models** and **database entities**.
-- Mapped directly to database tables via **ORM (EF Core / Dapper)**.
-- May include entity configurations, relationships, and constraints.
+##  System Architecture
 
-> Example: `Product`, `Order`, `BuyerProfile`.
-
----
-
-### 3. LoggerService
-- Provides a **centralized logging mechanism**.
-- Wraps around logging libraries (e.g., Serilog, NLog, Microsoft.Extensions.Logging).
-- Ensures consistent logging across services and repositories.
-
-> Example: `ILoggerManager` with methods like `LogInfo`, `LogWarn`, `LogError`.
-
----
-
-### 4. Repository
-- Implements **data access logic**.
-- Interacts with the database through Entities.
-- Only focuses on CRUD and query operations.
-
-> Example: `ProductRepository` implementing `IProductRepository`.
+```
+┌───────────────────────────────┐
+│          NGINX (8085:80)      |
+│ Reverse Proxy + Load Balancer │
+└──────────────┬────────────────┘
+               │
+               ▼
+            (8081)               (8081)
+   ┌───────────────────┐     ┌───────────────────┐
+   │  API Instance #1  │     │  API Instance #2  │
+   │ ASP.NET Core 8.0  │     │ ASP.NET Core 8.0  │
+   └───────────────────┘     └───────────────────┘
+               │
+               ▼
+           (3307:3306)
+        ┌──────────────┐
+        │   MySQL DB   │
+        │   (8.0)      │
+        └──────────────┘
+```
 
 ---
 
-### 5. Service
-- Contains **business logic**.
-- Calls repositories to fetch/update data.
-- Applies rules, validations, and transformations.
-- Works as the main layer between **Controllers** and **Repositories**.
+##  Project Structure
 
-> Example: `BuyerService` implementing `IBuyerService`.
+```
+PRN232_Group1_EbayClone_BuyerService/
+│
+├── Dockerfile                              # Build file for API
+├── docker-compose.yml                      # Orchestration stack
+│
+├── EbayClone.BuyerService.CoreAPI/         # ASP.NET Core Web API
+│   ├── Controllers/
+│   ├── Models/
+│   |   ├── Requests/
+│   |   ├── Reponses/   
+│   ├── Repository/
+|   │   ├── Impl/
+|   │   ├── Interface/
+│   ├── Service/
+│   |   ├── Impl/
+│   |   ├── Interface/   
+│   ├── Utils/
+│   ├── Properties
+│   └── Program.cs
+│
+├── db/
+│   └── clone_ebay_mysql_schema.sql         # Initial MySQL schema
+│
+├── nginx/
+│   └── nginx.conf                          # Load balancing + proxy config
+│
+├── ui/                                     # Static web UI 
+│   └── index.html
+│
+└── .github/workflows/ci-cd.yml             # CI/CD pipeline (GitHub Actions)
+```
 
 ---
 
-### 6. Service.Contracts
-- Defines **interfaces for services**.
-- Promotes abstraction and ensures services can be tested or replaced independently.
+## Core Components
 
-> Example: `IBuyerService`, `IOrderService`.
+
+### 2. **Models**
+- Located in `EbayCloneBuyerService_CoreAPI/Models/`
+- Contains **data models**, **DTOs**, and **request/response objects** for the API.
+- Divided into:
+  - `Requests/` → input DTOs for client requests  
+  - `Responses/` → output DTOs for API responses  
+- These models define the structure of data exchanged between frontend and backend.
+
+> Example:  
+> - Request: `CreateOrderRequest`, `LoginRequest`  
+> - Response: `ProductResponse`, `OrderDetailResponse`
+
+### 3. **Repositories**
+- Located in `EbayCloneBuyerService_CoreAPI/Repositories/`
+- Handles all **data access logic** with two main parts:
+  - `Interface/` → repository interfaces (e.g., `IProductRepository`, `IOrderRepository`)
+  - `Impl/` → implementation classes for data access (e.g., `ProductRepository`, `OrderRepository`)
+- Communicates directly with the database via EF Core or raw SQL queries.
+
+> Example:  
+> `ProductRepository` implementing `IProductRepository`
+
+### 4. **Services**
+- Located in `EbayCloneBuyerService_CoreAPI/Services/`
+- Encapsulates **business logic**.
+- Divided into:
+  - `Interface/` → service contracts (e.g., `IOrderService`, `ICartService`)
+  - `Impl/` → service implementations (e.g., `OrderService`, `CartService`)
+- Services use repositories to retrieve and modify data, applying business rules and validations.
+
+> Example:  
+> `BuyerService` implementing `IBuyerService`  
+> `AuthService` implementing `IAuthService`
+
+### 5. **Utils**
+- Located in `EbayCloneBuyerService_CoreAPI/Utils/`
+- Contains **helper classes**, **extensions**, and **utility functions** commonly used across controllers, repositories, and services.
+
+> Example: `JwtHelper`, `PasswordHasher`, `DateTimeExtensions`
 
 ---
 
-### 7. Shared
-- Contains **common utilities, DTOs, constants, and exception classes** shared across layers.
-- Prevents duplication of code and promotes consistency.
+##  Dockerized Architecture
 
-> Example:
-  - **DTOs**: `ProductDto`, `OrderDto`.
-  - **Exceptions**: `NotFoundException`, `ValidationException`.
-  - **Constants**: `AppConstants`.
+###  Run locally
+
+```bash
+docker-compose up --build -d
+```
+
+After starting:
+
+| Service | Port | Description |
+|----------|------|-------------|
+| Nginx (Reverse Proxy) | `8085` | Public entrypoint |
+| API #1 | Internal (8081) | API instance 1 |
+| API #2 | Internal (8081) | API instance 2 |
+| MySQL | `3307` | Database service |
+
+Access:
+- UI → http://localhost:8085  
+- API → http://localhost:8085/api  
+- Swagger → http://localhost:8085/swagger/index.html  
 
 ---
 
-## 🔗 Development Guidelines
+### Load Balancing
 
-1. **Follow Dependency Inversion Principle**  
-   - Always depend on **Contracts**, not implementations.
+`nginx.conf` defines an upstream pool for both API instances:
 
-2. **Keep Layers Independent**  
-   - Services should not directly depend on Entities. Use DTOs from `Shared`.
+```nginx
+upstream api_upstream {
+    server api1:8081;
+    server api2:8081;
+}
+```
 
-3. **Use Dependency Injection**  
-   - Register all services and repositories in `Program.cs` / `Startup.cs`.
+All requests to `/api/` and `/swagger` are proxied through Nginx to `api_upstream` for **round-robin load balancing**.
 
-4. **Centralized Logging & Error Handling**  
-   - Always use `LoggerService` for logging.  
-   - Use `Shared.Exceptions` for standardized error handling.
+---
 
-## Contributors
+## CI/CD Pipeline (GitHub Actions)
+
+Automated build & deployment pipeline to Amazon EC2:
+
+1. **Build Phase**
+   - Build API from root `Dockerfile`
+   - Push image to Docker Hub (`ebayclone-buyer-api:latest`)
+
+2. **Deploy Phase**
+   - SSH into EC2 (`ec2-user`)
+   - Pull latest repo & Docker image
+   - Run `docker-compose up -d --build`
+   - Nginx automatically reloads
+
+Workflow: `.github/workflows/ci-cd.yml`
+
+> Required GitHub Secrets:
+> - `DOCKER_USERNAME`, `DOCKER_PASSWORD`  
+> - `SERVER_IP`, `SERVER_SSH_KEY`
+
+---
+
+## Database Initialization
+
+- On the first MySQL container startup, `clone_ebay_mysql_schema.sql` is automatically imported.
+- Data is stored persistently in the named Docker volume `db_data`.
+- Rebuilds or restarts **will not remove data** unless the volume is deleted manually.
+
+>  Data is lost only when removing the volume using `docker-compose down -v` or `docker volume rm db_data`.
+
+---
+
+##  Useful Docker Commands
+
+| Command | Description |
+|----------|-------------|
+| `docker-compose up -d --build` | Build & start all services |
+| `docker-compose down` | Stop all containers (preserve data) |
+| `docker-compose down -v` | Stop & delete database volume (erase data) |
+| `docker logs <container>` | View container logs |
+| `docker exec -it ebayclone_buyer_db bash` | Access MySQL container shell |
+
+---
+
+##  Database Backup & Restore
+
+Backup:
+```bash
+docker exec ebayclone_buyer_db mysqldump -uroot -proot CloneEbayDB > backup.sql
+```
+
+Restore:
+```bash
+docker exec -i ebayclone_buyer_db mysql -uroot -proot CloneEbayDB < backup.sql
+```
