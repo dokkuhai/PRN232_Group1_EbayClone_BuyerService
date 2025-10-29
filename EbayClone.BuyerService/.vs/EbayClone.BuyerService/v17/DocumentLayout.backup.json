@@ -3,12 +3,11 @@
   "WorkspaceRootPath": "D:\\PRN232\\Project\\Group1_EbayClone_BuyerService\\EbayClone.BuyerService\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{817BABFE-5AA3-40CA-A884-1C4F6BAA1125}|EbayClone.BuyerService.csproj|d:\\prn232\\project\\group1_ebayclone_buyerservice\\ebayclone.buyerservice\\extensions\\serviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{817BABFE-5AA3-40CA-A884-1C4F6BAA1125}|EbayClone.BuyerService.csproj|solutionrelative:extensions\\serviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F6F3992F-4B29-40A5-B6F5-EF9EE1869CDA}|..\\Contracts\\Contracts.csproj|d:\\prn232\\project\\group1_ebayclone_buyerservice\\contracts\\iloggermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{817BABFE-5AA3-40CA-A884-1C4F6BAA1125}|EbayClone.BuyerService.csproj|d:\\prn232\\project\\group1_ebayclone_buyerservice\\ebayclone.buyerservice\\extensions\\exceptionmiddlewareextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{817BABFE-5AA3-40CA-A884-1C4F6BAA1125}|EbayClone.BuyerService.csproj|solutionrelative:extensions\\exceptionmiddlewareextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{817BABFE-5AA3-40CA-A884-1C4F6BAA1125}|EbayClone.BuyerService.csproj|d:\\prn232\\project\\group1_ebayclone_buyerservice\\ebayclone.buyerservice\\extensions\\serviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{817BABFE-5AA3-40CA-A884-1C4F6BAA1125}|EbayClone.BuyerService.csproj|solutionrelative:extensions\\serviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{817BABFE-5AA3-40CA-A884-1C4F6BAA1125}|EbayClone.BuyerService.csproj|d:\\prn232\\project\\group1_ebayclone_buyerservice\\ebayclone.buyerservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -37,7 +36,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -53,15 +52,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ExceptionMiddlewareExtensions.cs",
-              "DocumentMoniker": "D:\\PRN232\\Project\\Group1_EbayClone_BuyerService\\EbayClone.BuyerService\\Extensions\\ExceptionMiddlewareExtensions.cs",
-              "RelativeDocumentMoniker": "Extensions\\ExceptionMiddlewareExtensions.cs",
-              "ToolTip": "D:\\PRN232\\Project\\Group1_EbayClone_BuyerService\\EbayClone.BuyerService\\Extensions\\ExceptionMiddlewareExtensions.cs",
-              "RelativeToolTip": "Extensions\\ExceptionMiddlewareExtensions.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "ILoggerManager.cs",
+              "DocumentMoniker": "D:\\PRN232\\Project\\Group1_EbayClone_BuyerService\\Contracts\\ILoggerManager.cs",
+              "RelativeDocumentMoniker": "..\\Contracts\\ILoggerManager.cs",
+              "ToolTip": "D:\\PRN232\\Project\\Group1_EbayClone_BuyerService\\Contracts\\ILoggerManager.cs",
+              "RelativeToolTip": "..\\Contracts\\ILoggerManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-22T02:57:10.403Z"
+              "WhenOpened": "2025-10-29T04:40:49.64Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -101,7 +101,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "ServiceExtensions.cs",
               "DocumentMoniker": "D:\\PRN232\\Project\\Group1_EbayClone_BuyerService\\EbayClone.BuyerService\\Extensions\\ServiceExtensions.cs",
               "RelativeDocumentMoniker": "Extensions\\ServiceExtensions.cs",
