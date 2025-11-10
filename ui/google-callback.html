@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Đang xử lý đăng nhập...</title>
+	<style>
+		/* Chỉ là hiệu ứng cho đẹp mắt, không bắt buộc */
+		body {
+			font-family: Arial, sans-serif;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			background-color: #f4f4f4;
+		}
+
+		.container {
+			text-align: center;
+		}
+
+		.loader {
+			border: 8px solid #f3f3f3;
+			border-top: 8px solid #3498db;
+			border-radius: 50%;
+			width: 60px;
+			height: 60px;
+			animation: spin 1s linear infinite;
+			margin: 20px auto;
+		}
+
+		@keyframes spin {
+			0% {
+				transform: rotate(0deg);
+			}
+
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+	</style>
+</head>
+
+<body>
+
+	<div class="container">
+		<div class="loader"></div>
+		<p>Vui lòng đợi, đang xác thực...</p>
+	</div>
+
+	<script>
+		// Tự động chạy ngay khi trang được tải
+		(async () => {
+			// === 1. Lấy 'code' từ URL ===
+			const params = new URLSearchParams(window.location.search);
+			const code = params.get('code');
+
+			// === 2. Cấu hình các URL của bạn ===
+
+			// Đây là API Backend (.NET) của bạn
+			const API_BACKEND_URL = 'https://localhost:7020/api/User/google-login';
+
+			// Nơi chuyển hướng sau khi ĐĂNG NHẬP THÀNH CÔNG
+			const HOME_PAGE_URL = '/dashboard.html'; // Sửa lại thành trang dashboard/home
+
+			// Nơi chuyển hướng nếu ĐĂNG NHẬP THẤT BẠI
+			const LOGIN_PAGE_URL = '/login.html'; // Sửa lại thành trang login
+
+			// =====================================
+
+			if (code) {
+				// Có 'code', tiến hành gửi lên Backend
+				try {
+					// === 3. Gọi API Backend (của bạn) ===
+					const response = await fetch(API_BACKEND_URL, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						// Gửi 'code' trong body
+						body: JSON.stringify({ code: code }),
+					});
+
+					if (response.ok) {
+						// === 4. Lấy JWT từ API trả về ===
+						const data = await response.json(); // { token: "your_jwt_here" }
+
+						// Lưu JWT vào localStorage
+						localStorage.setItem('userToken', data.token);
+
+						// === 5. Chuyển hướng đến trang chính ===
+						window.location.href = HOME_PAGE_URL;
+
+					} else {
+						// API của bạn trả về lỗi (ví dụ: code hết hạn)
+						console.error('Lỗi từ API:', await response.text());
+						//window.location.href = LOGIN_PAGE_URL + '?error=api';
+					}
+				} catch (error) {
+					// Lỗi mạng hoặc không gọi được API
+					console.error('Lỗi khi gọi API:', error);
+					//window.location.href = LOGIN_PAGE_URL + '?error=network';
+				}
+			} else {
+				// Người dùng hủy hoặc có lỗi gì đó, không có 'code'
+				console.error('Không tìm thấy code trong URL');
+				//window.location.href = LOGIN_PAGE_URL + '?error=no_code';
+			}
+		})();
+	</script>
+</body>
+
+</html>
