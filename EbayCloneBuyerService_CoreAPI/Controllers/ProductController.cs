@@ -2,6 +2,7 @@
 using EbayCloneBuyerService_CoreAPI.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 
 namespace EbayCloneBuyerService_CoreAPI.Controllers
 {
@@ -15,6 +16,7 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
             _product = product;
         }
         [HttpGet]
+        [EnableQuery]
         public IActionResult GetAllProducts()
         {
             var products = _product.GetAllAsync();

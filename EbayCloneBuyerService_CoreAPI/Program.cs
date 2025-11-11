@@ -3,7 +3,11 @@ using EbayCloneBuyerService_CoreAPI.Repositories.Impl;
 using EbayCloneBuyerService_CoreAPI.Repositories.Interface;
 using EbayCloneBuyerService_CoreAPI.Services.Impl;
 using EbayCloneBuyerService_CoreAPI.Services.Interface;
+using Microsoft.AspNetCore.OData;
+using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OData.Edm;
+using Microsoft.OData.ModelBuilder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +17,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+// odata
+builder.Services.AddControllers()
+    .AddOData(options =>
+        options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null)
+            .AddRouteComponents("odata", GetEdmModel()));
 // ===== JWT Authentication & Authorization =====
 
 
@@ -60,3 +68,11 @@ app.UseCors("AllowAll");
 app.MapControllers();
 
 app.Run();
+
+static IEdmModel GetEdmModel()
+{
+    var builder = new ODataConventionModelBuilder();
+    builder.EntitySet<Category>("Category");
+    builder.EntitySet<Product>("Product");
+    return builder.GetEdmModel();
+}
