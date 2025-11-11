@@ -47,13 +47,12 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
 
             var tokenParams = new Dictionary<string, string>
         {
-            { "client_id", _configuration["GoogleAuth:ClientId"] },
-            { "client_secret", _configuration["GoogleAuth:ClientSecret"] },
-            { "code", request.Code },
-            { "grant_type", "authorization_code" },
-            // URI này phải KHỚP 100% với cái bạn dùng ở FE để lấy code
-            { "redirect_uri", _configuration["GoogleAuth:RedirectUri"] }
-        };
+    { "client_id", Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID") },
+    { "client_secret", Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET") },
+    { "code", request.Code },
+    { "grant_type", "authorization_code" },
+    { "redirect_uri", Environment.GetEnvironmentVariable("GOOGLE_REDIRECT_URI") }
+};
 
             var response = await client.PostAsync(tokenEndpoint, new FormUrlEncodedContent(tokenParams));
             if (!response.IsSuccessStatusCode)
@@ -63,7 +62,7 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
 
             var json = await response.Content.ReadAsStringAsync();
             var tokenResponse = JsonSerializer.Deserialize<GoogleTokenResponse>(json);
-
+            Console.WriteLine("Token Response: " + json);
             var userInfoEndpoint = "https://www.googleapis.com/oauth2/v2/userinfo";
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
 

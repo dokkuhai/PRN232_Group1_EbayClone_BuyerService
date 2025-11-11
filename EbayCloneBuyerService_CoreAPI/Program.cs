@@ -1,3 +1,4 @@
+using DotNetEnv;
 using EbayCloneBuyerService_CoreAPI.Exceptions;
 using EbayCloneBuyerService_CoreAPI.Models;
 using EbayCloneBuyerService_CoreAPI.MyProfile;
@@ -11,6 +12,12 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient();
 // Add services to the container.
+
+// Load file .env
+Env.Load();
+
+var googleClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
+var googleClientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET");
 
 
 builder.Services.AddControllers();
