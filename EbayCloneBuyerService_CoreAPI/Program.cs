@@ -1,6 +1,8 @@
 using EbayCloneBuyerService_CoreAPI.Models;
 using EbayCloneBuyerService_CoreAPI.Repositories.Impl;
 using EbayCloneBuyerService_CoreAPI.Repositories.Interface;
+using EbayCloneBuyerService_CoreAPI.Services.Impl;
+using EbayCloneBuyerService_CoreAPI.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +30,7 @@ builder.Services.AddDbContext<CloneEbayDbContext>(options =>
 builder.Services.AddScoped(typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IProductRepo, ProductRepo>();
+builder.Services.AddScoped<IProductServices, ProductServices>();
 
 
 

@@ -346,6 +346,42 @@
 	<script src="assets/js/sticker.js"></script>
 	<!-- main js -->
 	<script src="assets/js/main.js"></script>
+<script>
+    const apiBaseUrl = "https://localhost:7020/api/Product/";
+
+    // Lấy id từ URL (VD: single-product.html?id=3)
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get("id") || 1;
+
+    async function loadProduct() {
+        try {
+            const res = await fetch(apiBaseUrl + productId);
+            if (!res.ok) throw new Error("Không thể tải sản phẩm");
+            const product = await res.json();
+
+            // Gán dữ liệu vào giao diện
+            document.querySelector(".single-product-img img").src = "assets/img/products/" + product.images;
+            document.querySelector(".single-product-content h3").textContent = product.title;
+            document.querySelector(".single-product-pricing").innerHTML = `<span>Price</span> $${product.price}`;
+            document.querySelector(".single-product-content p:nth-of-type(2)").textContent = product.description;
+            document.querySelector(".single-product-form p strong").nextSibling.textContent = " Category ID: " + product.categoryId;
+
+            // Nếu là sản phẩm đấu giá (isAuction = true)
+            if (product.isAuction) {
+                const auctionInfo = document.createElement("p");
+                auctionInfo.innerHTML = `<strong>Auction ends:</strong> ${new Date(product.auctionEndTime).toLocaleString()}`;
+                document.querySelector(".single-product-content").appendChild(auctionInfo);
+            }
+
+        } catch (err) {
+            console.error(err);
+            document.querySelector(".single-product-content").innerHTML = "<p>Không thể tải dữ liệu sản phẩm.</p>";
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadProduct);
+</script>
 
 </body>
+
 </html>
