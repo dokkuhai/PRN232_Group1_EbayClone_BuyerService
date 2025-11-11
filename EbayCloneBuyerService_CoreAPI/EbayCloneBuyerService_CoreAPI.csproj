@@ -19,8 +19,6 @@
 
   <ItemGroup>
     <Folder Include="Models\Requests\" />
-    <Folder Include="Services\Impl\" />
-    <Folder Include="Services\Interface\" />
     <Folder Include="Utils\" />
   </ItemGroup>
 

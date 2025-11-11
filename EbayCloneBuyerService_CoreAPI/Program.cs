@@ -17,7 +17,6 @@ builder.Services.AddSwaggerGen();
 
 
 
-
 // ===== DB Context =====
 builder.Services.AddDbContext<CloneEbayDbContext>(options =>
     options.UseMySql(
@@ -28,7 +27,7 @@ builder.Services.AddDbContext<CloneEbayDbContext>(options =>
 // ===== DI: Repository & Service =====
 builder.Services.AddScoped(typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
+builder.Services.AddScoped<IProductRepo, ProductRepo>();
 
 
 

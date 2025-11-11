@@ -1,0 +1,26 @@
+﻿using EbayCloneBuyerService_CoreAPI.Models;
+using EbayCloneBuyerService_CoreAPI.Repositories.Interface;
+using Microsoft.EntityFrameworkCore;
+
+namespace EbayCloneBuyerService_CoreAPI.Repositories.Impl
+{
+    public class ProductRepo : IProductRepo
+    {
+        private readonly CloneEbayDbContext _context;
+
+        public ProductRepo(CloneEbayDbContext context)
+        {
+            _context = context;
+        }
+
+        public  IEnumerable<Product> GetAllAsync()
+        {
+            return _context.Products.AsQueryable();
+        }
+
+        public async Task<Product?> GetByIdAsync(int id)
+        {
+            return await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+        }
+    }
+}
