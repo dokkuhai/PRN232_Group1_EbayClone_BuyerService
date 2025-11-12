@@ -4,7 +4,7 @@ namespace EbayCloneBuyerService_CoreAPI.Repositories.Interface
 {
     public interface IProductRepo
     {
-        IEnumerable<Product> GetAllAsync();
+        IQueryable<Product> GetAllAsync();
         Task<Product?> GetByIdAsync(int id);
     }
 }

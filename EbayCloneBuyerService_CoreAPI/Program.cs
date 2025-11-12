@@ -1,4 +1,4 @@
-using EbayCloneBuyerService_CoreAPI.Models;
+﻿using EbayCloneBuyerService_CoreAPI.Models;
 using EbayCloneBuyerService_CoreAPI.Repositories.Impl;
 using EbayCloneBuyerService_CoreAPI.Repositories.Interface;
 using EbayCloneBuyerService_CoreAPI.Services.Impl;
@@ -19,9 +19,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // odata
 builder.Services.AddControllers()
+    .AddJsonOptions(x =>
+    {
+        x.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        x.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+    })
     .AddOData(options =>
         options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null)
-            .AddRouteComponents("odata", GetEdmModel()));
+            .AddRouteComponents("api", GetEdmModel()));
+
 // ===== JWT Authentication & Authorization =====
 
 

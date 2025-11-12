@@ -13,14 +13,15 @@ namespace EbayCloneBuyerService_CoreAPI.Repositories.Impl
             _context = context;
         }
 
-        public  IEnumerable<Product> GetAllAsync()
+        public  IQueryable<Product> GetAllAsync()
         {
-            return _context.Products.AsQueryable();
+            return _context.Products.Include(p => p.Category).Include(s => s.Seller).AsQueryable();
         }
 
         public async Task<Product?> GetByIdAsync(int id)
         {
-            return await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+            return await _context.Products.Include(p => p.Category)
+                .Include(p => p.Seller).FirstOrDefaultAsync(p => p.Id == id);
         }
     }
 }

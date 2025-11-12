@@ -23,6 +23,7 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
             return Ok(products);
         }
         [HttpGet("{id}")]
+        [EnableQuery]
         public async Task<IActionResult> GetProductById(int id)
         {
             var product = await _product.GetByIdAsync(id);
