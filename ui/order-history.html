@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Order History - eBay Clone</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+	<style>
+		body {
+			background-color: #f8f9fa;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		}
+
+		.page-header {
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			color: white;
+			padding: 2rem 0;
+			margin-bottom: 2rem;
+			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		}
+
+		.filter-card {
+			background: white;
+			border-radius: 12px;
+			padding: 1.5rem;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+			margin-bottom: 2rem;
+		}
+
+		.order-card {
+			background: white;
+			border-radius: 12px;
+			padding: 1.5rem;
+			margin-bottom: 1.5rem;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+			transition: transform 0.2s, box-shadow 0.2s;
+		}
+
+		.order-card:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+		}
+
+		.order-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding-bottom: 1rem;
+			border-bottom: 1px solid #e0e0e0;
+			margin-bottom: 1rem;
+		}
+
+		.order-id {
+			font-weight: 600;
+			font-size: 1.1rem;
+			color: #333;
+		}
+
+		.status-badge {
+			padding: 0.5rem 1rem;
+			border-radius: 20px;
+			font-size: 0.875rem;
+			font-weight: 600;
+			text-transform: uppercase;
+		}
+
+		.status-pending {
+			background-color: #fff4e6;
+			color: #f57c00;
+		}
+
+		.status-in-transit,
+		.status-in.transit {
+			background-color: #e3f2fd;
+			color: #1976d2;
+		}
+
+		.status-delivered {
+			background-color: #e8f5e9;
+			color: #388e3c;
+		}
+
+		.status-cancelled {
+			background-color: #ffebee;
+			color: #d32f2f;
+		}
+
+		.order-info {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.order-details span {
+			display: inline-block;
+			margin-right: 1.5rem;
+			color: #666;
+		}
+
+		.order-details i {
+			color: #667eea;
+			margin-right: 0.5rem;
+		}
+
+		.order-total {
+			font-size: 1.5rem;
+			font-weight: 700;
+			color: #667eea;
+		}
+
+		.btn-view-detail {
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			color: white;
+			border: none;
+			padding: 0.5rem 1.5rem;
+			border-radius: 8px;
+			transition: all 0.3s;
+		}
+
+		.btn-view-detail:hover {
+			transform: scale(1.05);
+			box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+			color: white;
+		}
+
+		.empty-state {
+			text-align: center;
+			padding: 4rem 2rem;
+			background: white;
+			border-radius: 12px;
+		}
+
+		.empty-state i {
+			font-size: 5rem;
+			color: #e0e0e0;
+			margin-bottom: 1rem;
+		}
+
+		.shipping-status {
+			font-size: 0.875rem;
+			color: #666;
+			margin-top: 0.5rem;
+		}
+
+		.shipping-status i {
+			color: #1976d2;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Header -->
+	<div class="page-header">
+		<div class="container">
+			<h1 class="mb-0"><i class="fas fa-shopping-bag me-2"></i>Order History</h1>
+			<p class="mb-0 mt-2">Track and manage your orders</p>
+		</div>
+	</div>
+
+	<div class="container">
+		<!-- Filters -->
+		<div class="filter-card">
+			<div class="row g-3">
+				<div class="col-md-4">
+					<label class="form-label"><i class="fas fa-filter me-2"></i>Filter by Status</label>
+					<select id="statusFilter" class="form-select">
+						<option value="">All Orders</option>
+						<option value="Pending">Pending</option>
+						<option value="In Transit">In Transit</option>
+						<option value="Delivered">Delivered</option>
+						<option value="Cancelled">Cancelled</option>
+					</select>
+				</div>
+				<div class="col-md-4">
+					<label class="form-label"><i class="fas fa-sort me-2"></i>Sort By</label>
+					<select id="sortOrder" class="form-select">
+						<option value="newest">Newest First</option>
+						<option value="oldest">Oldest First</option>
+						<option value="price-high">Price: High to Low</option>
+						<option value="price-low">Price: Low to High</option>
+					</select>
+				</div>
+				<div class="col-md-4 d-flex align-items-end">
+					<button id="applyFilters" class="btn btn-view-detail w-100">
+						<i class="fas fa-search me-2"></i>Apply Filters
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Orders List -->
+		<div id="ordersContainer">
+			<!-- Loading indicator -->
+			<div id="loading" class="text-center py-5">
+				<div class="spinner-border text-primary" role="status">
+					<span class="visually-hidden">Loading...</span>
+				</div>
+				<p class="mt-3">Loading your orders...</p>
+			</div>
+		</div>
+
+		<!-- Pagination -->
+		<nav id="paginationNav" class="mt-4 d-none">
+			<ul class="pagination justify-content-center">
+				<!-- Pagination will be generated dynamically -->
+			</ul>
+		</nav>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		const BUYER_ID = 1; // In real app, this would come from authentication
+		let currentPage = 1;
+		const pageSize = 10;
+		let allOrders = [];
+
+		// Load orders on page load
+		document.addEventListener('DOMContentLoaded', () => {
+			loadOrders();
+
+			// Apply filters event
+			document.getElementById('applyFilters').addEventListener('click', () => {
+				currentPage = 1;
+				loadOrders();
+			});
+		});
+
+		async function loadOrders() {
+			const loading = document.getElementById('loading');
+			const container = document.getElementById('ordersContainer');
+
+			loading.classList.remove('d-none');
+
+			try {
+				const statusFilter = document.getElementById('statusFilter').value;
+				let url = `/api/orders?buyerId=${BUYER_ID}&page=${currentPage}&pageSize=${pageSize}`;
+
+				if (statusFilter) {
+					url += `&status=${encodeURIComponent(statusFilter)}`;
+				}
+
+				const response = await fetch(url);
+				const result = await response.json();
+
+				if (result.statusCode === 200) {
+					allOrders = result.data;
+					applySorting();
+					displayOrders(allOrders);
+				} else {
+					showError('Failed to load orders: ' + result.message);
+				}
+			} catch (error) {
+				console.error('Error loading orders:', error);
+				showError('Failed to load orders. Please try again.');
+			} finally {
+				loading.classList.add('d-none');
+			}
+		}
+
+		function applySorting() {
+			const sortOrder = document.getElementById('sortOrder').value;
+
+			switch (sortOrder) {
+				case 'oldest':
+					allOrders.sort((a, b) => new Date(a.orderDate) - new Date(b.orderDate));
+					break;
+				case 'price-high':
+					allOrders.sort((a, b) => b.totalPrice - a.totalPrice);
+					break;
+				case 'price-low':
+					allOrders.sort((a, b) => a.totalPrice - b.totalPrice);
+					break;
+				case 'newest':
+				default:
+					allOrders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
+					break;
+			}
+		}
+
+		function displayOrders(orders) {
+			const container = document.getElementById('ordersContainer');
+			container.innerHTML = '';
+
+			if (orders.length === 0) {
+				container.innerHTML = `
+					<div class="empty-state">
+						<i class="fas fa-box-open"></i>
+						<h3>No orders found</h3>
+						<p class="text-muted">You haven't placed any orders yet, or no orders match your filters.</p>
+						<a href="shop.html" class="btn btn-view-detail mt-3">
+							<i class="fas fa-shopping-cart me-2"></i>Start Shopping
+						</a>
+					</div>
+				`;
+				return;
+			}
+
+			orders.forEach(order => {
+				const orderCard = createOrderCard(order);
+				container.innerHTML += orderCard;
+			});
+		}
+
+		function createOrderCard(order) {
+			const orderDate = new Date(order.orderDate).toLocaleDateString('en-US', {
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric'
+			});
+
+			const statusClass = getStatusClass(order.status);
+			const shippingInfo = order.latestShippingStatus ? 
+				`<div class="shipping-status"><i class="fas fa-truck"></i> Shipping: ${order.latestShippingStatus}</div>` : 
+				'';
+
+			return `
+				<div class="order-card">
+					<div class="order-header">
+						<div>
+							<div class="order-id">Order #${order.orderId}</div>
+							<small class="text-muted">${orderDate}</small>
+						</div>
+						<span class="status-badge ${statusClass}">${order.status}</span>
+					</div>
+					<div class="order-info">
+						<div class="order-details">
+							<span><i class="fas fa-box"></i>${order.itemCount} item(s)</span>
+							<span class="order-total">$${order.totalPrice.toFixed(2)}</span>
+						</div>
+						<button onclick="viewOrderDetail(${order.orderId})" class="btn btn-view-detail">
+							<i class="fas fa-eye me-2"></i>View Details
+						</button>
+					</div>
+					${shippingInfo}
+				</div>
+			`;
+		}
+
+		function getStatusClass(status) {
+			const statusMap = {
+				'Pending': 'status-pending',
+				'In Transit': 'status-in-transit',
+				'Delivered': 'status-delivered',
+				'Cancelled': 'status-cancelled'
+			};
+			return statusMap[status] || 'status-pending';
+		}
+
+		function viewOrderDetail(orderId) {
+			window.location.href = `order-detail.html?orderId=${orderId}`;
+		}
+
+		function showError(message) {
+			const container = document.getElementById('ordersContainer');
+			container.innerHTML = `
+				<div class="alert alert-danger" role="alert">
+					<i class="fas fa-exclamation-triangle me-2"></i>${message}
+				</div>
+			`;
+		}
+	</script>
+</body>
+
+</html>
