@@ -1,30 +1,30 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\PRN232\\Project\\Group1_EbayClone_BuyerService\\",
+  "WorkspaceRootPath": "C:\\Users\\Admin\\Desktop\\PRN all\\projectPRN232\\PRN232_Group1_EbayClone_BuyerService\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|d:\\prn232\\project\\group1_ebayclone_buyerservice\\ebayclonebuyerservice_coreapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|c:\\users\\admin\\desktop\\prn all\\projectprn232\\prn232_group1_ebayclone_buyerservice\\ebayclonebuyerservice_coreapi\\services\\impl\\productservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|solutionrelative:ebayclonebuyerservice_coreapi\\services\\impl\\productservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|c:\\users\\admin\\desktop\\prn all\\projectprn232\\prn232_group1_ebayclone_buyerservice\\ebayclonebuyerservice_coreapi\\repositories\\impl\\productrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|solutionrelative:ebayclonebuyerservice_coreapi\\repositories\\impl\\productrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|c:\\users\\admin\\desktop\\prn all\\projectprn232\\prn232_group1_ebayclone_buyerservice\\ebayclonebuyerservice_coreapi\\repositories\\interface\\iproductrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|solutionrelative:ebayclonebuyerservice_coreapi\\repositories\\interface\\iproductrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|c:\\users\\admin\\desktop\\prn all\\projectprn232\\prn232_group1_ebayclone_buyerservice\\ebayclonebuyerservice_coreapi\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|solutionrelative:ebayclonebuyerservice_coreapi\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|c:\\users\\admin\\desktop\\prn all\\projectprn232\\prn232_group1_ebayclone_buyerservice\\ebayclonebuyerservice_coreapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|solutionrelative:ebayclonebuyerservice_coreapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|d:\\prn232\\project\\group1_ebayclone_buyerservice\\ebayclonebuyerservice_coreapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|solutionrelative:ebayclonebuyerservice_coreapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|d:\\prn232\\project\\group1_ebayclone_buyerservice\\ebayclonebuyerservice_coreapi\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|solutionrelative:ebayclonebuyerservice_coreapi\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|d:\\prn232\\project\\group1_ebayclone_buyerservice\\ebayclonebuyerservice_coreapi\\models\\reponses\\apiresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|solutionrelative:ebayclonebuyerservice_coreapi\\models\\reponses\\apiresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|d:\\prn232\\project\\group1_ebayclone_buyerservice\\ebayclonebuyerservice_coreapi\\repositories\\impl\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|solutionrelative:ebayclonebuyerservice_coreapi\\repositories\\impl\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|d:\\prn232\\project\\group1_ebayclone_buyerservice\\ebayclonebuyerservice_coreapi\\repositories\\interface\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|solutionrelative:ebayclonebuyerservice_coreapi\\repositories\\interface\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|c:\\users\\admin\\desktop\\prn all\\projectprn232\\prn232_group1_ebayclone_buyerservice\\ebayclonebuyerservice_coreapi\\models\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA1FFAB2-AF15-4DD2-A6BA-ED7DED565861}|EbayCloneBuyerService_CoreAPI\\EbayCloneBuyerService_CoreAPI.csproj|solutionrelative:ebayclonebuyerservice_coreapi\\models\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -51,79 +51,79 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "appsettings.Development.json",
-              "DocumentMoniker": "D:\\PRN232\\Project\\Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\appsettings.Development.json",
-              "RelativeDocumentMoniker": "EbayCloneBuyerService_CoreAPI\\appsettings.Development.json",
-              "ToolTip": "D:\\PRN232\\Project\\Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\appsettings.Development.json",
-              "RelativeToolTip": "EbayCloneBuyerService_CoreAPI\\appsettings.Development.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAACAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-10-29T06:15:22.544Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\PRN232\\Project\\Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\Program.cs",
-              "RelativeDocumentMoniker": "EbayCloneBuyerService_CoreAPI\\Program.cs",
-              "ToolTip": "D:\\PRN232\\Project\\Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\Program.cs",
-              "RelativeToolTip": "EbayCloneBuyerService_CoreAPI\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "Title": "IProductRepo.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\PRN all\\projectPRN232\\PRN232_Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\Repositories\\Interface\\IProductRepo.cs",
+              "RelativeDocumentMoniker": "EbayCloneBuyerService_CoreAPI\\Repositories\\Interface\\IProductRepo.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\PRN all\\projectPRN232\\PRN232_Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\Repositories\\Interface\\IProductRepo.cs",
+              "RelativeToolTip": "EbayCloneBuyerService_CoreAPI\\Repositories\\Interface\\IProductRepo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-29T06:14:08.583Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "APIResponse.cs",
-              "DocumentMoniker": "D:\\PRN232\\Project\\Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\Models\\Reponses\\APIResponse.cs",
-              "RelativeDocumentMoniker": "EbayCloneBuyerService_CoreAPI\\Models\\Reponses\\APIResponse.cs",
-              "ToolTip": "D:\\PRN232\\Project\\Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\Models\\Reponses\\APIResponse.cs",
-              "RelativeToolTip": "EbayCloneBuyerService_CoreAPI\\Models\\Reponses\\APIResponse.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-29T06:13:20.908Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "GenericRepository.cs",
-              "DocumentMoniker": "D:\\PRN232\\Project\\Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\Repositories\\Impl\\GenericRepository.cs",
-              "RelativeDocumentMoniker": "EbayCloneBuyerService_CoreAPI\\Repositories\\Impl\\GenericRepository.cs",
-              "ToolTip": "D:\\PRN232\\Project\\Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\Repositories\\Impl\\GenericRepository.cs",
-              "RelativeToolTip": "EbayCloneBuyerService_CoreAPI\\Repositories\\Impl\\GenericRepository.cs",
-              "ViewState": "AgIAAAEAAAAAAAAAAAAmwBEAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-29T06:11:26.284Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "IGenericRepository.cs",
-              "DocumentMoniker": "D:\\PRN232\\Project\\Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\Repositories\\Interface\\IGenericRepository.cs",
-              "RelativeDocumentMoniker": "EbayCloneBuyerService_CoreAPI\\Repositories\\Interface\\IGenericRepository.cs",
-              "ToolTip": "D:\\PRN232\\Project\\Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\Repositories\\Interface\\IGenericRepository.cs",
-              "RelativeToolTip": "EbayCloneBuyerService_CoreAPI\\Repositories\\Interface\\IGenericRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-29T06:10:08.748Z",
+              "WhenOpened": "2025-11-12T07:22:09.138Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "D:\\PRN232\\Project\\Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\appsettings.json",
-              "RelativeDocumentMoniker": "EbayCloneBuyerService_CoreAPI\\appsettings.json",
-              "ToolTip": "D:\\PRN232\\Project\\Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\appsettings.json",
-              "RelativeToolTip": "EbayCloneBuyerService_CoreAPI\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAADAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-10-29T06:04:07.987Z",
+              "Title": "ProductRepo.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\PRN all\\projectPRN232\\PRN232_Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\Repositories\\Impl\\ProductRepo.cs",
+              "RelativeDocumentMoniker": "EbayCloneBuyerService_CoreAPI\\Repositories\\Impl\\ProductRepo.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\PRN all\\projectPRN232\\PRN232_Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\Repositories\\Impl\\ProductRepo.cs",
+              "RelativeToolTip": "EbayCloneBuyerService_CoreAPI\\Repositories\\Impl\\ProductRepo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAABhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-12T06:33:42.088Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ProductServices.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\PRN all\\projectPRN232\\PRN232_Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\Services\\Impl\\ProductServices.cs",
+              "RelativeDocumentMoniker": "EbayCloneBuyerService_CoreAPI\\Services\\Impl\\ProductServices.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\PRN all\\projectPRN232\\PRN232_Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\Services\\Impl\\ProductServices.cs",
+              "RelativeToolTip": "EbayCloneBuyerService_CoreAPI\\Services\\Impl\\ProductServices.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-12T06:33:35.445Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Product.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\PRN all\\projectPRN232\\PRN232_Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\Models\\Product.cs",
+              "RelativeDocumentMoniker": "EbayCloneBuyerService_CoreAPI\\Models\\Product.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\PRN all\\projectPRN232\\PRN232_Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\Models\\Product.cs",
+              "RelativeToolTip": "EbayCloneBuyerService_CoreAPI\\Models\\Product.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAA1wBsAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-12T06:32:52.68Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ProductController.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\PRN all\\projectPRN232\\PRN232_Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\Controllers\\ProductController.cs",
+              "RelativeDocumentMoniker": "EbayCloneBuyerService_CoreAPI\\Controllers\\ProductController.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\PRN all\\projectPRN232\\PRN232_Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\Controllers\\ProductController.cs",
+              "RelativeToolTip": "EbayCloneBuyerService_CoreAPI\\Controllers\\ProductController.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAUwBUAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-08T07:07:47.031Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\PRN all\\projectPRN232\\PRN232_Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\Program.cs",
+              "RelativeDocumentMoniker": "EbayCloneBuyerService_CoreAPI\\Program.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\PRN all\\projectPRN232\\PRN232_Group1_EbayClone_BuyerService\\EbayCloneBuyerService_CoreAPI\\Program.cs",
+              "RelativeToolTip": "EbayCloneBuyerService_CoreAPI\\Program.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAADwvzcAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T06:14:08.583Z",
               "EditorCaption": ""
             }
           ]
