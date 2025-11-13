@@ -1,4 +1,3 @@
-
 CREATE DATABASE IF NOT EXISTS CloneEbayDB;
 USE CloneEbayDB;
 
@@ -175,3 +174,8 @@ CREATE TABLE Store (
     bannerImageURL TEXT,
     FOREIGN KEY (sellerId) REFERENCES User(id)
 );
+
+-- Sample data for User table
+INSERT INTO `User` (`Username`, `Password`, `Email`, `FullName`, `Role`, `RegistrationDate`) VALUES
+('johndoe', 'password123', 'john.doe@example.com', 'John Doe', 'Buyer', NOW()),
+('janesmith', 'password456', 'jane.smith@example.com', 'Jane Smith', 'Seller', NOW());
