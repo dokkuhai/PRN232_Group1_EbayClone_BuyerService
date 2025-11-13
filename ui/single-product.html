@@ -112,21 +112,22 @@
 
 	<!-- search area -->
 	<div class="search-area">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<span class="close-btn"><i class="fas fa-window-close"></i></span>
-					<div class="search-bar">
-						<div class="search-bar-tablecell">
-							<h3>Search For:</h3>
-							<input type="text" placeholder="Keywords">
-							<button type="submit">Search <i class="fas fa-search"></i></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <span class="close-btn"><i class="fas fa-window-close"></i></span>
+        <div class="search-bar">
+          <div class="search-bar-tablecell">
+            <h3>Search For:</h3>
+            <input id="search-input" type="text" placeholder="Keywords">
+            <button id="search-btn" type="button">Search <i class="fas fa-search"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 	<!-- end search arewa -->
 	
 	<!-- breadcrumb-section -->
@@ -346,6 +347,44 @@
 	<script src="assets/js/sticker.js"></script>
 	<!-- main js -->
 	<script src="assets/js/main.js"></script>
+<script>
+    const apiBaseUrl = "https://localhost:7020/api/Product/";
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get("id") || 1;
+
+    async function loadProduct() {
+        try {
+            const res = await fetch(apiBaseUrl + productId);
+            if (!res.ok) throw new Error("Không thể tải sản phẩm");
+
+            const product = await res.json();
+            console.log("✅ Product:", product);
+
+            document.querySelector(".single-product-img img").src =
+                "assets/img/products/" + (product.images || "default.jpg");
+            document.querySelector(".single-product-content h3").textContent =
+                product.title || "No title";
+            document.querySelector(".single-product-pricing").innerHTML =
+                `<span>Price</span> $${product.price ?? "N/A"}`;
+            document.querySelector(".single-product-content p:nth-of-type(2)").textContent =
+                product.description || "No description";
+
+            // Hiển thị tên Category
+            const categoryName = product.category?.name ?? "Unknown";
+            document.querySelector(".single-product-form p strong").nextSibling.textContent =
+                " " + categoryName;
+
+        } catch (err) {
+            console.error("❌ Lỗi khi tải sản phẩm:", err);
+            document.querySelector(".single-product-content").innerHTML =
+                "<p>Không thể tải dữ liệu sản phẩm.</p>";
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadProduct);
+</script>
+
 
 </body>
+
 </html>
