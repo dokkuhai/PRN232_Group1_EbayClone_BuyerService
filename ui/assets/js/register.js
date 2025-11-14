@@ -4,8 +4,11 @@ $('#registerBtn').on('click', function (event) {
     const firstName = $('#first-name').val().trim();
     const lastName = $('#last-name').val().trim();
     const userName = firstName + " " + lastName;
+    console.log("Full name:", userName);
     const email = $('#email').val().trim();
+    console.log("Email:", email);
     const password = $('#password').val().trim();
+    console.log("Password:", password);
 
     $("#error-message, #success-message").hide();
 

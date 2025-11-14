@@ -166,16 +166,15 @@
 		}
 
 		.btn-create-account {
-			background-color: #e0e0e0;
-			/* Màu xám (disabled) */
-			color: #888;
+			background-color: #004ab3;
+			color: white;
 			font-size: 16px;
 			font-weight: 600;
 			border: none;
 			border-radius: 24px;
 			padding: 12px;
 			width: 100%;
-			cursor: not-allowed;
+			cursor: pointer;
 			/* Con trỏ bị cấm */
 		}
 
@@ -292,39 +291,39 @@
 			<div class="form-column">
 				<h1>Create an account</h1>
 
-				<form class="register-form" action="#">
-					<div class="name-fields">
-						<div class="form-field">
-							<input type="text" id="first-name" placeholder="First name">
-						</div>
-						<div class="form-field">
-							<input type="text" id="last-name" placeholder="Last name">
-						</div>
+				<div id="error-message" style="color: red; display: none;"></div>
+				<br>
+				<div class="name-fields">
+					<div class="form-field">
+						<input type="text" id="first-name" placeholder="First name">
 					</div>
-
-					<div class="form-field full-width">
-						<input type="email" id="email" placeholder="Email">
+					<div class="form-field">
+						<input type="text" id="last-name" placeholder="Last name">
 					</div>
+				</div>
 
-					<div class="form-field full-width password-field">
-						<input type="password" id="password" placeholder="Password">
-						<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<path
-								d="M15.5 12c0 1.93-1.57 3.5-3.5 3.5S8.5 13.93 8.5 12 10.07 8.5 12 8.5s3.5 1.57 3.5 3.5z"
-								fill="currentColor"></path>
-							<path
-								d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 11.5c-2.49 0-4.5-2.01-4.5-4.5S9.51 7.5 12 7.5s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5z"
-								fill="currentColor"></path>
-						</svg>
-					</div>
+				<div class="form-field full-width">
+					<input type="email" id="email" placeholder="Email">
+				</div>
 
-					<p class="legal-text">
-						By selecting <strong>Create personal account</strong>, you agree to our <a href="#">User
-							Agreement</a> and acknowledge reading our <a href="#">User Privacy Notice</a>.
-					</p>
+				<div class="form-field full-width password-field">
+					<input type="password" id="password" placeholder="Password">
+					<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M15.5 12c0 1.93-1.57 3.5-3.5 3.5S8.5 13.93 8.5 12 10.07 8.5 12 8.5s3.5 1.57 3.5 3.5z"
+							fill="currentColor"></path>
+						<path
+							d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 11.5c-2.49 0-4.5-2.01-4.5-4.5S9.51 7.5 12 7.5s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5z"
+							fill="currentColor"></path>
+					</svg>
+				</div>
 
-					<button type="submit" class="btn-create-account" id="registerBtn">Create personal account</button>
-				</form>
+				<p class="legal-text">
+					By selecting <strong>Create personal account</strong>, you agree to our <a href="#">User
+						Agreement</a> and acknowledge reading our <a href="#">User Privacy Notice</a>.
+				</p>
+
+				<button type="button" class="btn-create-account" id="registerBtn">Create personal
+					account</button>
 
 				<div class="divider">or continue with</div>
 
@@ -354,6 +353,8 @@
 	</main>
 
 	<button class="help-icon">?</button>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="assets/js/register.js"></script>
 
 </body>
 
