@@ -16,8 +16,8 @@ services:
   api1:
     build:
       context: .
-      dockerfile: ./Dockerfile     # Dockerfile nằm ở root
-    image: ebayclone_buyer_api1:latest
+      dockerfile: ./Dockerfile     
+    image: dokkuhaidev/ebayclone_buyer_api1:latest
     container_name: ebayclone_buyer_api1
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
@@ -33,7 +33,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    image: ebayclone_buyer_api2:latest
+    image: dokkuhaidev/ebayclone_buyer_api2:latest
     container_name: ebayclone_buyer_api2
     environment:
       - ASPNETCORE_ENVIRONMENT=Production

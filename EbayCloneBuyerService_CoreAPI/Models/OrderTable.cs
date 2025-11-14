@@ -21,6 +21,8 @@ public partial class Ordertable
 
     public virtual User? Buyer { get; set; }
 
+    public virtual ICollection<CouponUsage> CouponUsages { get; set; } = new List<CouponUsage>();
+
     public virtual ICollection<Dispute> Disputes { get; set; } = new List<Dispute>();
 
     public virtual ICollection<Orderitem> Orderitems { get; set; } = new List<Orderitem>();
