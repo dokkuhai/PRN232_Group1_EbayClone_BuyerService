@@ -532,7 +532,22 @@
 	<script src="assets/js/main.js"></script>
 
 <script>
-const apiUrl = "https://localhost:7020/api/Product?$expand=Category&$count=true";
+// ==== AUTO BASE URL (LOCAL vs SERVER) ====
+let baseUrl = window.location.origin;
+
+// Nếu mở file bằng file:/// → fallback sang localhost API
+if (baseUrl.startsWith("http")) {
+    baseUrl = "https://localhost:7020";
+}
+
+// Nếu API server của bạn là domain:
+if (baseUrl.includes("dokkuhai")) {
+    baseUrl = "https://ebay.dokkuhai.dpdns.org";
+}
+
+// API chính
+const apiUrl = `${baseUrl}/api/Product`;
+
 let page = 0;
 const pageSize = 3;
 let totalCount = 0;
@@ -546,93 +561,132 @@ const pageInput = document.getElementById("page-input");
 const goPageBtn = document.getElementById("go-page");
 
 async function loadProducts() {
-	try {
-		container.innerHTML = '<p>Loading products...</p>';
+    try {
+        container.innerHTML = '<p>Loading products...</p>';
 
-		const skip = page * pageSize;
-		const url = apiUrl + `&$top=${pageSize}&$skip=${skip}`;
-		console.log("Fetching:", url);
+        const skip = page * pageSize;
 
-		const res = await fetch(url);
-		if (!res.ok) throw new Error("Cannot fetch products");
-		const data = await res.json();
-		const products = data.value ?? data;
-        if (totalCount === 0) {
-        const countRes = await fetch("https://localhost:7020/api/Product");
-        const countData = await countRes.json();
-         totalCount = countData.length;
+        // LOCAL ODATA → dùng $top, $skip, $expand
+        // SERVER JSON THUẦN → không hỗ trợ OData → chỉ lấy cả mảng
+        let url = "";
+
+        if (baseUrl.includes("localhost")) {
+            url = `${apiUrl}?$expand=Category&$top=${pageSize}&$skip=${skip}`;
+        } else {
+            // Server không hỗ trợ OData → tự phân trang bằng JS
+            url = apiUrl;
+        }
+
+        console.log("Fetching:", url);
+
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Cannot fetch products");
+
+        const data = await res.json();
+
+        // Chuẩn hóa dữ liệu
+        const products = Array.isArray(data) ? data : (data.value ?? []);
+
+        // Nếu server trả về full list → tự phân trang
+        if (!baseUrl.includes("localhost")) {
+            if (totalCount === 0) {
+                totalCount = products.length;
+                totalPages = Math.ceil(totalCount / pageSize);
+            }
+
+            // cắt theo trang
+            paged = products.slice(skip, skip + pageSize);
+        } else {
+            paged = products;
+
+            if (totalCount === 0) {
+                const fullRes = await fetch(apiUrl);
+                const fullData = await fullRes.json();
+                const list = Array.isArray(fullData) ? fullData : fullData.value;
+                totalCount = list.length;
+                totalPages = Math.ceil(totalCount / pageSize);
+            }
+        }
+
+        // Nếu không có sản phẩm
+        if (paged.length === 0) {
+            container.innerHTML = '<p>No products found.</p>';
+            return;
+        }
+
+        // Render
+        container.innerHTML = "";
+        for (const p of paged) {
+            const categoryName = p.Category?.Name ?? "Unknown";
+
+            const img = p.Images || p.images || "default.jpg";
+            const imageUrl = img.startsWith("http")
+                ? img
+                : `assets/img/products/${img}`;
+
+            const html = `
+                <div class="col-lg-4 col-md-6 text-center">
+                    <div class="single-product-item">
+                        <div class="product-image">
+                            <a href="single-product.html?id=${p.Id || p.id}">
+                                <img src="${imageUrl}" alt="${p.Title || p.title}">
+                            </a>
+                        </div>
+                        <h3>${p.Title || p.title}</h3>
+                        <p class="product-price">
+                            <span>${categoryName}</span> $${p.Price ?? p.price ?? "N/A"}
+                        </p>
+                        <a href="cart.html" class="cart-btn">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </a>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML("beforeend", html);
+        }
+
+        pageInfo.textContent = `Page ${page + 1} / ${totalPages}`;
+        btnPrev.disabled = page === 0;
+        btnNext.disabled = page + 1 >= totalPages;
+
+    } catch (err) {
+        console.error("❌ Error loading products:", err);
+        container.innerHTML = '<p style="color:red;">Error loading product list.</p>';
     }
-        totalPages = Math.ceil(totalCount / pageSize);
-
-		if (products.length === 0) {
-			container.innerHTML = '<p>No products found.</p>';
-			btnNext.disabled = true;
-			pageInfo.textContent = "";
-			return;
-		}
-
-		container.innerHTML = "";
-		for (const p of products) {
-			const categoryName = (p.Category && p.Category.Name) ? p.Category.Name : "Unknown";
-			const imageUrl = p.Images ? `assets/img/products/${p.Images}` : "assets/img/products/default.jpg";
-
-			const html = `
-				<div class="col-lg-4 col-md-6 text-center">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html?id=${p.Id}">
-								<img src="${imageUrl}" alt="${p.Title}">
-							</a>
-						</div>
-						<h3>${p.Title}</h3>
-						<p class="product-price"><span>${categoryName}</span> $${p.Price ?? "N/A"}</p>
-						<a href="cart.html" class="cart-btn">
-							<i class="fas fa-shopping-cart"></i> Add to Cart
-						</a>
-					</div>
-				</div>`;
-			container.insertAdjacentHTML("beforeend", html);
-		}
-
-		pageInfo.textContent = `Page ${page + 1} / ${totalPages}`;
-		btnPrev.disabled = page === 0;
-		btnNext.disabled = page + 1 >= totalPages;
-
-	} catch (err) {
-		console.error("❌ Error loading products:", err);
-		container.innerHTML = '<p style="color:red;">Error loading product list.</p>';
-	}
 }
 
-btnPrev.addEventListener("click", function () {
-	if (page > 0) {
-		page--;
-		loadProducts();
-		window.scrollTo({ top: 0, behavior: "smooth" });
-	}
+// ==== Pagination Buttons ====
+btnPrev.addEventListener("click", () => {
+    if (page > 0) {
+        page--;
+        loadProducts();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 });
 
-btnNext.addEventListener("click", function () {
-	if (page + 1 < totalPages) {
-		page++;
-		loadProducts();
-		window.scrollTo({ top: 0, behavior: "smooth" });
-	}
+btnNext.addEventListener("click", () => {
+    if (page + 1 < totalPages) {
+        page++;
+        loadProducts();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 });
 
-goPageBtn.addEventListener("click", function () {
-	const target = parseInt(pageInput.value);
-	if (!isNaN(target) && target >= 1 && target <= totalPages) {
-		page = target - 1;
-		loadProducts();
-		window.scrollTo({ top: 0, behavior: "smooth" });
-	} else {
-		alert(`Enter a valid page number (1–${totalPages})`);
-	}
+goPageBtn.addEventListener("click", () => {
+    const target = parseInt(pageInput.value);
+    if (target >= 1 && target <= totalPages) {
+        page = target - 1;
+        loadProducts();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+        alert(`Enter a valid page number (1–${totalPages})`);
+    }
 });
 
+// Load initial
 document.addEventListener("DOMContentLoaded", loadProducts);
 </script>
+
 
 
 
