@@ -1,13 +1,36 @@
+using DotNetEnv;
+using EbayCloneBuyerService_CoreAPI.Exceptions;
 using EbayCloneBuyerService_CoreAPI.Models;
+using EbayCloneBuyerService_CoreAPI.MyProfile;
 using EbayCloneBuyerService_CoreAPI.Repositories.Impl;
 using EbayCloneBuyerService_CoreAPI.Repositories.Interface;
+using EbayCloneBuyerService_CoreAPI.Services.Impl;
+using EbayCloneBuyerService_CoreAPI.Services.Interface;
+using EbayCloneBuyerService_CoreAPI.Utils;
+using Microsoft.AspNetCore.OData;
+using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OData.Edm;
+using Microsoft.OData.ModelBuilder;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddHttpClient();
 // Add services to the container.
+// Load file .env
+Env.Load();
 
-builder.Services.AddControllers();
+var googleClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
+var googleClientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET");
+
+builder.Services.AddControllers()
+ .AddJsonOptions(x =>
+    {
+        x.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        x.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+    })
+    .AddOData(options =>
+        options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null)
+            .AddRouteComponents("api", GetEdmModel()));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -15,19 +38,33 @@ builder.Services.AddSwaggerGen();
 // ===== JWT Authentication & Authorization =====
 
 
-
-
+//==== AutoMapper =====
+builder.Services.AddAutoMapper(cfg => {
+    cfg.AddProfile<UserProfile>();
+});
 
 // ===== DB Context =====
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<CloneEbayDbContext>(options =>
+{
     options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
-    ));
+        connectionString,
+        new MySqlServerVersion(new Version(8, 0, 21)),
+        mySqlOptions => mySqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 10,
+            maxRetryDelay: TimeSpan.FromSeconds(30),
+            errorNumbersToAdd: null)
+    );
+});
 
 // ===== DI: Repository & Service =====
-builder.Services.AddScoped(typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<JwtService>();
+
+//builder.Services.AddScoped<IUserRepository, UserRepository>();
+//builder.Services.AddScoped<IUserService, UserService>();
 
 
 
@@ -56,5 +93,14 @@ app.UseAuthorization();
 app.UseCors("AllowAll");
 
 app.MapControllers();
-
+//====== Exception Middleware =====
+app.UseMiddleware<ExceptionMiddleware>();
 app.Run();
+
+static IEdmModel GetEdmModel()
+{
+    var builder = new ODataConventionModelBuilder();
+    builder.EntitySet<Category>("Category");
+    builder.EntitySet<Product>("Product");
+    return builder.GetEdmModel();
+}

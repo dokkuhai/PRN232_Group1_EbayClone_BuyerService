@@ -196,50 +196,33 @@
 
 	<!-- product section -->
 	<div class="product-section mt-150 mb-150">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-8 offset-lg-2 text-center">
-					<div class="section-title">	
-						<h3><span class="orange-text">Our</span> Products</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet beatae optio.</p>
-					</div>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-lg-4 col-md-6 text-center">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html"><img src="assets/img/products/product-img-1.jpg" alt=""></a>
-						</div>
-						<h3>Strawberry</h3>
-						<p class="product-price"><span>Per Kg</span> 85$ </p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6 text-center">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html"><img src="assets/img/products/product-img-2.jpg" alt=""></a>
-						</div>
-						<h3>Berry</h3>
-						<p class="product-price"><span>Per Kg</span> 70$ </p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6 offset-md-3 offset-lg-0 text-center">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html"><img src="assets/img/products/product-img-3.jpg" alt=""></a>
-						</div>
-						<h3>Lemon</h3>
-						<p class="product-price"><span>Per Kg</span> 35$ </p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-					</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8 offset-lg-2 text-center">
+				<div class="section-title">	
+					<h3><span class="orange-text">Our</span> Products</h3>
+					<p>Discover our latest collection — powered by real data from your API.</p>
 				</div>
 			</div>
 		</div>
+
+		<!-- Product list container -->
+		<div class="row" id="product-container"></div>
+
+		<!-- Pagination controls -->
+		<div class="text-center mt-4">
+			<button id="prev-page" class="boxed-btn" disabled>Previous</button>
+			<span id="page-info" class="mx-3"></span>
+			<button id="next-page" class="boxed-btn">Next</button>
+		</div>
+
+		<!-- Jump to page -->
+		<div class="text-center mt-3">
+			<input type="number" id="page-input" min="1" style="width:80px; text-align:center;" placeholder="Page">
+			<button id="go-page" class="boxed-btn">Go</button>
+		</div>
 	</div>
+</div>
 	<!-- end product section -->
 
 	<!-- cart banner section -->
@@ -547,6 +530,109 @@
 	<script src="assets/js/sticker.js"></script>
 	<!-- main js -->
 	<script src="assets/js/main.js"></script>
+
+	<script>
+const apiUrl = "/api/Product?$expand=Category&$count=true";
+let page = 0;
+const pageSize = 3;
+let totalCount = 0;
+let totalPages = 0;
+
+const container = document.getElementById("product-container");
+const btnPrev = document.getElementById("prev-page");
+const btnNext = document.getElementById("next-page");
+const pageInfo = document.getElementById("page-info");
+const pageInput = document.getElementById("page-input");
+const goPageBtn = document.getElementById("go-page");
+
+async function loadProducts() {
+	try {
+		container.innerHTML = '<p>Loading products...</p>';
+
+		const skip = page * pageSize;
+		const url = apiUrl + `&$top=${pageSize}&$skip=${skip}`;
+		console.log("Fetching:", url);
+
+		const res = await fetch(url);
+		if (!res.ok) throw new Error("Cannot fetch products");
+		const data = await res.json();
+		const products = data.value ?? data;
+        if (totalCount === 0) {
+        const countRes = await fetch("/api/Product");
+        const countData = await countRes.json();
+         totalCount = countData.length;
+    }
+        totalPages = Math.ceil(totalCount / pageSize);
+
+		if (products.length === 0) {
+			container.innerHTML = '<p>No products found.</p>';
+			btnNext.disabled = true;
+			pageInfo.textContent = "";
+			return;
+		}
+
+		container.innerHTML = "";
+		for (const p of products) {
+			const categoryName = (p.Category && p.Category.Name) ? p.Category.Name : "Unknown";
+			const imageUrl = p.Images ? `assets/img/products/${p.Images}` : "assets/img/products/default.jpg";
+
+			const html = `
+				<div class="col-lg-4 col-md-6 text-center">
+					<div class="single-product-item">
+						<div class="product-image">
+							<a href="single-product.html?id=${p.Id}">
+								<img src="${imageUrl}" alt="${p.Title}">
+							</a>
+						</div>
+						<h3>${p.Title}</h3>
+						<p class="product-price"><span>${categoryName}</span> $${p.Price ?? "N/A"}</p>
+						<a href="cart.html" class="cart-btn">
+							<i class="fas fa-shopping-cart"></i> Add to Cart
+						</a>
+					</div>
+				</div>`;
+			container.insertAdjacentHTML("beforeend", html);
+		}
+
+		pageInfo.textContent = `Page ${page + 1} / ${totalPages}`;
+		btnPrev.disabled = page === 0;
+		btnNext.disabled = page + 1 >= totalPages;
+
+	} catch (err) {
+		console.error("❌ Error loading products:", err);
+		container.innerHTML = '<p style="color:red;">Error loading product list.</p>';
+	}
+}
+
+btnPrev.addEventListener("click", function () {
+	if (page > 0) {
+		page--;
+		loadProducts();
+		window.scrollTo({ top: 0, behavior: "smooth" });
+	}
+});
+
+btnNext.addEventListener("click", function () {
+	if (page + 1 < totalPages) {
+		page++;
+		loadProducts();
+		window.scrollTo({ top: 0, behavior: "smooth" });
+	}
+});
+
+goPageBtn.addEventListener("click", function () {
+	const target = parseInt(pageInput.value);
+	if (!isNaN(target) && target >= 1 && target <= totalPages) {
+		page = target - 1;
+		loadProducts();
+		window.scrollTo({ top: 0, behavior: "smooth" });
+	} else {
+		alert(`Enter a valid page number (1–${totalPages})`);
+	}
+});
+
+document.addEventListener("DOMContentLoaded", loadProducts);
+</script>
 
 </body>
 </html>

@@ -30,6 +30,14 @@
 	<link rel="stylesheet" href="assets/css/main.css">
 	<!-- responsive -->
 	<link rel="stylesheet" href="assets/css/responsive.css">
+<style>
+  select.form-select {
+    float: right;
+    border-radius: 8px;
+    padding: 6px 10px;
+  }
+  
+</style>
 
 </head>
 <body>
@@ -135,7 +143,7 @@
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 text-center">
 					<div class="breadcrumb-text">
-						<p>Fresh and Organic</p>
+						<p>Ebay</p>
 						<h1>Shop</h1>
 					</div>
 				</div>
@@ -147,20 +155,6 @@
 	<!-- products -->
 	<div class="product-section mt-150 mb-150">
 		<div class="container">
-
-			<div class="row">
-                <div class="col-md-12">
-                    <div class="product-filters">
-                        <ul>
-                            <li class="active" data-filter="*">All</li>
-                            <li data-filter=".strawberry">Strawberry</li>
-                            <li data-filter=".berry">Berry</li>
-                            <li data-filter=".lemon">Lemon</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
 			<div class="row product-lists">
 				<div class="col-lg-4 col-md-6 text-center strawberry">
 					<div class="single-product-item">
@@ -276,16 +270,15 @@
 				<div class="col-lg-3 col-md-6">
 					<div class="footer-box about-widget">
 						<h2 class="widget-title">About us</h2>
-						<p>Ut enim ad minim veniam perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae.</p>
+						<p>Group 1 SE 1848</p>
 					</div>
 				</div>
 				<div class="col-lg-3 col-md-6">
 					<div class="footer-box get-in-touch">
 						<h2 class="widget-title">Get in Touch</h2>
 						<ul>
-							<li>34/8, East Hukupara, Gifirtok, Sadan.</li>
-							<li>support@fruitkha.com</li>
-							<li>+00 111 222 3333</li>
+							<li>Group 1 </li>
+							<li>Leader: Vũ Đức Hải</li>
 						</ul>
 					</div>
 				</div>
@@ -361,6 +354,205 @@
 	<script src="assets/js/sticker.js"></script>
 	<!-- main js -->
 	<script src="assets/js/main.js"></script>
+<script>
+const apiBaseUrl = "/api/Product?$expand=Category&$count=true";
+const container = document.querySelector(".product-lists");
+const paginationWrap = document.querySelector(".pagination-wrap ul");
+
+// --- Cấu hình ---
+let page = 0;
+const pageSize = 3;
+let totalCount = 0;
+let totalPages = 0;
+let currentKeyword = "";
+let currentSort = "";
+let currentCategorySort = "";
+
+// ------------------------------
+// 1️⃣ Hàm load danh sách sản phẩm
+// ------------------------------
+async function loadProducts() {
+  try {
+    container.innerHTML = "<p>Loading products...</p>";
+
+    const skip = page * pageSize;
+    let url = `${apiBaseUrl}&$top=${pageSize}&$skip=${skip}`;
+    
+    // tìm kiếm
+    if (currentKeyword.trim() !== "") {
+      const keyword = currentKeyword.toLowerCase();
+      url += `&$filter=contains(tolower(Title),'${keyword}') or contains(tolower(Category/Name),'${keyword}')`;
+    }
+
+    // sắp xếp theo sản phẩm hoặc category
+    if (currentCategorySort !== "") {
+      url += `&$orderby=Category/Name ${currentCategorySort}`;
+    } else if (currentSort !== "") {
+      url += `&$orderby=${currentSort}`;
+    }
+
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Không thể tải sản phẩm");
+    const data = await res.json();
+
+    const products = data.value ?? data;
+    if (totalCount === 0) {
+      const countRes = await fetch("/api/Product");
+      const countData = await countRes.json();
+      totalCount = countData.length;
+    }
+    totalPages = Math.ceil(totalCount / pageSize);
+
+    if (products.length === 0) {
+      container.innerHTML = '<p>No products found.</p>';
+      paginationWrap.innerHTML = "";
+      return;
+    }
+
+    container.innerHTML = "";
+    products.forEach(p => {
+      const categoryName = p.Category?.Name ?? "Unknown";
+      const imageUrl = p.Images ? `assets/img/products/${p.Images}` : "assets/img/products/default.jpg";
+      const html = `
+        <div class="col-lg-4 col-md-6 text-center">
+          <div class="single-product-item">
+            <div class="product-image">
+              <a href="single-product.html?id=${p.Id}">
+                <img src="${imageUrl}" alt="${p.Title}">
+              </a>
+            </div>
+            <h3>${p.Title}</h3>
+            <p class="product-price"><span>${categoryName}</span> $${p.Price ?? "N/A"}</p>
+            <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+          </div>
+        </div>`;
+      container.insertAdjacentHTML("beforeend", html);
+    });
+
+    renderPagination();
+  } catch (err) {
+    console.error("❌ Error loading products:", err);
+    container.innerHTML = '<p style="color:red;">Error loading product list.</p>';
+  }
+}
+
+// ------------------------------
+// 2️⃣ Phân trang
+// ------------------------------
+function renderPagination() {
+  paginationWrap.innerHTML = "";
+
+  const prevDisabled = page === 0 ? "disabled" : "";
+  const nextDisabled = page + 1 >= totalPages ? "disabled" : "";
+
+  paginationWrap.insertAdjacentHTML(
+    "beforeend",
+    `<li><a href="#" class="page-btn" data-page="${page - 1}" ${prevDisabled}>Prev</a></li>`
+  );
+
+  for (let i = 0; i < totalPages; i++) {
+    const active = page === i ? "active" : "";
+    paginationWrap.insertAdjacentHTML(
+      "beforeend",
+      `<li><a href="#" class="page-btn ${active}" data-page="${i}">${i + 1}</a></li>`
+    );
+  }
+
+  paginationWrap.insertAdjacentHTML(
+    "beforeend",
+    `<li><a href="#" class="page-btn" data-page="${page + 1}" ${nextDisabled}>Next</a></li>`
+  );
+
+  document.querySelectorAll(".page-btn").forEach(btn => {
+    btn.addEventListener("click", e => {
+      e.preventDefault();
+      const target = parseInt(btn.dataset.page);
+      if (!isNaN(target) && target >= 0 && target < totalPages) {
+        page = target;
+        loadProducts();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
+  });
+}
+
+// ------------------------------
+// 3️⃣ Tìm kiếm
+// ------------------------------
+document.querySelector(".search-bar button").addEventListener("click", () => {
+  const keyword = document.querySelector(".search-bar input").value.trim();
+  currentKeyword = keyword;
+  page = 0;
+  loadProducts();
+});
+
+document.querySelector(".search-bar input").addEventListener("keypress", e => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    document.querySelector(".search-bar button").click();
+  }
+});
+
+// ------------------------------
+// 4️⃣ Sắp xếp (2 dropdown)
+// ------------------------------
+
+// 🔸 Sort theo giá / tên
+const sortSelect = document.createElement("select");
+sortSelect.innerHTML = `
+  <option value="">-- Sort by Product --</option>
+  <option value="Price asc">Price ↑</option>
+  <option value="Price desc">Price ↓</option>
+  <option value="Title asc">Name A–Z</option>
+  <option value="Title desc">Name Z–A</option>
+`;
+sortSelect.classList.add("form-select", "mb-3");
+sortSelect.style.width = "200px";
+sortSelect.style.marginLeft = "10px";
+
+// 🔸 Sort theo Category
+const categorySortSelect = document.createElement("select");
+categorySortSelect.innerHTML = `
+  <option value="">-- Sort by Category --</option>
+  <option value="asc">Category A–Z</option>
+  <option value="desc">Category Z–A</option>
+`;
+categorySortSelect.classList.add("form-select", "mb-3");
+categorySortSelect.style.width = "220px";
+categorySortSelect.style.marginLeft = "10px";
+
+// chèn cả hai dropdown vào cùng hàng
+const sortContainer = document.createElement("div");
+sortContainer.style.display = "flex";
+sortContainer.style.justifyContent = "flex-end";
+sortContainer.style.marginBottom = "20px";
+sortContainer.appendChild(categorySortSelect);
+sortContainer.appendChild(sortSelect);
+
+document.querySelector(".product-section .container").prepend(sortContainer);
+
+sortSelect.addEventListener("change", () => {
+  currentSort = sortSelect.value;
+  currentCategorySort = "";
+  categorySortSelect.value = "";
+  page = 0;
+  loadProducts();
+});
+
+categorySortSelect.addEventListener("change", () => {
+  currentCategorySort = categorySortSelect.value;
+  currentSort = "";
+  sortSelect.value = "";
+  page = 0;
+  loadProducts();
+});
+
+// ------------------------------
+// 5️⃣ Khởi động
+// ------------------------------
+document.addEventListener("DOMContentLoaded", loadProducts);
+</script>
+
 
 </body>
 </html>
