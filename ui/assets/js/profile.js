@@ -1,60 +1,41 @@
-﻿showAddAddressInput = () => {
-    const inputField = document.querySelector('#manageAddressModal input[type="text"]');
-    const addButton = document.querySelector('#manageAddressModal button.btn-primary.mt-3');
-    inputField.removeAttribute('hidden');
-    addButton.removeAttribute('hidden');
-}
-hideAddAddressInput = () => {
-    const inputField = document.querySelector('#manageAddressModal input[type="text"]');
-    const addButton = document.querySelector('#manageAddressModal button.btn-primary.mt-3');
-    inputField.setAttribute('hidden', 'true');
-    addButton.setAttribute('hidden', 'true');
-}
-showAddPaymentInput = () => {
-    const inputField = document.querySelector('#managePaymentModal input[type="text"]');
-    const addButton = document.querySelector('#managePaymentModal button.btn-primary.mt-3');
-    inputField.removeAttribute('hidden');
-    addButton.removeAttribute('hidden');
-}
-hideAddPaymentInput = () => {
-    const inputField = document.querySelector('#managePaymentModal input[type="text"]');
-    const addButton = document.querySelector('#managePaymentModal button.btn-primary.mt-3');
-    inputField.setAttribute('hidden', 'true');
-    addButton.setAttribute('hidden', 'true');
+﻿
+const editUsernameBtn = document.getElementById('editUsernameBtn');
+const usernameEditForm = document.getElementById('usernameEditForm');
+const currentUsernameSpan = document.getElementById('currentUsername');
+const newUsernameInput = document.getElementById('newUsername');
+const cancelUsernameEditBtn = document.getElementById('cancelUsernameEdit');
+const saveUsernameEditBtn = document.getElementById('saveUsernameEdit');
+
+function showEditForm() {
+    usernameEditForm.classList.remove('hidden');
+    editUsernameBtn.classList.add('hidden'); // Ẩn nút Edit
+    currentUsernameSpan.classList.add('hidden'); // Ẩn username hiện tại
+    newUsernameInput.value = currentUsernameSpan.textContent.trim(); // Đổ dữ liệu hiện tại vào input
 }
 
-$('#savePaymentBtn').on('click', function () {
-    const paymentEmail = $('#paymentMethod').val();
-    const address = $('#shippingAddress').val();
+// Hàm ẩn form chỉnh sửa
+function hideEditForm() {
+    usernameEditForm.classList.add('hidden');
+    editUsernameBtn.classList.remove('hidden'); // Hiện lại nút Edit
+    currentUsernameSpan.classList.remove('hidden'); // Hiện lại username hiện tại
+}
 
-    if (!paymentEmail || !address) {
-        $('#payment-error').text('Please fill in all required fields.').removeClass('d-none');
-        $('#payment-success').addClass('d-none');
-        return;
+// Xử lý khi nhấn nút "Edit"
+editUsernameBtn.addEventListener('click', showEditForm);
+
+// Xử lý khi nhấn nút "Cancel"
+cancelUsernameEditBtn.addEventListener('click', hideEditForm);
+
+// Xử lý khi nhấn nút "Save"
+saveUsernameEditBtn.addEventListener('click', function () {
+    const updatedUsername = newUsernameInput.value.trim();
+    if (updatedUsername) {
+        currentUsernameSpan.textContent = updatedUsername; // Cập nhật hiển thị username
+        // Thêm logic gửi dữ liệu lên server ở đây
+        console.log('New username saved:', updatedUsername);
+        alert('Username updated successfully (simulated)!'); // Thông báo giả định
+        hideEditForm(); // Ẩn form sau khi lưu
+    } else {
+        alert('Username cannot be empty!');
     }
-
-    // Gửi request API (ví dụ)
-    $.ajax({
-        url: 'https://localhost:7020/api/user/payment-info',
-        method: 'PUT',
-        contentType: 'application/json',
-        data: JSON.stringify({ paymentEmail, address }),
-        success: function (res) {
-            $('#payment-success').text('Payment & Address updated successfully!').removeClass('d-none');
-            $('#payment-error').addClass('d-none');
-
-            // Cập nhật thông tin hiển thị trên card (giả lập)
-            $('.profile-card p:first strong').next().remove(); // xóa text cũ nếu có
-            $('.profile-card p:first').html(`<strong>Default Payment:</strong> PayPal - ${paymentEmail}`);
-            $('.profile-card p:last').html(`<strong>Shipping Address:</strong><br>${address}`);
-
-            setTimeout(() => {
-                $('#editPaymentModal').modal('hide');
-            }, 1500);
-        },
-        error: function () {
-            $('#payment-error').text('Failed to update information. Please try again.').removeClass('d-none');
-            $('#payment-success').addClass('d-none');
-        }
-    });
 });

@@ -79,7 +79,7 @@ $('#loginBtn').on('click', function () {
 });
 
 $('#googleLoginBtn').on('click', function () {
-    const feCallbackUrl = ' https://ebay.dokkuhai.dpdns.org/google-callback.html';
+    const feCallbackUrl = 'https://ebay.dokkuhai.dpdns.org/google-callback.html';
 
     const googleOAuthUrl = 'https://accounts.google.com/o/oauth2/v2/auth' +
         '?client_id=399694141537-0t854jihnmp6h6qfqnb9hnv66eb4oa53.apps.googleusercontent.com' +

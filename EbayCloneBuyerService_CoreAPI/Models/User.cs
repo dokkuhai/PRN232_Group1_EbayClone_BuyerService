@@ -17,11 +17,15 @@ public partial class User
 
     public string? AvatarUrl { get; set; }
 
+    public string? PhoneNumber { get; set; }
+
+    public DateTime? LastUpdated { get; set; }
+
+    public virtual ICollection<Address1> Address1s { get; set; } = new List<Address1>();
+
     public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
 
     public virtual ICollection<Bid> Bids { get; set; } = new List<Bid>();
-
-    public virtual ICollection<CouponUsage> CouponUsages { get; set; } = new List<CouponUsage>();
 
     public virtual ICollection<Dispute> Disputes { get; set; } = new List<Dispute>();
 
