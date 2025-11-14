@@ -1,4 +1,3 @@
-
 CREATE DATABASE IF NOT EXISTS CloneEbayDB;
 USE CloneEbayDB;
 
@@ -175,3 +174,4 @@ CREATE TABLE Store (
     bannerImageURL TEXT,
     FOREIGN KEY (sellerId) REFERENCES User(id)
 );
+
