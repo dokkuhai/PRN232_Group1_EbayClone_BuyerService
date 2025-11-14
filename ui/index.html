@@ -105,10 +105,14 @@
 											const userId = localStorage.getItem('userId');
 											if (userId) {
 												document.write(`
-										 <a class="user-login" href="#">
-											 <i class="fas fa-user"></i>		
-											 <i class="fas fa-caret-down" ></i>
-										 </a>
+											<a class="user-login" href="#">
+											 <i class="fas fa-user"></i>
+											</a>
+
+											<a class="user-name" href="#" style="margin-left:4px;" id="logoutBtn">
+											 <i class="fas fa-sign-out-alt" id="logoutBtn" style="margin-left:8px; cursor:pointer;"></i>
+											</a>
+										 
 										`);
 											} else {
 												document.write(`
