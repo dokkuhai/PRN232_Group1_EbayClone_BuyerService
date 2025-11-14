@@ -163,8 +163,6 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
 
             return Ok(new
             {
-                userId = user.Id,
-                userName = user.Username,
                 token = tokenString,
                 userId = user.Id,
                 userName = user.Username
