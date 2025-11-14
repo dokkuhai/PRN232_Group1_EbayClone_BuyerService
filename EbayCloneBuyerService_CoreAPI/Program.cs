@@ -107,7 +107,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
     {
-        builder.AllowAnyOrigin()
+        builder.WithOrigins("https://ebay.dokkuhai.dpdns.org")
                .AllowAnyMethod()
                .AllowAnyHeader();
     });
