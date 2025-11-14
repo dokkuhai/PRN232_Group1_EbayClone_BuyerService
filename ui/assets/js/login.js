@@ -1,3 +1,32 @@
+(async function checkRememberMe() {
+    const sessionToken = localStorage.getItem("accessToken");
+    // if (sessionToken) {
+    //     return;
+    // }
+    console.log("No session token found, checking remember-me login...");
+    var cookies = document.cookie.split(';');
+    try {
+        const res = await fetch("https://localhost:7020/api/User/remember-me-login", {
+            method: "GET",
+            credentials: "include"
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            console.log("User is already logged in:", data);
+            localStorage.setItem("accessToken", data.token);
+            localStorage.setItem("userId", data.userId);
+            localStorage.setItem("userName", data.userName);
+            if (window.location.pathname.includes("login.html")) {
+                window.location.href = "/index.html";
+            }
+        } else {
+        }
+    } catch (err) {
+        console.error("Error checking auth status:", err);
+    }
+})();
+
 $('#loginBtn').on('click', function () {
     const email = $('#floatingEmail').val();
     const password = $('#floatingPassword').val();
@@ -5,12 +34,18 @@ $('#loginBtn').on('click', function () {
         $("#error-message").text("Please fill in all required fields.").show();
         return;
     }
+    const rememberMe = $('#rememberMeCheck').is(':checked');
+    console.log("Attempting login with email:", email, "Remember me:", rememberMe);
     $.ajax({
         url: 'https://localhost:7020/api/User/login',
         method: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify({ email, password }),
+        data: JSON.stringify({ email, password, rememberMe }),
         success: function (response) {
+            console.log('Login successful:', response);
+            localStorage.setItem("accessToken", response.token);
+            localStorage.setItem("userId", response.userId);
+            localStorage.setItem("userName", response.userName);
             $("#success-message")
                 .text("Login successful! Redirecting to home page...")
                 .fadeIn();
