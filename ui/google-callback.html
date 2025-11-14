@@ -86,11 +86,12 @@
 						// === 4. Lấy JWT từ API trả về ===
 						const data = await response.json(); // { token: "your_jwt_here" }
 
+						console.log('Đăng nhập thành công, nhận được token:', data.token);
 						// Lưu JWT vào localStorage
 						localStorage.setItem('userToken', data.token);
 
 						// === 5. Chuyển hướng đến trang chính ===
-						window.location.href = HOME_PAGE_URL;
+						//window.location.href = HOME_PAGE_URL;
 
 					} else {
 						// API của bạn trả về lỗi (ví dụ: code hết hạn)
