@@ -31,6 +31,8 @@
 	<!-- responsive -->
 	<link rel="stylesheet" href="assets/css/responsive.css">
 
+	<link rel="stylesheet" href="assets/css/checkout.css">
+
 </head>
 <body>
 	
@@ -144,122 +146,230 @@
 	</div>
 	<!-- end breadcrumb section -->
 
-	<!-- check out section -->
-	<div class="checkout-section mt-150 mb-150">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-8">
-					<div class="checkout-accordion-wrap">
-						<div class="accordion" id="accordionExample">
-						  <div class="card single-accordion">
-						    <div class="card-header" id="headingOne">
-						      <h5 class="mb-0">
-						        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-						          Billing Address
-						        </button>
-						      </h5>
-						    </div>
+	<main class="main-container">
+        <div class="container">
+            <div class="checkout-layout">
+                <!-- Left Column - Form -->
+                <div class="checkout-form">
+                    <!-- Shipping Address -->
+                   <section class="form-section">
+                        <div class="section-header">
+                            <h2>Shipping Address</h2>
+                            <a href="#" class="change-link">Change</a>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Full Name *</label>
+                            <input type="text" id="name" placeholder="John Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Street Address *</label>
+                            <input type="text" id="address" placeholder="123 Main Street" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">City *</label>
+                                <input type="text" id="city" placeholder="New York" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="state">State *</label>
+                                <input type="text" id="state" placeholder="NY" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="country">Country *</label>
+                                <input type="text" id="country" placeholder="United States" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" placeholder="(123) 456-7890" required>
+                            </div>
+                        </div>
+                        </section>
 
-						    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-						      <div class="card-body">
-						        <div class="billing-address-form">
-						        	<form action="index.html">
-						        		<p><input type="text" placeholder="Name"></p>
-						        		<p><input type="email" placeholder="Email"></p>
-						        		<p><input type="text" placeholder="Address"></p>
-						        		<p><input type="tel" placeholder="Phone"></p>
-						        		<p><textarea name="bill" id="bill" cols="30" rows="10" placeholder="Say Something"></textarea></p>
-						        	</form>
-						        </div>
-						      </div>
-						    </div>
-						  </div>
-						  <div class="card single-accordion">
-						    <div class="card-header" id="headingTwo">
-						      <h5 class="mb-0">
-						        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-						          Shipping Address
-						        </button>
-						      </h5>
-						    </div>
-						    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-						      <div class="card-body">
-						        <div class="shipping-address-form">
-						        	<p>Your shipping address form is here.</p>
-						        </div>
-						      </div>
-						    </div>
-						  </div>
-						  <div class="card single-accordion">
-						    <div class="card-header" id="headingThree">
-						      <h5 class="mb-0">
-						        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-						          Card Details
-						        </button>
-						      </h5>
-						    </div>
-						    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-						      <div class="card-body">
-						        <div class="card-details">
-						        	<p>Your card details goes here.</p>
-						        </div>
-						      </div>
-						    </div>
-						  </div>
-						</div>
+                    Shipping Method
+                    <section class="form-section">
+                        <div class="section-header">
+                            <h2>Shipping Method</h2>
+                        </div>
+                        <div class="shipping-options">
+                            <label class="radio-option selected">
+                                <input type="radio" name="shipping" value="standard" checked>
+                                <div class="option-content">
+                                    <span class="option-title">Standard Shipping (5-7 business days)</span>
+                                    <span class="option-price">FREE</span>
+                                </div>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="shipping" value="express">
+                                <div class="option-content">
+                                    <span class="option-title">Express Shipping (2-3 business days)</span>
+                                    <span class="option-price">$9.99</span>
+                                </div>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="shipping" value="overnight">
+                                <div class="option-content">
+                                    <span class="option-title">Overnight Shipping (1 business day)</span>
+                                    <span class="option-price">$19.99</span>
+                                </div>
+                            </label>
+                        </div>
+                    </section>
 
-					</div>
-				</div>
+                    <!-- Payment Method -->
+                    <section class="form-section">
+                        <div class="section-header">
+                            <h2>Payment Method</h2>
+                        </div>
+                        <div class="payment-options">
+                            <label class="radio-option selected">
+                                <input type="radio" name="payment" value="credit" checked>
+                                <span class="option-title">Credit Card</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="payment" value="paypal">
+                                <span class="option-title">PayPal</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="payment" value="apple">
+                                <span class="option-title">Apple Pay</span>
+                            </label>
+                        </div>
 
-				<div class="col-lg-4">
-					<div class="order-details-wrap">
-						<table class="order-details">
-							<thead>
-								<tr>
-									<th>Your order Details</th>
-									<th>Price</th>
-								</tr>
-							</thead>
-							<tbody class="order-details-body">
-								<tr>
-									<td>Product</td>
-									<td>Total</td>
-								</tr>
-								<tr>
-									<td>Strawberry</td>
-									<td>$85.00</td>
-								</tr>
-								<tr>
-									<td>Berry</td>
-									<td>$70.00</td>
-								</tr>
-								<tr>
-									<td>Lemon</td>
-									<td>$35.00</td>
-								</tr>
-							</tbody>
-							<tbody class="checkout-details">
-								<tr>
-									<td>Subtotal</td>
-									<td>$190</td>
-								</tr>
-								<tr>
-									<td>Shipping</td>
-									<td>$50</td>
-								</tr>
-								<tr>
-									<td>Total</td>
-									<td>$240</td>
-								</tr>
-							</tbody>
-						</table>
-						<a href="#" class="boxed-btn">Place Order</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- end check out section -->
+                        <!-- Credit Card Form -->
+                        <!-- <div class="payment-form" id="credit-card-form">
+                            <div class="form-group">
+                                <label for="cardname">Cardholder Name *</label>
+                                <input type="text" id="cardname" placeholder="John Doe" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cardnumber">Card Number *</label>
+                                <input type="text" id="cardnumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="expiry">Expiry Date *</label>
+                                    <input type="text" id="expiry" placeholder="MM/YY" maxlength="5" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cvv">CVV *</label>
+                                    <input type="text" id="cvv" placeholder="123" maxlength="4" required>
+                                </div>
+                            </div>
+                        </div>
+                    </section> -->
+
+                    <!-- Billing Address
+                    <section class="form-section">
+                        <div class="section-header">
+                            <h2>Billing Address</h2>
+                            <label class="checkbox">
+                                <input type="checkbox" id="same-address" checked>
+                                Same as shipping
+                            </label>
+                        </div>
+                        <div id="billing-form" style="display: none;">
+                            <div class="form-group">
+                                <label for="billing-address">Street Address *</label>
+                                <input type="text" id="billing-address" placeholder="123 Main Street">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="billing-city">City *</label>
+                                    <input type="text" id="billing-city" placeholder="New York">
+                                </div>
+                                <div class="form-group">
+                                    <label for="billing-state">State *</label>
+                                    <input type="text" id="billing-state" placeholder="NY">
+                                </div>
+                            </div>
+                        </div>
+                    </section> -->
+                </div>
+
+                <!-- Right Column - Order Summary -->
+                <aside class="order-summary">
+                    <h3>Order Summary</h3>
+                    
+                    <!-- Cart Items -->
+                    <div class="cart-items">
+                        <div class="cart-item">
+                            <img src="/placeholder.svg?height=80&width=80" alt="Product">
+                            <div class="item-details">
+                                <h4>Premium Wireless Headphones</h4>
+                                <p class="seller">by TechStore</p>
+                                <p class="quantity">Qty: 1</p>
+                            </div>
+                            <div class="item-price">$79.99</div>
+                        </div>
+                        <div class="cart-item">
+                            <img src="/placeholder.svg?height=80&width=80" alt="Product">
+                            <div class="item-details">
+                                <h4>USB-C Cable (2-pack)</h4>
+                                <p class="seller">by AudioGear</p>
+                                <p class="quantity">Qty: 2</p>
+                            </div>
+                            <div class="item-price">$19.98</div>
+                        </div>
+                    </div>
+
+                    <!-- Price Breakdown -->
+                    <div class="price-breakdown">
+                        <div class="price-row">
+                            <span>Subtotal</span>
+                            <span>$99.97</span>
+                        </div>
+                        <div class="price-row">
+                            <span>Shipping</span>
+                            <span id="shipping-cost">FREE</span>
+                        </div>
+                        <div class="price-row">
+                            <span>Tax</span>
+                            <span>$8.49</span>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="price-row total">
+                            <span>Total</span>
+                            <span id="total-price">$108.46</span>
+                        </div>
+                    </div>
+
+                    <!-- Place Order Button -->
+                    <button class="btn-primary" id="place-order-btn">Place Your Order</button>
+                    
+                    <!-- Continue Shopping -->
+                    <button class="btn-secondary">Continue Shopping</button>
+
+                    <!-- Trust Signals -->
+                    <div class="trust-signals">
+                        <p>✓ Secure payment</p>
+                        <p>✓ eBay Money Back Guarantee</p>
+                        <p>✓ Buyer Protection</p>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+	<!-- Order Confirmation Modal -->
+    <div class="modal" id="confirmation-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Order Confirmed!</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="success-icon">✓</div>
+                <p>Thank you for your purchase!</p>
+                <p class="order-id">Order #<span id="order-number"></span></p>
+                <p>A confirmation email has been sent to your email address.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="window.location.reload()">Back to Shopping</button>
+            </div>
+        </div>
+    </div>
 
 	<!-- logo carousel -->
 	<div class="logo-carousel-section">
@@ -381,6 +491,8 @@
 	<script src="assets/js/sticker.js"></script>
 	<!-- main js -->
 	<script src="assets/js/main.js"></script>
+
+	<script src="assets/js/checkout.js"></script>
 
 </body>
 </html>

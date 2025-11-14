@@ -22,5 +22,7 @@ namespace EbayCloneBuyerService_CoreAPI.Services.Interface
         Task<List<ReturnRequestDto>> GetReturnRequestsAsync(int orderId);
 
         Task<bool> ValidateOrderOwnershipAsync(int orderId, int userId);
+
+        Task<int> PlaceOrderAsync(int? userId, PlaceOrderRequest request);
     }
 }

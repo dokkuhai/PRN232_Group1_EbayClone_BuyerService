@@ -2,7 +2,9 @@ using EbayCloneBuyerService_CoreAPI.Exceptions;
 using EbayCloneBuyerService_CoreAPI.Models;
 using EbayCloneBuyerService_CoreAPI.Models.Requests;
 using EbayCloneBuyerService_CoreAPI.Models.Responses;
+using EbayCloneBuyerService_CoreAPI.Repositories.Interface;
 using EbayCloneBuyerService_CoreAPI.Services.Interface;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace EbayCloneBuyerService_CoreAPI.Services.Impl
@@ -11,11 +13,15 @@ namespace EbayCloneBuyerService_CoreAPI.Services.Impl
     {
         private readonly CloneEbayDbContext _context;
         private readonly ILogger<OrderService> _logger;
+        private readonly IOrderRepository _orderRepository;
 
-        public OrderService(CloneEbayDbContext context, ILogger<OrderService> logger)
+        public OrderService(CloneEbayDbContext context, ILogger<OrderService> logger,
+            IOrderRepository orderRepository
+            )
         {
             _context = context;
             _logger = logger;
+            _orderRepository = orderRepository;
         }
 
         public async Task<(List<OrderListItemDto> orders, int totalCount)> GetOrdersAsync(
@@ -223,6 +229,51 @@ namespace EbayCloneBuyerService_CoreAPI.Services.Impl
                 .FirstOrDefaultAsync(o => o.Id == orderId);
 
             return order != null && order.BuyerId == userId;
+        }
+
+        public async Task<int> PlaceOrderAsync(int? userId, PlaceOrderRequest request)
+        {
+            // 1. Validation cơ bản
+            if (request.Items == null || !request.Items.Any())
+            {
+                throw new InvalidOperationException("Danh sách sản phẩm trống.");
+            }
+
+            // TODO: Cần thêm logic kiểm tra tồn kho (AvailableStock) cho từng ProductId tại đây.
+
+            // 2. Tạo Address Entity và Lưu
+            var addressEntity = new Address
+            {
+                UserId = userId ?? null,
+                FullName = request.ShippingInfo.FullName,
+                Phone = request.ShippingInfo.Phone,
+                Street = request.ShippingInfo.Street,
+                City = request.ShippingInfo.City,
+                State = request.ShippingInfo.State,
+                Country = request.ShippingInfo.Country,
+                IsDefault = true // Giả định là địa chỉ mới/mặc định
+            };
+            var addressId = await _orderRepository.CreateAddressAsync(addressEntity);
+
+            // 3. Tính toán tổng giá trị (Sử dụng LINQ)
+            var subtotal = request.Items.Sum(item => item.UnitPrice * item.Quantity);
+            var tax = subtotal * request.TaxRate;
+            var totalPrice = subtotal + request.ShippingCost + tax;
+
+            // 4. Tạo Order Entity
+            var orderEntity = new OrderTable
+            {
+                BuyerId = userId,
+                AddressId = addressId,
+                OrderDate = DateTime.Now,
+                TotalPrice = totalPrice,
+                Status = "PENDING"
+            };
+
+            // 5. Tạo Order và Order Items trong Transaction
+            var orderId = await _orderRepository.CreateOrderAsync(orderEntity, (IEnumerable<OrderItemDto>)request.Items);
+
+            return orderId;
         }
     }
 }
