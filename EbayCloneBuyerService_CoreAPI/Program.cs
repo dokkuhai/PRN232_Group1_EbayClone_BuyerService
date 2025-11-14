@@ -1,9 +1,13 @@
-﻿using EbayCloneBuyerService_CoreAPI.Hubs;
+using EbayCloneBuyerService_CoreAPI.Hubs;
 using EbayCloneBuyerService_CoreAPI.Models;
+using DotNetEnv;
+using EbayCloneBuyerService_CoreAPI.Exceptions;
+using EbayCloneBuyerService_CoreAPI.MyProfile;
 using EbayCloneBuyerService_CoreAPI.Repositories.Impl;
 using EbayCloneBuyerService_CoreAPI.Repositories.Interface;
 using EbayCloneBuyerService_CoreAPI.Services.Impl;
 using EbayCloneBuyerService_CoreAPI.Services.Interface;
+using EbayCloneBuyerService_CoreAPI.Utils;
 using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
@@ -13,8 +17,14 @@ using Microsoft.OData.ModelBuilder;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// Load file .env
+Env.Load();
+
+var googleClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
+var googleClientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET");
+
 builder.Services.AddControllers()
-    .AddJsonOptions(x =>
+ .AddJsonOptions(x =>
     {
         x.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
         x.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
@@ -31,6 +41,11 @@ builder.Services.AddSwaggerGen();
 
 
 
+
+//==== AutoMapper =====
+builder.Services.AddAutoMapper(cfg => {
+    cfg.AddProfile<UserProfile>();
+});
 
 // ===== DB Context =====
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -60,6 +75,18 @@ builder.Services.AddSignalR(options =>
     options.EnableDetailedErrors = true;
     options.KeepAliveInterval = TimeSpan.FromSeconds(15);
 });
+
+
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<JwtService>();
+
+//builder.Services.AddScoped<IUserRepository, UserRepository>();
+//builder.Services.AddScoped<IUserService, UserService>();
+
+
+
 
 
 
