@@ -348,25 +348,15 @@
 	<script src="assets/js/main.js"></script>
 <script>
 // =====================
-// Detect API Base URL
+// FIXED API DOMAIN 
 // =====================
-let baseUrl = window.location.origin;
-
-// chạy bằng file:/// → fallback localhost
-if (baseUrl.startsWith("http")) {
-    baseUrl = "https://localhost:7020";
-}
-
-// deploy domain
-if (baseUrl.includes("dokkuhai")) {
-    baseUrl = "https://ebay.dokkuhai.dpdns.org";
-}
-
-// API chính
+const baseUrl = "https://ebay.dokkuhai.dpdns.org";
 const apiBaseUrl = `${baseUrl}/api/Product/`;
 
+// Get ID product từ URL
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("id") || 1;
+
 
 // =====================
 // LOAD PRODUCT DETAILS
@@ -376,12 +366,10 @@ async function loadProduct() {
         const res = await fetch(apiBaseUrl + productId);
         if (!res.ok) throw new Error("Cannot load product");
 
-        const raw = await res.json();
-        const product = raw; // deploy và local đều trả object
-
+        const product = await res.json();
         console.log("Product:", product);
 
-        // ----- Chuẩn hóa key (Local OData vs Deploy JSON) -----
+        // ----- Chuẩn hóa key (đề phòng OData/JSON) -----
         const name = product.Title ?? product.title;
         const price = product.Price ?? product.price;
         const desc = product.Description ?? product.description;
@@ -396,10 +384,10 @@ async function loadProduct() {
         const auctionEndTime = product.AuctionEndTime ?? product.auctionEndTime;
 
         // -------- IMAGE --------
-        document.querySelector(".single-product-img img").src =
-            img?.startsWith("http")
-                ? img
-                : "assets/img/products/" + (img || "default.jpg");
+        const imgUrl = img?.startsWith("http")
+            ? img
+            : `assets/img/products/${img || "default.jpg"}`;
+        document.querySelector(".single-product-img img").src = imgUrl;
 
         // -------- BASIC INFO --------
         document.getElementById("p-title").textContent = name;
@@ -411,8 +399,9 @@ async function loadProduct() {
             category?.Name ?? category?.name ?? "Unknown";
 
         // -------- AUCTION --------
-        if (isAuction === true) {
+        if (isAuction) {
             document.getElementById("product-type").textContent = "Auction Product";
+
             if (auctionEndTime) {
                 const end = new Date(auctionEndTime);
                 document.getElementById("auction-end").textContent = end.toLocaleString();
@@ -430,14 +419,16 @@ async function loadProduct() {
 
         // -------- STOCK --------
         document.getElementById("stock-qty").textContent =
-            inventories?.length > 0 ? inventories[0].Quantity ?? inventories[0].quantity : "N/A";
+            inventories?.length > 0
+                ? inventories[0].Quantity ?? inventories[0].quantity
+                : "N/A";
 
         // -------- COUPONS --------
         const couponList = document.getElementById("coupon-list");
         couponList.innerHTML = "";
         if (coupons?.length > 0) {
             coupons.forEach(c => {
-                couponList.innerHTML += `<li>${c.Code ?? c.code} - ${(c.DiscountPercent ?? c.discountPercent)}%</li>`;
+                couponList.innerHTML += `<li>${c.Code ?? c.code} - ${c.DiscountPercent ?? c.discountPercent}%</li>`;
             });
         } else {
             couponList.innerHTML = "<li>No coupons available</li>";
@@ -448,7 +439,7 @@ async function loadProduct() {
         reviewList.innerHTML = "";
         if (reviews?.length > 0) {
             reviews.forEach(r => {
-                reviewList.innerHTML += `<li>⭐ ${(r.Rating ?? r.rating)}/5 - ${(r.Comment ?? r.comment)}</li>`;
+                reviewList.innerHTML += `<li>⭐ ${r.Rating ?? r.rating}/5 - ${r.Comment ?? r.comment}</li>`;
             });
         } else {
             reviewList.innerHTML = "<li>No reviews yet</li>";
@@ -460,6 +451,7 @@ async function loadProduct() {
             const total = reviews.reduce((sum, r) => sum + (r.Rating ?? r.rating), 0);
             avgRating = (total / reviews.length).toFixed(1);
         }
+
         document.getElementById("avg-rating").textContent =
             reviews?.length > 0
                 ? `${avgRating} / 5 ⭐ (${reviews.length} reviews)`
@@ -472,6 +464,7 @@ async function loadProduct() {
         console.error("❌ Error loading product:", err);
     }
 }
+
 
 // ============================
 // LOAD RELATED PRODUCTS
@@ -501,13 +494,17 @@ async function loadRelatedProducts(categoryId, currentProductId) {
             const img = p.images ?? p.Images;
             const title = p.title ?? p.Title;
             const price = p.price ?? p.Price;
-            
+
+            const imgUrl = img?.startsWith("http")
+                ? img
+                : `assets/img/products/${img || "default.jpg"}`;
+
             container.innerHTML += `
                 <div class="col-lg-4 col-md-6 text-center">
                     <div class="single-product-item">
                         <div class="product-image">
                             <a href="single-product.html?id=${id}">
-                                <img src="assets/img/products/${img || "default.jpg"}" alt="">
+                                <img src="${imgUrl}" alt="">
                             </a>
                         </div>
                         <h3>${title}</h3>
@@ -527,6 +524,7 @@ async function loadRelatedProducts(categoryId, currentProductId) {
 
 document.addEventListener("DOMContentLoaded", loadProduct);
 </script>
+
 </body>
 
 </html>
