@@ -19,7 +19,7 @@ $('#registerBtn').on('click', function (event) {
     }
 
     $.ajax({
-        url: 'https://localhost:7020/api/User/register',
+        url: 'https://ebay.dokkuhai.dpdns.org/api/User/register',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({ userName, email, password }),

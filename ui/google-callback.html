@@ -234,9 +234,9 @@
 			const params = new URLSearchParams(window.location.search);
 			const code = params.get('code');
 
-			const API_BACKEND_URL = 'https://localhost:7020/api/User/google-login';
+			const API_BACKEND_URL = 'https://ebay.dokkuhai.dpdns.org/api/User/google-login';
 
-			const HOME_PAGE_URL = ' https://ebay.dokkuhai.dpdns.org/'; // Sửa lại thành trang dashboard/home
+			const HOME_PAGE_URL = 'https://ebay.dokkuhai.dpdns.org/'; // Sửa lại thành trang dashboard/home
 
 			// Nơi chuyển hướng nếu ĐĂNG NHẬP THẤT BẠI
 			const LOGIN_PAGE_URL = '/login.html'; // Sửa lại thành trang login
@@ -297,7 +297,7 @@
 			const email = $('#hiddenEmail').val();
 			const name = $('#hiddenName').val();
 			$.ajax({
-				url: 'https://localhost:7020/api/User/google-register',
+				url: 'https://ebay.dokkuhai.dpdns.org/api/User/google-register',
 				method: 'POST',
 				contentType: 'application/json',
 				data: JSON.stringify({ email: email, name: name }),
