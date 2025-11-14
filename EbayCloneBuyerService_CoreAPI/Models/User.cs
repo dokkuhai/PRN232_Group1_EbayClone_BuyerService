@@ -21,6 +21,8 @@ public partial class User
 
     public virtual ICollection<Bid> Bids { get; set; } = new List<Bid>();
 
+    public virtual ICollection<CouponUsage> CouponUsages { get; set; } = new List<CouponUsage>();
+
     public virtual ICollection<Dispute> Disputes { get; set; } = new List<Dispute>();
 
     public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
