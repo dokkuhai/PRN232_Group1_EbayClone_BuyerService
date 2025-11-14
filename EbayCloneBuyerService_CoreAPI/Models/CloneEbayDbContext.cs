@@ -18,15 +18,13 @@ public partial class CloneEbayDbContext : DbContext
 
     public virtual DbSet<Address> Addresses { get; set; }
 
-    public virtual DbSet<Address1> Addresses1 { get; set; }
-
     public virtual DbSet<Bid> Bids { get; set; }
 
+    public virtual DbSet<Cart> Carts { get; set; }
+
+    public virtual DbSet<CartItem> CartItems { get; set; }
+
     public virtual DbSet<Category> Categories { get; set; }
-
-    public virtual DbSet<City> Cities { get; set; }
-
-    public virtual DbSet<Country> Countries { get; set; }
 
     public virtual DbSet<Coupon> Coupons { get; set; }
 
@@ -60,7 +58,7 @@ public partial class CloneEbayDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=localhost;port=3306;database=CloneEbayDB;user=root;password=root", Microsoft.EntityFrameworkCore.ServerVersion.Parse("9.5.0-mysql"));
+        => optionsBuilder.UseMySql("server=13.229.143.154;port=3307;database=CloneEbayDB;user=root;password=root", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.44-mysql"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -103,33 +101,6 @@ public partial class CloneEbayDbContext : DbContext
                 .HasConstraintName("Address_ibfk_1");
         });
 
-        modelBuilder.Entity<Address1>(entity =>
-        {
-            entity.HasKey(e => e.AddressId).HasName("PRIMARY");
-
-            entity.ToTable("Addresses");
-
-            entity.HasIndex(e => e.UserId, "UserID");
-
-            entity.Property(e => e.AddressId).HasColumnName("AddressID");
-            entity.Property(e => e.AddressLine).HasMaxLength(255);
-            entity.Property(e => e.AddressType).HasColumnType("enum('Registration','Shipping','ShipFrom','Return','Payment')");
-            entity.Property(e => e.City).HasMaxLength(100);
-            entity.Property(e => e.Country).HasMaxLength(100);
-            entity.Property(e => e.LastUpdated)
-                .ValueGeneratedOnAddOrUpdate()
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("datetime");
-            entity.Property(e => e.PostalCode).HasMaxLength(20);
-            entity.Property(e => e.State).HasMaxLength(100);
-            entity.Property(e => e.UserId).HasColumnName("UserID");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Address1s)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("Addresses_ibfk_1");
-        });
-
         modelBuilder.Entity<Bid>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -159,6 +130,64 @@ public partial class CloneEbayDbContext : DbContext
                 .HasConstraintName("Bid_ibfk_1");
         });
 
+        modelBuilder.Entity<Cart>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("Cart");
+
+            entity.HasIndex(e => e.GuestToken, "unique_guest_cart").IsUnique();
+
+            entity.HasIndex(e => e.UserId, "unique_user_cart").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("datetime")
+                .HasColumnName("createdAt");
+            entity.Property(e => e.GuestToken)
+                .HasMaxLength(100)
+                .HasColumnName("guestToken");
+            entity.Property(e => e.UpdatedAt)
+                .ValueGeneratedOnAddOrUpdate()
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("datetime")
+                .HasColumnName("updatedAt");
+            entity.Property(e => e.UserId).HasColumnName("userId");
+
+            entity.HasOne(d => d.User).WithOne(p => p.Cart)
+                .HasForeignKey<Cart>(d => d.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("fk_cart_user");
+        });
+
+        modelBuilder.Entity<CartItem>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("CartItem");
+
+            entity.HasIndex(e => e.CartId, "fk_cartitem_cart");
+
+            entity.HasIndex(e => e.ProductId, "fk_cartitem_product");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CartId).HasColumnName("cartId");
+            entity.Property(e => e.ProductId).HasColumnName("productId");
+            entity.Property(e => e.Quantity)
+                .HasDefaultValueSql("'1'")
+                .HasColumnName("quantity");
+
+            entity.HasOne(d => d.Cart).WithMany(p => p.CartItems)
+                .HasForeignKey(d => d.CartId)
+                .HasConstraintName("fk_cartitem_cart");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.CartItems)
+                .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_cartitem_product");
+        });
+
         modelBuilder.Entity<Category>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -169,33 +198,6 @@ public partial class CloneEbayDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
                 .HasColumnName("name");
-        });
-
-        modelBuilder.Entity<City>(entity =>
-        {
-            entity.HasKey(e => e.CityId).HasName("PRIMARY");
-
-            entity.HasIndex(e => e.CountryId, "CountryID");
-
-            entity.Property(e => e.CityId).HasColumnName("CityID");
-            entity.Property(e => e.CityName).HasMaxLength(100);
-            entity.Property(e => e.CountryId).HasColumnName("CountryID");
-
-            entity.HasOne(d => d.Country).WithMany(p => p.Cities)
-                .HasForeignKey(d => d.CountryId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("Cities_ibfk_1");
-        });
-
-        modelBuilder.Entity<Country>(entity =>
-        {
-            entity.HasKey(e => e.CountryId).HasName("PRIMARY");
-
-            entity.Property(e => e.CountryId).HasColumnName("CountryID");
-            entity.Property(e => e.CountryCode)
-                .HasMaxLength(2)
-                .IsFixedLength();
-            entity.Property(e => e.CountryName).HasMaxLength(100);
         });
 
         modelBuilder.Entity<Coupon>(entity =>
@@ -594,13 +596,9 @@ public partial class CloneEbayDbContext : DbContext
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");
-            entity.Property(e => e.LastUpdated)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("datetime");
             entity.Property(e => e.Password)
                 .HasMaxLength(255)
                 .HasColumnName("password");
-            entity.Property(e => e.PhoneNumber).HasMaxLength(20);
             entity.Property(e => e.Role)
                 .HasMaxLength(20)
                 .HasColumnName("role");
