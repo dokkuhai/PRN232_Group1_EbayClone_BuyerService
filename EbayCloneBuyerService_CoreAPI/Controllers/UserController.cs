@@ -58,7 +58,7 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
     { "client_secret", Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET") },
     { "code", request.Code },
     { "grant_type", "authorization_code" },
-    { "redirect_uri", Environment.GetEnvironmentVariable("GOOGLE_REDIRECT_URI") }
+    { "redirect_uri", "https://ebay.dokkuhai.dpdns.org/google-callback.html" }
 };
 
             var response = await client.PostAsync(tokenEndpoint, new FormUrlEncodedContent(tokenParams));
@@ -189,7 +189,7 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
             return Unauthorized(new { message = "Invalid remember me token." });
         }
 
-        [HttpDelete("logout")]
+        [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
             if (Request.Cookies.TryGetValue("RememberMeToken", out var tokenhash))
