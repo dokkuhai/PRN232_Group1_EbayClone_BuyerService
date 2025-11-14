@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.OData.Query;
 
 namespace EbayCloneBuyerService_CoreAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -16,14 +16,14 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
         {
             _product = product;
         }
-        [HttpGet]
+        [HttpGet("Product")]
         [EnableQuery]
         public IActionResult GetAllProducts()
         {
             var products = _product.GetAllAsync();
             return Ok(products);
         }
-        [HttpGet("{id}")]
+        [HttpGet("Product/{id}")]
         [EnableQuery]
         public async Task<IActionResult> GetProductById(int id)
         {
