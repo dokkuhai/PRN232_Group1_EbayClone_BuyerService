@@ -53,3 +53,4 @@ CodeCoverage/
 TestResult.xml
 nunit-*.xml
 # Ignore Visual Studio workspace cache
+.vs
