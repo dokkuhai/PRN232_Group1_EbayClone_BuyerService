@@ -6,7 +6,7 @@
     console.log("No session token found, checking remember-me login...");
     var cookies = document.cookie.split(';');
     try {
-        const res = await fetch("https://localhost:7020/api/User/remember-me-login", {
+        const res = await fetch("/api/user/remember-me-login", {
             method: "GET",
             credentials: "include"
         });
@@ -37,7 +37,7 @@ $('#loginBtn').on('click', function () {
     const rememberMe = $('#rememberMeCheck').is(':checked');
     console.log("Attempting login with email:", email, "Remember me:", rememberMe);
     $.ajax({
-        url: 'https://localhost:7020/api/User/login',
+        url: '/api/user/login',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({ email, password, rememberMe }),
