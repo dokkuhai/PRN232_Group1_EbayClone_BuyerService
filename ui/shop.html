@@ -437,7 +437,7 @@ async function loadProducts() {
         container.innerHTML = "";
         products.forEach(p => {
             const img = p.images || p.Images || "default.jpg";
-            const imgUrl = img.startsWith("http") ? img : `assets/img/products/${img}`;
+            const imgUrl = img.startsWith("http") ? img : `https://th.bing.com/th/id/OIP.ipTpmWrouGNDkLY582e2hQHaEK?w=294&h=180&c=7&r=0&o=7&cb=ucfimg2&dpr=1.3&pid=1.7&rm=3&ucfimg=1`;
             const category = p.category?.name ?? "Unknown";
 
             container.insertAdjacentHTML(
@@ -452,7 +452,7 @@ async function loadProducts() {
                         </div>
                         <h3>${p.title}</h3>
                         <p class="product-price">
-                            <span>${category}</span> $${p.price}
+                            <span>${category}</span> ${p.price} VND
                         </p>
                         <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
                     </div>
