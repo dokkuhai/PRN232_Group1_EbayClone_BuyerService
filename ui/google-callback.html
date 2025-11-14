@@ -201,7 +201,7 @@
 
 				<div class="user-info">
 					<div class="user-info-name" id="user-info-name">Son Nguyen</div>
-					<div class="user-info-email">nguyenson221004@gmail.com</div>
+					<div class="user-info-email" id="user-info-email">nguyenson221004@gmail.com</div>
 				</div>
 
 				<p class="legal-text">
@@ -212,6 +212,8 @@
 				<button class="btn-create-account">Create account</button>
 			</div>
 		</main>
+		<br>
+		<br>
 
 		<footer class="page-footer">
 			<p class="footer-links">
@@ -264,7 +266,7 @@
 						localStorage.setItem('userName', data.userName);
 						localStorage.setItem('accessToken', data.token);
 
-						//window.location.href = HOME_PAGE_URL;
+						window.location.href = HOME_PAGE_URL;
 
 					} else if (response.status === 401) {
 						console.log('Tài khoản chưa đăng ký, chuyển sang trang đăng ký', data);
