@@ -13,12 +13,6 @@ using Microsoft.OData.ModelBuilder;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-// odata
 builder.Services.AddControllers()
     .AddJsonOptions(x =>
     {
@@ -29,20 +23,30 @@ builder.Services.AddControllers()
         options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null)
             .AddRouteComponents("api", GetEdmModel()));
 
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 // ===== JWT Authentication & Authorization =====
 
 
 
 
 // ===== DB Context =====
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<CloneEbayDbContext>(options =>
+{
     options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
-    ));
+        connectionString,
+        new MySqlServerVersion(new Version(8, 0, 21)),
+        mySqlOptions => mySqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 10,
+            maxRetryDelay: TimeSpan.FromSeconds(30),
+            errorNumbersToAdd: null)
+    );
+});
 
 // ===== DI: Repository & Service =====
-builder.Services.AddScoped(typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IProductRepo, ProductRepo>();
 builder.Services.AddScoped<IProductServices, ProductServices>();

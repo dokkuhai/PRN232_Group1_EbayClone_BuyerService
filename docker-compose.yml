@@ -12,6 +12,12 @@ services:
     ports:
       - "3307:3306"
     restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   api1:
     build:
@@ -26,7 +32,8 @@ services:
     expose:
       - "8081"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     restart: always
 
   api2:
@@ -42,7 +49,8 @@ services:
     expose:
       - "8081"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     restart: always
 
   nginx:

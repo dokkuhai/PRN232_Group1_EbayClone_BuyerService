@@ -532,7 +532,7 @@
 	<script src="assets/js/main.js"></script>
 
 	<script>
-const apiUrl = "https://localhost:7020/api/Product?$expand=Category&$count=true";
+const apiUrl = "/api/Product?$expand=Category&$count=true";
 let page = 0;
 const pageSize = 3;
 let totalCount = 0;
@@ -558,7 +558,7 @@ async function loadProducts() {
 		const data = await res.json();
 		const products = data.value ?? data;
         if (totalCount === 0) {
-        const countRes = await fetch("https://localhost:7020/api/Product");
+        const countRes = await fetch("/api/Product");
         const countData = await countRes.json();
          totalCount = countData.length;
     }
