@@ -89,6 +89,8 @@ builder.Services.AddScoped<IRememberTokenRepository, RememberTokenRepository>();
 builder.Services.AddScoped<IRememberTokenService, RememberTokenService>();
 
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IProductRepo, ProductRepo>();
+builder.Services.AddScoped<IProductServices, ProductServices>();
 
 builder.Services.AddScoped<JwtService>();
 

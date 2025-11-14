@@ -355,7 +355,7 @@
 	<!-- main js -->
 	<script src="assets/js/main.js"></script>
 <script>
-const apiBaseUrl = "/api/Product?$expand=Category&$count=true";
+const apiBaseUrl = "https://localhost:7020/api/Product?$expand=Category&$count=true";
 const container = document.querySelector(".product-lists");
 const paginationWrap = document.querySelector(".pagination-wrap ul");
 
@@ -397,13 +397,13 @@ async function loadProducts() {
 
     const products = data.value ?? data;
     if (totalCount === 0) {
-      const countRes = await fetch("/api/Product");
+      const countRes = await fetch("https://localhost:7020/api/Product");
       const countData = await countRes.json();
       totalCount = countData.length;
     }
     totalPages = Math.ceil(totalCount / pageSize);
 
-    if (products.length === 0) {
+if (products.length === 0) {
       container.innerHTML = '<p>No products found.</p>';
       paginationWrap.innerHTML = "";
       return;
@@ -435,6 +435,7 @@ async function loadProducts() {
     container.innerHTML = '<p style="color:red;">Error loading product list.</p>';
   }
 }
+
 
 // ------------------------------
 // 2️⃣ Phân trang
