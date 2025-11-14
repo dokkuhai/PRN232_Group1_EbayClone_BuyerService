@@ -356,28 +356,19 @@
 	<script src="assets/js/main.js"></script>
 <script>
 // =====================
-// Detect API Base URL
+// FIXED API DOMAIN (NO LOCALHOST)
 // =====================
-let baseUrl = window.location.origin;
-
-// mở bằng file:/// → fallback localhost
-if (baseUrl.startsWith("http")) {
-    baseUrl = "https://localhost:7020";
-}
-
-// nếu deploy domain
-if (baseUrl.includes("dokkuhai")) {
-    baseUrl = "https://ebay.dokkuhai.dpdns.org";
-}
-
-// API chính
+const baseUrl = "https://ebay.dokkuhai.dpdns.org";
 const apiUrl = `${baseUrl}/api/Product`;
 
+// =====================
+// ELEMENTS
+// =====================
 const container = document.querySelector(".product-lists");
 const paginationWrap = document.querySelector(".pagination-wrap ul");
 
 // =====================
-// Config
+// CONFIG
 // =====================
 let page = 0;
 const pageSize = 3;
@@ -389,100 +380,54 @@ let currentSort = "";
 let currentCategorySort = "";
 
 // =====================
-// Load Products
+// LOAD PRODUCTS (DOMAIN JSON ONLY)
 // =====================
 async function loadProducts() {
     try {
         container.innerHTML = "<p>Loading products...</p>";
 
+        // Always fetch full list from domain
+        const res = await fetch(apiUrl);
+        if (!res.ok) throw new Error("Cannot fetch products");
+
+        const raw = await res.json();
+        let products = Array.isArray(raw) ? raw : [];
+
+        // ----- FILTER (search) -----
+        if (currentKeyword.trim() !== "") {
+            const key = currentKeyword.toLowerCase();
+            products = products.filter(p =>
+                (p.title ?? "").toLowerCase().includes(key) ||
+                (p.category?.name ?? "").toLowerCase().includes(key)
+            );
+        }
+
+        // ----- SORT Category -----
+        if (currentCategorySort !== "") {
+            products.sort((a, b) =>
+                currentCategorySort === "asc"
+                    ? (a.category?.name ?? "").localeCompare(b.category?.name ?? "")
+                    : (b.category?.name ?? "").localeCompare(a.category?.name ?? "")
+            );
+        }
+        // ----- SORT Product -----
+        else if (currentSort !== "") {
+            const [field, direction] = currentSort.split(" ");
+            products.sort((a, b) => {
+                const va = a[field.toLowerCase()];
+                const vb = b[field.toLowerCase()];
+                return direction === "asc" ? va - vb : vb - va;
+            });
+        }
+
+        // ----- PAGING -----
+        totalCount = products.length;
+        totalPages = Math.ceil(totalCount / pageSize);
+
         const skip = page * pageSize;
-        let url = "";
+        products = products.slice(skip, skip + pageSize);
 
-        const isLocal = baseUrl.includes("localhost");
-
-        if (isLocal) {
-            // ----- LOCAL ODATA -----
-            url = `${apiUrl}?$expand=Category&$count=true&$top=${pageSize}&$skip=${skip}`;
-
-            // tìm kiếm
-            if (currentKeyword.trim() !== "") {
-                const keyword = currentKeyword.toLowerCase();
-                url += `&$filter=contains(tolower(Title),'${keyword}') or contains(tolower(Category/Name),'${keyword}')`;
-            }
-
-            // sort theo Category
-            if (currentCategorySort !== "") {
-                url += `&$orderby=Category/Name ${currentCategorySort}`;
-            }
-            // sort theo Title/Price
-            else if (currentSort !== "") {
-                url += `&$orderby=${currentSort}`;
-            }
-
-        } else {
-            // ----- DEPLOY JSON THUẦN -----
-            url = apiUrl;
-        }
-
-        const res = await fetch(url);
-        if (!res.ok) throw new Error("Fetch failed");
-        const rawData = await res.json();
-
-        const data = Array.isArray(rawData) ? rawData : (rawData.value ?? []);
-
-        // ===============================
-        // DEPLOY → lọc, sort, paging bằng JS
-        // ===============================
-        let products = [...data];
-
-        if (!isLocal) {
-            // ---- JS FILTER ----
-            if (currentKeyword.trim() !== "") {
-                const key = currentKeyword.toLowerCase();
-                products = products.filter(p =>
-                    (p.title ?? "").toLowerCase().includes(key) ||
-                    (p.category?.name ?? "").toLowerCase().includes(key)
-                );
-            }
-
-            // ---- JS SORT ----
-            if (currentCategorySort !== "") {
-                products.sort((a, b) =>
-                    currentCategorySort === "asc"
-                        ? (a.category?.name ?? "").localeCompare(b.category?.name ?? "")
-                        : (b.category?.name ?? "").localeCompare(a.category?.name ?? "")
-                );
-            }
-            else if (currentSort !== "") {
-                const [field, direction] = currentSort.split(" ");
-
-                products.sort((a, b) => {
-                    const va = a[field.toLowerCase()];
-                    const vb = b[field.toLowerCase()];
-                    return direction === "asc" ? va - vb : vb - va;
-                });
-            }
-
-            // ---- JS PAGING ----
-            totalCount = products.length;
-            totalPages = Math.ceil(totalCount / pageSize);
-            products = products.slice(skip, skip + pageSize);
-
-        } else {
-            // LOCAL ODATA
-            if (totalCount === 0) {
-                const allRes = await fetch(apiUrl);
-                const allData = await allRes.json();
-                const list = Array.isArray(allData) ? allData : allData.value;
-                totalCount = list.length;
-            }
-
-            totalPages = Math.ceil(totalCount / pageSize);
-        }
-
-        // =====================
-        // Hiển thị UI
-        // =====================
+        // Render UI
         if (products.length === 0) {
             container.innerHTML = "<p>No products found.</p>";
             paginationWrap.innerHTML = "";
@@ -490,45 +435,40 @@ async function loadProducts() {
         }
 
         container.innerHTML = "";
-
         products.forEach(p => {
-            const name = p.Title ?? p.title;
-            const price = p.Price ?? p.price;
-            const img = p.Images ?? p.images;
-            const id = p.Id ?? p.id;
+            const img = p.images || p.Images || "default.jpg";
+            const imgUrl = img.startsWith("http") ? img : `assets/img/products/${img}`;
+            const category = p.category?.name ?? "Unknown";
 
-            const categoryName = p.Category?.Name ?? p.category?.name ?? "Unknown";
-
-            const imgUrl = img?.startsWith("http")
-                ? img
-                : `assets/img/products/${img || "default.jpg"}`;
-
-            const html = `
-            <div class="col-lg-4 col-md-6 text-center">
-                <div class="single-product-item">
-                    <div class="product-image">
-                        <a href="single-product.html?id=${id}">
-                            <img src="${imgUrl}" alt="${name}">
-                        </a>
+            container.insertAdjacentHTML(
+                "beforeend",
+                `
+                <div class="col-lg-4 col-md-6 text-center">
+                    <div class="single-product-item">
+                        <div class="product-image">
+                            <a href="single-product.html?id=${p.id}">
+                                <img src="${imgUrl}" alt="${p.title}">
+                            </a>
+                        </div>
+                        <h3>${p.title}</h3>
+                        <p class="product-price">
+                            <span>${category}</span> $${p.price}
+                        </p>
+                        <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
                     </div>
-                    <h3>${name}</h3>
-                    <p class="product-price"><span>${categoryName}</span> $${price}</p>
-                    <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                </div>
-            </div>`;
-            container.insertAdjacentHTML("beforeend", html);
+                </div>`
+            );
         });
 
         renderPagination();
-
     } catch (err) {
         console.error("❌ Error:", err);
-        container.innerHTML = '<p style="color:red;">Error loading product list.</p>';
+        container.innerHTML = `<p style="color:red">Error loading product list.</p>`;
     }
 }
 
 // =====================
-// Pagination
+// PAGINATION RENDER
 // =====================
 function renderPagination() {
     paginationWrap.innerHTML = "";
@@ -561,14 +501,13 @@ function renderPagination() {
             if (!isNaN(target) && target >= 0 && target < totalPages) {
                 page = target;
                 loadProducts();
-                window.scrollTo({ top: 0, behavior: "smooth" });
             }
         });
     });
 }
 
 // =====================
-// Search
+// SEARCH
 // =====================
 document.querySelector(".search-bar button").addEventListener("click", () => {
     currentKeyword = document.querySelector(".search-bar input").value.trim();
@@ -576,15 +515,8 @@ document.querySelector(".search-bar button").addEventListener("click", () => {
     loadProducts();
 });
 
-document.querySelector(".search-bar input").addEventListener("keypress", e => {
-    if (e.key === "Enter") {
-        e.preventDefault();
-        document.querySelector(".search-bar button").click();
-    }
-});
-
 // =====================
-// Sort
+// SORT UI
 // =====================
 const sortSelect = document.createElement("select");
 sortSelect.innerHTML = `
@@ -595,7 +527,6 @@ sortSelect.innerHTML = `
 <option value="Title desc">Name Z–A</option>`;
 sortSelect.classList.add("form-select", "mb-3");
 sortSelect.style.width = "200px";
-sortSelect.style.marginLeft = "10px";
 
 const categorySortSelect = document.createElement("select");
 categorySortSelect.innerHTML = `
@@ -603,21 +534,21 @@ categorySortSelect.innerHTML = `
 <option value="asc">Category A–Z</option>
 <option value="desc">Category Z–A</option>`;
 categorySortSelect.classList.add("form-select", "mb-3");
-categorySortSelect.style.width = "220px";
-categorySortSelect.style.marginLeft = "10px";
+categorySortSelect.style.width = "200px";
 
+// Add to UI
 const sortContainer = document.createElement("div");
 sortContainer.style.display = "flex";
+sortContainer.style.gap = "10px";
 sortContainer.style.justifyContent = "flex-end";
-sortContainer.style.marginBottom = "20px";
 sortContainer.appendChild(categorySortSelect);
 sortContainer.appendChild(sortSelect);
+
 document.querySelector(".product-section .container").prepend(sortContainer);
 
 sortSelect.addEventListener("change", () => {
     currentSort = sortSelect.value;
     currentCategorySort = "";
-    categorySortSelect.value = "";
     page = 0;
     loadProducts();
 });
@@ -625,7 +556,6 @@ sortSelect.addEventListener("change", () => {
 categorySortSelect.addEventListener("change", () => {
     currentCategorySort = categorySortSelect.value;
     currentSort = "";
-    sortSelect.value = "";
     page = 0;
     loadProducts();
 });
@@ -635,7 +565,6 @@ categorySortSelect.addEventListener("change", () => {
 // =====================
 document.addEventListener("DOMContentLoaded", loadProducts);
 </script>
-
 
 
 </body>

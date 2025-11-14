@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -622,269 +621,147 @@
 	<!-- main js -->
 	<script src="assets/js/main.js"></script>
 
-	<script>
-		const apiUrl = "/api/Product?$expand=Category&$count=true";
-		let page = 0;
-		const pageSize = 3;
-		let totalCount = 0;
-		let totalPages = 0;
+<script>
+    // ===== FIXED API BASE URL (ALWAYS USE DOMAIN) =====
+    const baseUrl = "https://ebay.dokkuhai.dpdns.org";
+    const apiUrl = `${baseUrl}/api/Product`;
 
-		const container = document.getElementById("product-container");
-		const btnPrev = document.getElementById("prev-page");
-		const btnNext = document.getElementById("next-page");
-		const pageInfo = document.getElementById("page-info");
-		const pageInput = document.getElementById("page-input");
-		const goPageBtn = document.getElementById("go-page");
+    let page = 0;
+    const pageSize = 3;
+    let totalCount = 0;
+    let totalPages = 0;
 
-		async function loadProducts() {
-			try {
-				container.innerHTML = '<p>Loading products...</p>';
+    const container = document.getElementById("product-container");
+    const btnPrev = document.getElementById("prev-page");
+    const btnNext = document.getElementById("next-page");
+    const pageInfo = document.getElementById("page-info");
+    const pageInput = document.getElementById("page-input");
+    const goPageBtn = document.getElementById("go-page");
 
-				const skip = page * pageSize;
-				const url = apiUrl + `& $top=${pageSize} & $skip=${skip}`;
-				console.log("Fetching:", url);
+    async function loadProducts() {
+        try {
+            container.innerHTML = "<p>Loading products...</p>";
 
-				const res = await fetch(url);
-				if (!res.ok) throw new Error("Cannot fetch products");
-				const data = await res.json();
-				const products = data.value ?? data;
-				if (totalCount === 0) {
-					const countRes = await fetch("/api/Product");
-					const countData = await countRes.json();
-					totalCount = countData.length;
-				}
-				totalPages = Math.ceil(totalCount / pageSize);
+            const res = await fetch(apiUrl);
+            if (!res.ok) throw new Error("Fetch error");
 
-				if (products.length === 0) {
-					container.innerHTML = '<p>No products found.</p>';
-					btnNext.disabled = true;
-					pageInfo.textContent = "";
-					return;
-				}
+            const data = await res.json();
+            const products = Array.isArray(data) ? data : [];
 
-				container.innerHTML = "";
-				for (const p of products) {
-					const categoryName = (p.Category && p.Category.Name) ? p.Category.Name : "Unknown";
-					const imageUrl = p.Images ? `assets / img / products / ${p.Images}` : "assets/img/products/default.jpg";
+            // Setup pagination
+            if (totalCount === 0) {
+                totalCount = products.length;
+                totalPages = Math.ceil(totalCount / pageSize);
+            }
 
-					const html = `
-												< div class= "col-lg-4 col-md-6 text-center" >
-												<div class="single-product-item">
-													<div class="product-image">
-														<a href="single-product.html?id=${p.Id}">
-															<img src="${imageUrl}" alt="${p.Title}">
-														</a>
-													</div>
-													<h3>${p.Title}</h3>
-													<p class="product-price"><span>${categoryName}</span> $${p.Price ?? "N/A"}</p>
-													<a href="cart.html" class="cart-btn">
-														<i class="fas fa-shopping-cart"></i> Add to Cart
-													</a>
-												</div>
-				</div > `;
-					container.insertAdjacentHTML("beforeend", html);
-				}
+            const skip = page * pageSize;
+            const paged = products.slice(skip, skip + pageSize);
 
-				pageInfo.textContent = `Page ${page + 1} / ${totalPages}`;
-				btnPrev.disabled = page === 0;
-				btnNext.disabled = page + 1 >= totalPages;
+            if (paged.length === 0) {
+                container.innerHTML = "<p>No products found.</p>";
+                return;
+            }
 
-			} catch (err) {
-				console.error("❌ Error loading products:", err);
-				container.innerHTML = '<p style="color:red;">Error loading product list.</p>';
-			}
-		}
+            // Render UI
+            container.innerHTML = "";
+            paged.forEach(p => {
+                const img = p.images || p.Images || "default.jpg";
+                const imageUrl = img.startsWith("http")
+                    ? img
+                    : `assets/img/products/${img}`;
+                const categoryName = p.category?.name ?? "Unknown";
 
-		btnPrev.addEventListener("click", function () {
-			if (page > 0) {
-				page--;
-				loadProducts();
-				window.scrollTo({ top: 0, behavior: "smooth" });
-			}
-		});
-
-		btnNext.addEventListener("click", function () {
-			if (page + 1 < totalPages) {
-				page++;
-				loadProducts();
-				window.scrollTo({ top: 0, behavior: "smooth" });
-			}
-		});
-
-		goPageBtn.addEventListener("click", function () {
-			const target = parseInt(pageInput.value);
-			if (!isNaN(target) && target >= 1 && target <= totalPages) {
-				page = target - 1;
-				loadProducts();
-				window.scrollTo({ top: 0, behavior: "smooth" });
-			} else {
-				alert(`Enter a valid page number (1–${totalPages})`);
-			}
-		});
-
-		document.addEventListener("DOMContentLoaded", loadProducts);
-	</script>
-
-	<script>
-		// ==== AUTO BASE URL (LOCAL vs SERVER) ====
-		let baseUrl = window.location.origin;
-
-		// Nếu mở file bằng file:/// → fallback sang localhost API
-		if (baseUrl.startsWith("http")) {
-			baseUrl = "https://localhost:7020";
-		}
-
-		// Nếu API server của bạn là domain:
-		if (baseUrl.includes("dokkuhai")) {
-			baseUrl = "https://ebay.dokkuhai.dpdns.org";
-		}
-
-		// API chính
-		const apiUrl = `${baseUrl}/api/Product`;
-
-		let page = 0;
-		const pageSize = 3;
-		let totalCount = 0;
-		let totalPages = 0;
-
-		const container = document.getElementById("product-container");
-		const btnPrev = document.getElementById("prev-page");
-		const btnNext = document.getElementById("next-page");
-		const pageInfo = document.getElementById("page-info");
-		const pageInput = document.getElementById("page-input");
-		const goPageBtn = document.getElementById("go-page");
-
-		async function loadProducts() {
-			try {
-				container.innerHTML = '<p>Loading products...</p>';
-
-				const skip = page * pageSize;
-
-				// LOCAL ODATA → dùng $top, $skip, $expand
-				// SERVER JSON THUẦN → không hỗ trợ OData → chỉ lấy cả mảng
-				let url = "";
-
-				if (baseUrl.includes("localhost")) {
-					url = `${apiUrl}?$expand=Category&$top=${pageSize}&$skip=${skip}`;
-				} else {
-					// Server không hỗ trợ OData → tự phân trang bằng JS
-					url = apiUrl;
-				}
-
-				console.log("Fetching:", url);
-
-				const res = await fetch(url);
-				if (!res.ok) throw new Error("Cannot fetch products");
-
-				const data = await res.json();
-
-				// Chuẩn hóa dữ liệu
-				const products = Array.isArray(data) ? data : (data.value ?? []);
-
-				// Nếu server trả về full list → tự phân trang
-				if (!baseUrl.includes("localhost")) {
-					if (totalCount === 0) {
-						totalCount = products.length;
-						totalPages = Math.ceil(totalCount / pageSize);
-					}
-
-					// cắt theo trang
-					paged = products.slice(skip, skip + pageSize);
-				} else {
-					paged = products;
-
-					if (totalCount === 0) {
-						const fullRes = await fetch(apiUrl);
-						const fullData = await fullRes.json();
-						const list = Array.isArray(fullData) ? fullData : fullData.value;
-						totalCount = list.length;
-						totalPages = Math.ceil(totalCount / pageSize);
-					}
-				}
-
-				// Nếu không có sản phẩm
-				if (paged.length === 0) {
-					container.innerHTML = '<p>No products found.</p>';
-					return;
-				}
-
-				// Render
-				container.innerHTML = "";
-				for (const p of paged) {
-					const categoryName = p.Category?.Name ?? "Unknown";
-
-					const img = p.Images || p.images || "default.jpg";
-					const imageUrl = img.startsWith("http")
-						? img
-						: `assets/img/products/${img}`;
-
-					const html = `
-                <div class="col-lg-4 col-md-6 text-center">
-                    <div class="single-product-item">
-                        <div class="product-image">
-                            <a href="single-product.html?id=${p.Id || p.id}">
-                                <img src="${imageUrl}" alt="${p.Title || p.title}">
+                const html = `
+                    <div class="col-lg-4 col-md-6 text-center">
+                        <div class="single-product-item">
+                            <div class="product-image">
+                                <a href="single-product.html?id=${p.id}">
+                                    <img src="${imageUrl}" alt="${p.title}">
+                                </a>
+                            </div>
+                            <h3>${p.title}</h3>
+                            <p class="product-price">
+                                <span>${categoryName}</span> $${p.price}
+                            </p>
+                            <a href="cart.html" class="cart-btn">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
                             </a>
                         </div>
-                        <h3>${p.Title || p.title}</h3>
-                        <p class="product-price">
-                            <span>${categoryName}</span> $${p.Price ?? p.price ?? "N/A"}
-                        </p>
-                        <a href="cart.html" class="cart-btn">
-                            <i class="fas fa-shopping-cart"></i> Add to Cart
-                        </a>
-                    </div>
-                </div>
-            `;
-					container.insertAdjacentHTML("beforeend", html);
+                    </div>`;
+                container.insertAdjacentHTML("beforeend", html);
+            });
+
+            pageInfo.textContent = `Page ${page + 1} / ${totalPages}`;
+            btnPrev.disabled = page === 0;
+            btnNext.disabled = page + 1 >= totalPages;
+
+        } catch (err) {
+            console.error("❌ Load error:", err);
+            container.innerHTML = '<p style="color:red;">Error loading products.</p>';
+        }
+    }
+
+    // Pagination events
+    btnPrev.addEventListener("click", () => {
+        if (page > 0) { page--; loadProducts(); }
+    });
+
+    btnNext.addEventListener("click", () => {
+        if (page + 1 < totalPages) { page++; loadProducts(); }
+    });
+
+    goPageBtn.addEventListener("click", () => {
+        const target = parseInt(pageInput.value);
+        if (target >= 1 && target <= totalPages) {
+            page = target - 1;
+            loadProducts();
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", loadProducts);
+</script>
+
+
+
+
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
 				}
-
-				pageInfo.textContent = `Page ${page + 1} / ${totalPages}`;
-				btnPrev.disabled = page === 0;
-				btnNext.disabled = page + 1 >= totalPages;
-
-			} catch (err) {
-				console.error("❌ Error loading products:", err);
-				container.innerHTML = '<p style="color:red;">Error loading product list.</p>';
 			}
-		}
-
-		// ==== Pagination Buttons ====
-		btnPrev.addEventListener("click", () => {
-			if (page > 0) {
-				page--;
-				loadProducts();
-				window.scrollTo({ top: 0, behavior: "smooth" });
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
 			}
-		});
-
-		btnNext.addEventListener("click", () => {
-			if (page + 1 < totalPages) {
-				page++;
-				loadProducts();
-				window.scrollTo({ top: 0, behavior: "smooth" });
-			}
-		});
-
-		goPageBtn.addEventListener("click", () => {
-			const target = parseInt(pageInput.value);
-			if (target >= 1 && target <= totalPages) {
-				page = target - 1;
-				loadProducts();
-				window.scrollTo({ top: 0, behavior: "smooth" });
-			} else {
-				alert(`Enter a valid page number (1–${totalPages})`);
-			}
-		});
-
-		// Load initial
-		document.addEventListener("DOMContentLoaded", loadProducts);
-	</script>
-
-
-
-
-
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
 </body>
 
 </html>
