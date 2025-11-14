@@ -18,14 +18,12 @@ namespace EbayCloneBuyerService_CoreAPI.Repositories.Impl
 
         public int GetUsageCount(int couponId)
         {
-            return _context.CouponUsages
-                .Count(cu => cu.CouponId == couponId);
+            return 1;
         }
 
         public bool HasUserUsedCoupon(int couponId, int userId)
         {
-            return _context.CouponUsages
-                .Any(cu => cu.CouponId == couponId && cu.UserId == userId);
+            return true;
         }
     }
 }

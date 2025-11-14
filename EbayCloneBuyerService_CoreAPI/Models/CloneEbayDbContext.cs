@@ -18,6 +18,8 @@ public partial class CloneEbayDbContext : DbContext
 
     public virtual DbSet<Address> Addresses { get; set; }
 
+    public virtual DbSet<Address1> Addresses1 { get; set; }
+
     public virtual DbSet<Bid> Bids { get; set; }
 
     public virtual DbSet<Cart> Carts { get; set; }
@@ -26,7 +28,13 @@ public partial class CloneEbayDbContext : DbContext
 
     public virtual DbSet<Category> Categories { get; set; }
 
+    public virtual DbSet<City> Cities { get; set; }
+
+    public virtual DbSet<Country> Countries { get; set; }
+
     public virtual DbSet<Coupon> Coupons { get; set; }
+
+    public virtual DbSet<CouponUsage> CouponUsages { get; set; }
 
     public virtual DbSet<Dispute> Disputes { get; set; }
 
@@ -99,6 +107,33 @@ public partial class CloneEbayDbContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Addresses)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("Address_ibfk_1");
+        });
+
+        modelBuilder.Entity<Address1>(entity =>
+        {
+            entity.HasKey(e => e.AddressId).HasName("PRIMARY");
+
+            entity.ToTable("Addresses");
+
+            entity.HasIndex(e => e.UserId, "UserID");
+
+            entity.Property(e => e.AddressId).HasColumnName("AddressID");
+            entity.Property(e => e.AddressLine).HasMaxLength(255);
+            entity.Property(e => e.AddressType).HasColumnType("enum('Registration','Shipping','ShipFrom','Return','Payment')");
+            entity.Property(e => e.City).HasMaxLength(100);
+            entity.Property(e => e.Country).HasMaxLength(100);
+            entity.Property(e => e.LastUpdated)
+                .ValueGeneratedOnAddOrUpdate()
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("datetime");
+            entity.Property(e => e.PostalCode).HasMaxLength(20);
+            entity.Property(e => e.State).HasMaxLength(100);
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Address1s)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Addresses_ibfk_1");
         });
 
         modelBuilder.Entity<Bid>(entity =>
@@ -200,6 +235,33 @@ public partial class CloneEbayDbContext : DbContext
                 .HasColumnName("name");
         });
 
+        modelBuilder.Entity<City>(entity =>
+        {
+            entity.HasKey(e => e.CityId).HasName("PRIMARY");
+
+            entity.HasIndex(e => e.CountryId, "CountryID");
+
+            entity.Property(e => e.CityId).HasColumnName("CityID");
+            entity.Property(e => e.CityName).HasMaxLength(100);
+            entity.Property(e => e.CountryId).HasColumnName("CountryID");
+
+            entity.HasOne(d => d.Country).WithMany(p => p.Cities)
+                .HasForeignKey(d => d.CountryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Cities_ibfk_1");
+        });
+
+        modelBuilder.Entity<Country>(entity =>
+        {
+            entity.HasKey(e => e.CountryId).HasName("PRIMARY");
+
+            entity.Property(e => e.CountryId).HasColumnName("CountryID");
+            entity.Property(e => e.CountryCode)
+                .HasMaxLength(2)
+                .IsFixedLength();
+            entity.Property(e => e.CountryName).HasMaxLength(100);
+        });
+
         modelBuilder.Entity<Coupon>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -227,6 +289,42 @@ public partial class CloneEbayDbContext : DbContext
             entity.HasOne(d => d.Product).WithMany(p => p.Coupons)
                 .HasForeignKey(d => d.ProductId)
                 .HasConstraintName("Coupon_ibfk_1");
+        });
+
+        modelBuilder.Entity<CouponUsage>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("CouponUsage");
+
+            entity.HasIndex(e => e.CouponId, "couponId");
+
+            entity.HasIndex(e => e.OrderId, "orderId");
+
+            entity.HasIndex(e => new { e.UserId, e.CouponId }, "unique_user_coupon").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CouponId).HasColumnName("couponId");
+            entity.Property(e => e.DiscountAmount)
+                .HasPrecision(10, 2)
+                .HasColumnName("discountAmount");
+            entity.Property(e => e.OrderId).HasColumnName("orderId");
+            entity.Property(e => e.UsedAt)
+                .HasColumnType("datetime")
+                .HasColumnName("usedAt");
+            entity.Property(e => e.UserId).HasColumnName("userId");
+
+            entity.HasOne(d => d.Coupon).WithMany(p => p.CouponUsages)
+                .HasForeignKey(d => d.CouponId)
+                .HasConstraintName("CouponUsage_ibfk_1");
+
+            entity.HasOne(d => d.Order).WithMany(p => p.CouponUsages)
+                .HasForeignKey(d => d.OrderId)
+                .HasConstraintName("CouponUsage_ibfk_3");
+
+            entity.HasOne(d => d.User).WithMany(p => p.CouponUsages)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("CouponUsage_ibfk_2");
         });
 
         modelBuilder.Entity<Dispute>(entity =>
@@ -596,9 +694,13 @@ public partial class CloneEbayDbContext : DbContext
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");
+            entity.Property(e => e.LastUpdated)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("datetime");
             entity.Property(e => e.Password)
                 .HasMaxLength(255)
                 .HasColumnName("password");
+            entity.Property(e => e.PhoneNumber).HasMaxLength(20);
             entity.Property(e => e.Role)
                 .HasMaxLength(20)
                 .HasColumnName("role");
