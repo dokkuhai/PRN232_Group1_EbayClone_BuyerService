@@ -355,7 +355,7 @@
 	<!-- main js -->
 	<script src="assets/js/main.js"></script>
 <script>
-const apiBaseUrl = "https://localhost:7020/api/Product?$expand=Category&$count=true";
+const apiBaseUrl = "/api/Product?$expand=Category&$count=true";
 const container = document.querySelector(".product-lists");
 const paginationWrap = document.querySelector(".pagination-wrap ul");
 
@@ -397,7 +397,7 @@ async function loadProducts() {
 
     const products = data.value ?? data;
     if (totalCount === 0) {
-      const countRes = await fetch("https://localhost:7020/api/Product");
+      const countRes = await fetch("/api/Product");
       const countData = await countRes.json();
       totalCount = countData.length;
     }
