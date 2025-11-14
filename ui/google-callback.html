@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Đang xử lý đăng nhập...</title>
+	<title>Processing Login...</title>
 	<style>
 		/* Chỉ là hiệu ứng cho đẹp mắt, không bắt buộc */
 		body {
@@ -30,6 +30,128 @@
 			margin: 20px auto;
 		}
 
+		a {
+			color: #004ab3;
+			text-decoration: none;
+			font-weight: 600;
+		}
+
+		a:hover {
+			text-decoration: underline;
+		}
+
+		/* --- Header --- */
+		.page-header {
+			padding: 24px 40px;
+		}
+
+		.ebay-logo {
+			width: 117px;
+			height: 48px;
+		}
+
+		/* --- Main Content --- */
+		.main-content {
+			flex-grow: 1;
+			/* Đẩy footer xuống dưới */
+			display: flex;
+			justify-content: center;
+			align-items: flex-start;
+			/* Căn từ trên xuống */
+			padding-top: 48px;
+		}
+
+		.confirm-container {
+			width: 100%;
+			max-width: 550px;
+			/* Giới hạn chiều rộng của box */
+			box-sizing: border-box;
+			padding: 0 20px;
+		}
+
+		h1 {
+			font-size: 32px;
+			font-weight: 600;
+			text-align: center;
+			margin: 0 0 16px 0;
+		}
+
+		.subtitle {
+			font-size: 16px;
+			color: #333;
+			text-align: center;
+			margin-bottom: 32px;
+		}
+
+		.user-info {
+			font-size: 16px;
+			line-height: 1.5;
+		}
+
+		.user-info-name {
+			font-weight: 600;
+		}
+
+		.user-info-email {
+			color: #555;
+		}
+
+		.change-link {
+			display: block;
+			margin-top: 16px;
+			font-size: 14px;
+		}
+
+		.existing-account-link {
+			margin-top: 40px;
+			font-size: 14px;
+			color: #333;
+		}
+
+		.legal-text {
+			font-size: 12px;
+			color: #555;
+			margin-top: 24px;
+			line-height: 1.5;
+		}
+
+		.btn-create-account {
+			background-color: #004ab3;
+			color: white;
+			font-size: 16px;
+			font-weight: 600;
+			border: none;
+			border-radius: 24px;
+			padding: 14px;
+			width: 100%;
+			cursor: pointer;
+			margin-top: 16px;
+			transition: background-color 0.2s;
+		}
+
+		.btn-create-account:hover {
+			background-color: #003a8c;
+		}
+
+
+		/* --- Footer --- */
+		.page-footer {
+			text-align: center;
+			padding: 32px 40px 24px 40px;
+			font-size: 12px;
+			color: #555;
+			background-color: #f7f7f7;
+			/* Nền xám cho footer */
+			border-top: 1px solid #e0e0e0;
+		}
+
+		.footer-links a {
+			margin: 0 8px;
+			color: #555;
+			font-weight: 400;
+			/* Link footer không béo */
+		}
+
 		@keyframes spin {
 			0% {
 				transform: rotate(0deg);
@@ -46,23 +168,81 @@
 
 	<div class="container">
 		<div class="loader"></div>
-		<p>Vui lòng đợi, đang xác thực...</p>
+		<p>Please wait, processing your login...</p>
+	</div>
+	<div id="if-regiser" style="display: none;">
+		<input type="hidden" id="hiddenEmail" />
+		<input type="hidden" id="hiddenName" />
+		<header class="page-header">
+			<svg xmlns="http://www.w3.org/2000/svg" width="117" height="48" viewBox="0 0 122 48.592" id="gh-logo"
+				aria-labelledby="ebayLogoTitle">
+				<title id="ebayLogoTitle">eBay Home</title>
+				<g>
+					<path fill="#F02D2D"
+						d="M24.355 22.759c-.269-5.738-4.412-7.838-8.826-7.813-4.756.026-8.544 2.459-9.183 7.915zM6.234 26.93c.364 5.553 4.208 8.814 9.476 8.785 3.648-.021 6.885-1.524 7.952-4.763l6.306-.035c-1.187 6.568-8.151 8.834-14.145 8.866C4.911 39.844.043 33.865-.002 25.759c-.05-8.927 4.917-14.822 15.765-14.884 8.628-.048 14.978 4.433 15.033 14.291l.01 1.625z">
+					</path>
+					<path fill="#0968F6"
+						d="M46.544 35.429c5.688-.032 9.543-4.148 9.508-10.32s-3.947-10.246-9.622-10.214-9.543 4.148-9.509 10.32 3.974 10.245 9.623 10.214zM30.652.029l6.116-.034.085 15.369c2.978-3.588 7.1-4.65 11.167-4.674 6.817-.037 14.412 4.518 14.468 14.454.045 8.29-5.941 14.407-14.422 14.454-4.463.026-8.624-1.545-11.218-4.681a33.237 33.237 0 01-.19 3.731l-5.994.034c.09-1.915.185-4.364.174-6.322z">
+					</path>
+					<path fill="#FFBD14"
+						d="M77.282 25.724c-5.548.216-8.985 1.229-8.965 4.883.013 2.365 1.94 4.919 6.7 4.891 6.415-.035 9.826-3.556 9.794-9.289v-.637c-2.252.02-5.039.054-7.529.152zm13.683 7.506c.01 1.778.071 3.538.232 5.1l-5.688.032a33.381 33.381 0 01-.225-3.825c-3.052 3.8-6.708 4.909-11.783 4.938-7.532.042-11.585-3.915-11.611-8.518-.037-6.665 5.434-9.049 14.954-9.318 2.6-.072 5.529-.1 7.945-.116v-.637c-.026-4.463-2.9-6.285-7.854-6.257-3.68.021-6.368 1.561-6.653 4.2l-6.434.035c.645-6.566 7.53-8.269 13.595-8.3 7.263-.04 13.406 2.508 13.448 10.192z">
+					</path>
+					<path fill="#92C821"
+						d="M91.939 19.852l-4.5-8.362 7.154-.04 10.589 20.922 10.328-21.02 6.486-.048-18.707 37.251-6.85.039 5.382-10.348-9.887-18.393">
+					</path>
+				</g>
+			</svg>
+		</header>
+
+		<main class="main-content">
+			<div class="confirm-container">
+				<h1>Create an account</h1>
+				<p class="subtitle">We'll use your Google details to create your eBay account.</p>
+
+				<div class="user-info">
+					<div class="user-info-name">Son Nguyen</div>
+					<div class="user-info-email">nguyenson221004@gmail.com</div>
+				</div>
+
+				<a href="#" class="change-link">Change</a>
+
+				<p class="existing-account-link">
+					Already using eBay? <a href="#">Link to an existing account</a>
+				</p>
+
+				<p class="legal-text">
+					By <strong>Creating an account</strong>, you agree to our <a href="#">User Agreement</a> and
+					acknowledge reading our <a href="#">User Privacy Notice</a>.
+				</p>
+
+				<button class="btn-create-account">Create account</button>
+			</div>
+		</main>
+
+		<footer class="page-footer">
+			<p class="footer-links">
+				Copyright © 1995-2025 eBay Inc. All Rights Reserved.
+				<a href="#">Accessibility</a>
+				<a href="#">User Agreement</a>
+				<a href="#">Privacy</a>
+				<a href="#">Consumer Health Data</a>
+				<a href="#">Payments Terms of Use</a>
+				<a href="#">Cookies</a>
+				<a href="#">CA Privacy Notice</a>
+				<a href="#">Your Privacy Choices</a>
+				and <a href="#">AdChoice</a>
+			</p>
+		</footer>
 	</div>
 
 	<script>
-		// Tự động chạy ngay khi trang được tải
 		(async () => {
-			// === 1. Lấy 'code' từ URL ===
 			const params = new URLSearchParams(window.location.search);
 			const code = params.get('code');
 
-			// === 2. Cấu hình các URL của bạn ===
-
-			// Đây là API Backend (.NET) của bạn
 			const API_BACKEND_URL = 'https://localhost:7020/api/User/google-login';
 
-			// Nơi chuyển hướng sau khi ĐĂNG NHẬP THÀNH CÔNG
-			const HOME_PAGE_URL = '/dashboard.html'; // Sửa lại thành trang dashboard/home
+			const HOME_PAGE_URL = '/index.html'; // Sửa lại thành trang dashboard/home
 
 			// Nơi chuyển hướng nếu ĐĂNG NHẬP THẤT BẠI
 			const LOGIN_PAGE_URL = '/login.html'; // Sửa lại thành trang login
@@ -78,30 +258,37 @@
 						headers: {
 							'Content-Type': 'application/json',
 						},
-						// Gửi 'code' trong body
 						body: JSON.stringify({ code: code }),
 					});
 
+					const data = await response.json();
 					if (response.ok) {
-						// === 4. Lấy JWT từ API trả về ===
-						const data = await response.json(); // { token: "your_jwt_here" }
+						// { token: "your_jwt_here" }
 
-						console.log('Đăng nhập thành công, nhận được token:', data.token);
-						// Lưu JWT vào localStorage
-						localStorage.setItem('userToken', data.token);
+						console.log('Đăng nhập thành công, nhận được token:', data);
+						localStorage.setItem('userId', data.userId);
+						localStorage.setItem('userName', data.userName);
+						localStorage.setItem('accessToken', data.token);
 
-						// === 5. Chuyển hướng đến trang chính ===
 						//window.location.href = HOME_PAGE_URL;
 
+					} else if (response.status === 401) {
+						console.log('Tài khoản chưa đăng ký, chuyển sang trang đăng ký', data);
+
+						document.getElementById('if-regiser').style.display = 'block';
+						document.querySelector('.container').style.display = 'none';
+						document.getElementById('hiddenEmail').value = data.email;
+						console.log(data.email);
+						document.getElementById('hiddenName').value = data.userName;
+						console.log(data.userName);
+
 					} else {
-						// API của bạn trả về lỗi (ví dụ: code hết hạn)
-						console.error('Lỗi từ API:', await response.text());
-						//window.location.href = LOGIN_PAGE_URL + '?error=api';
+						// Lỗi khác
+						console.error('Lỗi khi gọi API:', data);
+						//window.location.href = LOGIN_PAGE_URL + '?error=api_error';
 					}
 				} catch (error) {
-					// Lỗi mạng hoặc không gọi được API
 					console.error('Lỗi khi gọi API:', error);
-					//window.location.href = LOGIN_PAGE_URL + '?error=network';
 				}
 			} else {
 				// Người dùng hủy hoặc có lỗi gì đó, không có 'code'
@@ -110,6 +297,31 @@
 			}
 		})();
 	</script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		$('.btn-create-account').on('click', function () {
+			const email = $('#hiddenEmail').val();
+			const name = $('#hiddenName').val();
+			$.ajax({
+				url: 'https://localhost:7020/api/User/google-register',
+				method: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify({ email: email, name: name }),
+				success: function (data) {
+					console.log('Đăng ký thành công, nhận được token:', data);
+					console.log(data);
+					localStorage.setItem('userId', data.userId);
+					localStorage.setItem('userName', data.userName);
+					localStorage.setItem('accessToken', data.token);
+					//window.location.href = '/index.html';
+				},
+				error: function (xhr, status, error) {
+					console.error('Lỗi khi gọi API đăng ký:', xhr.responseText);
+				}
+			});
+		});
+	</script>
+
 </body>
 
 </html>
