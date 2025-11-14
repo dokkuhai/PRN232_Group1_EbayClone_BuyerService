@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build & Push Images
+    name: Build & Push Docker Images
     runs-on: ubuntu-latest
 
     steps:
@@ -24,23 +24,32 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push API image
+      # Build and push API1
+      - name: Build and push API1 image
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
           push: true
-          tags: |
-            ${{ secrets.DOCKER_USERNAME }}/ebayclone-buyer-api:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/ebayclone-buyer-api1:latest
 
+      # Build and push API2
+      - name: Build and push API2 image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/ebayclone-buyer-api2:latest
+
+      # Optional: Build and push DB image (if needed)
       - name: Build and push DB image (optional)
-        if: ${{ false }}  
+        if: ${{ false }}
         uses: docker/build-push-action@v5
         with:
           context: ./db
           push: true
-          tags: |
-            ${{ secrets.DOCKER_USERNAME }}/ebayclone-buyer-db:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/ebayclone-buyer-db:latest
 
   deploy:
     name: Deploy to Amazon EC2
@@ -88,4 +97,4 @@ jobs:
             docker-compose pull || true
             docker-compose up -d --build
 
-            echo "=== Deployment done === "
+            echo "=== Deployment done ==="

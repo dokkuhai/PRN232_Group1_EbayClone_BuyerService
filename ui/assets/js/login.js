@@ -1,3 +1,4 @@
+
 $(document).ready(function () {
     document.cookie = "";
     console.log(document.cookie);
@@ -6,6 +7,7 @@ $(document).ready(function () {
     if (!token) {
         console.log("No Remember Me token found in cookies.");
         return;
+
     }
     $.ajax({
         url: 'https://localhost:7020/api/User/login-with-remember-token',
@@ -49,7 +51,7 @@ $('#loginBtn').on('click', function () {
     const rememberMe = $('#stay-signed-in').is(':checked');
     console.log("Attempting login with email:", email, "Remember me:", rememberMe);
     $.ajax({
-        url: 'https://localhost:7020/api/User/login',
+        url: '/api/user/login',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({ email, rememberMe }),
