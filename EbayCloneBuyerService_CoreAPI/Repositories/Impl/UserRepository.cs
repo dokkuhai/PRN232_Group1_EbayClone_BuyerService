@@ -11,10 +11,10 @@ namespace EbayCloneBuyerService_CoreAPI.Repositories.Impl
         {
             _context = context;
         }
-        public async Task<User?> AuthenticateAsync(string email, string password)
+        public async Task<User?> AuthenticateAsync(string email)
         {
             return await _context.Users
-                .FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+                .FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<User?> GetUserByEmailAsync(string email)
