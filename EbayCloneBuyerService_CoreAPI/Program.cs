@@ -23,8 +23,6 @@ builder.Services.AddHttpClient();
 // Load file .env
 Env.Load();
 
-var googleClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
-var googleClientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET");
 
 builder.Services.AddControllers()
  .AddJsonOptions(x =>
@@ -56,6 +54,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Encoding.UTF8.GetBytes(jwtSettings["Key"]!))
         };
     });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("BuyerOnly", policy => policy.RequireRole("Buyer"));
+});
+
 
 builder.Services.AddAuthorization();
 
@@ -82,9 +85,13 @@ builder.Services.AddDbContext<CloneEbayDbContext>(options =>
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRememberTokenRepository, RememberTokenRepository>();
+builder.Services.AddScoped<IRememberTokenService, RememberTokenService>();
+
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IProductRepo, ProductRepo>();
 builder.Services.AddScoped<IProductServices, ProductServices>();
+
 builder.Services.AddScoped<JwtService>();
 
 
@@ -103,16 +110,18 @@ builder.Services.AddCors(options =>
     });
 });
 
-var app = builder.Build();
+
+    var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
-
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
+
+
 
 app.MapControllers();
 //====== Exception Middleware =====

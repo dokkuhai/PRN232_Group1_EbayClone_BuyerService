@@ -20,8 +20,7 @@ namespace EbayCloneBuyerService_CoreAPI.Services.Impl
         public async Task<User?> AuthenticateAsync(LoginRequest loginRequest)
         {
             var email = loginRequest.Email;
-            var password = loginRequest.Password;
-            return await _userRepository.AuthenticateAsync(email, password);
+            return await _userRepository.AuthenticateAsync(email);
         }
 
         public async Task<User?> GetUserByEmailAsync(string email)
