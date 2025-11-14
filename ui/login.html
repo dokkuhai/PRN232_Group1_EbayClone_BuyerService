@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Sign in to your account</title>
+	<style>
+		/* --- Cài đặt chung --- */
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+			background-color: #f7f7f7;
+			margin: 0;
+			padding: 0;
+			display: flex;
+			flex-direction: column;
+			min-height: 100vh;
+			color: #333;
+		}
+
+		a {
+			color: #004ab3;
+			text-decoration: none;
+		}
+
+		a:hover {
+			text-decoration: underline;
+		}
+
+		button {
+			cursor: pointer;
+		}
+
+		/* --- Header --- */
+		.page-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 24px 40px;
+		}
+
+		.ebay-logo {
+			width: 117px;
+			height: 48px;
+		}
+
+		.tell-us-link {
+			font-size: 14px;
+		}
+
+		/* --- Main Content --- */
+		.main-content {
+			flex-grow: 1;
+			display: flex;
+			justify-content: center;
+			align-items: flex-start;
+			padding: 48px 0;
+		}
+
+		.signin-container {
+			width: 400px;
+			background-color: #ffffff;
+			border-radius: 8px;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+			padding: 32px 40px;
+			box-sizing: border-box;
+			/* Đảm bảo padding không làm tăng width */
+		}
+
+		h1 {
+			text-align: center;
+			font-size: 28px;
+			font-weight: 600;
+			margin: 0 0 24px 0;
+		}
+
+		/* --- Phần tạo tài khoản --- */
+		.create-account {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 24px;
+			font-size: 14px;
+		}
+
+		.btn-create-account {
+			font-size: 14px;
+			font-weight: 600;
+			color: #333;
+			background-color: #fff;
+			border: 1px solid #888;
+			border-radius: 24px;
+			padding: 8px 16px;
+			transition: all 0.2s;
+		}
+
+		.btn-create-account:hover {
+			border-color: #333;
+		}
+
+		/* --- Form đăng nhập --- */
+		.signin-form {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.form-field {
+			margin-bottom: 20px;
+		}
+
+		.form-field label {
+			font-weight: 600;
+			font-size: 14px;
+			display: block;
+			margin-bottom: 8px;
+		}
+
+		.form-field input {
+			width: 100%;
+			padding: 12px 16px;
+			font-size: 16px;
+			border: 1px solid #888;
+			border-radius: 4px;
+			box-sizing: border-box;
+			/* Đảm bảo padding không làm tăng width */
+		}
+
+		.btn-continue {
+			background-color: #004ab3;
+			color: white;
+			font-size: 16px;
+			font-weight: 600;
+			border: none;
+			border-radius: 24px;
+			padding: 12px;
+			width: 100%;
+			transition: background-color 0.2s;
+		}
+
+		.btn-continue:hover {
+			background-color: #003a8c;
+		}
+
+		/* --- Dấu gạch ngang "or" --- */
+		.divider {
+			display: flex;
+			align-items: center;
+			text-align: center;
+			color: #555;
+			font-size: 14px;
+			margin: 24px 0;
+		}
+
+		.divider::before,
+		.divider::after {
+			content: '';
+			flex: 1;
+			border-bottom: 1px solid #ccc;
+		}
+
+		.divider:not(:empty)::before {
+			margin-right: .5em;
+		}
+
+		.divider:not(:empty)::after {
+			margin-left: .5em;
+		}
+
+		/* --- Nút đăng nhập social --- */
+		.social-login-btn {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 100%;
+			padding: 10px;
+			margin-bottom: 16px;
+			font-size: 15px;
+			font-weight: 600;
+			border: 1px solid #888;
+			border-radius: 24px;
+			background-color: #fff;
+			transition: all 0.2s;
+		}
+
+		.social-login-btn:hover {
+			border-color: #333;
+			box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+		}
+
+		.social-login-btn svg {
+			width: 20px;
+			height: 20px;
+			margin-right: 12px;
+		}
+
+		/* --- Checkbox "Stay signed in" --- */
+		.stay-signed-in {
+			display: flex;
+			align-items: center;
+			text-align: left;
+			margin-top: 8px;
+			/* Giảm margin-top vì đã bỏ nút Apple */
+		}
+
+		.stay-signed-in input[type="checkbox"] {
+			width: 16px;
+			height: 16px;
+			margin-right: 8px;
+		}
+
+		.stay-signed-in label {
+			font-size: 14px;
+			font-weight: 600;
+			margin-right: 4px;
+		}
+
+		.info-icon {
+			width: 16px;
+			height: 16px;
+			color: #555;
+		}
+
+		/* --- Footer --- */
+		.page-footer {
+			text-align: center;
+			padding: 24px 40px;
+			font-size: 12px;
+			color: #555;
+		}
+
+		.footer-links a {
+			margin: 0 8px;
+			color: #555;
+		}
+	</style>
+</head>
+
+<body>
+
+	<header class="page-header">
+		<svg xmlns="http://www.w3.org/2000/svg" width="117" height="48" viewBox="0 0 122 48.592" id="gh-logo"
+			aria-labelledby="ebayLogoTitle">
+			<title id="ebayLogoTitle">eBay Home</title>
+			<g>
+				<path fill="#F02D2D"
+					d="M24.355 22.759c-.269-5.738-4.412-7.838-8.826-7.813-4.756.026-8.544 2.459-9.183 7.915zM6.234 26.93c.364 5.553 4.208 8.814 9.476 8.785 3.648-.021 6.885-1.524 7.952-4.763l6.306-.035c-1.187 6.568-8.151 8.834-14.145 8.866C4.911 39.844.043 33.865-.002 25.759c-.05-8.927 4.917-14.822 15.765-14.884 8.628-.048 14.978 4.433 15.033 14.291l.01 1.625z">
+				</path>
+				<path fill="#0968F6"
+					d="M46.544 35.429c5.688-.032 9.543-4.148 9.508-10.32s-3.947-10.246-9.622-10.214-9.543 4.148-9.509 10.32 3.974 10.245 9.623 10.214zM30.652.029l6.116-.034.085 15.369c2.978-3.588 7.1-4.65 11.167-4.674 6.817-.037 14.412 4.518 14.468 14.454.045 8.29-5.941 14.407-14.422 14.454-4.463.026-8.624-1.545-11.218-4.681a33.237 33.237 0 01-.19 3.731l-5.994.034c.09-1.915.185-4.364.174-6.322z">
+				</path>
+				<path fill="#FFBD14"
+					d="M77.282 25.724c-5.548.216-8.985 1.229-8.965 4.883.013 2.365 1.94 4.919 6.7 4.891 6.415-.035 9.826-3.556 9.794-9.289v-.637c-2.252.02-5.039.054-7.529.152zm13.683 7.506c.01 1.778.071 3.538.232 5.1l-5.688.032a33.381 33.381 0 01-.225-3.825c-3.052 3.8-6.708 4.909-11.783 4.938-7.532.042-11.585-3.915-11.611-8.518-.037-6.665 5.434-9.049 14.954-9.318 2.6-.072 5.529-.1 7.945-.116v-.637c-.026-4.463-2.9-6.285-7.854-6.257-3.68.021-6.368 1.561-6.653 4.2l-6.434.035c.645-6.566 7.53-8.269 13.595-8.3 7.263-.04 13.406 2.508 13.448 10.192z">
+				</path>
+				<path fill="#92C821"
+					d="M91.939 19.852l-4.5-8.362 7.154-.04 10.589 20.922 10.328-21.02 6.486-.048-18.707 37.251-6.85.039 5.382-10.348-9.887-18.393">
+				</path>
+			</g>
+		</svg>
+	</header>
+
+	<main class="main-content">
+		<div class="signin-container">
+			<h1>Sign in to your account</h1>
+
+			<div class="create-account">
+				<span>New to eBay?</span>
+				<button class="btn-create-account"><a href="register.html">Create an account</a></button>
+			</div>
+			<div id="error-message" style="color: red; font-weight: bold; margin-bottom: 16px; display: none;"></div>
+			<div class="form-field">
+				<input type="text" id="floatingEmail" placeholder="Email">
+			</div>
+			<button type="submit" class="btn-continue" id="loginBtn">Continue</button>
+
+			<div class="divider">or</div>
+
+			<button class="social-login-btn" id="googleLoginBtn">
+				<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+					<path
+						d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+						fill="#4285F4"></path>
+					<path
+						d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+						fill="#34A853"></path>
+					<path
+						d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
+						fill="#FBBC05"></path>
+					<path
+						d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+						fill="#EA4335"></path>
+					<path d="M1 1h22v22H1z" fill="none"></path>
+				</svg>
+				Continue with Google
+			</button>
+
+			<button class="social-login-btn" id="facebookLoginBtn">
+				<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+					<path
+						d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"
+						fill="#1877F2"></path>
+				</svg>
+				Continue with Facebook
+			</button>
+
+			<div class="stay-signed-in">
+				<input type="checkbox" id="stay-signed-in" checked>
+				<label for="stay-signed-in">Stay signed in</label>
+			</div>
+		</div>
+	</main>
+
+	<footer class="page-footer">
+		<p class="footer-links">
+			<a href="#">Accessibility</a>
+			<a href="#">User Agreement</a>
+			<a href="#">Privacy</a>
+			<a href="#">Consumer Health Data</a>
+			<a href="#">Payments Terms of Use</a>
+			<a href="#">Cookies</a>
+			<a href="#">CA Privacy Notice</a>
+			<a href="#">Your Privacy Choices</a>
+			<a href="#">AdChoice</a>
+		</p>
+		<p>Copyright © 1995-2025 eBay Inc. All Rights Reserved.</p>
+	</footer>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+	<script src="assets/js/login.js"></script>
+
+</body>
+
+</html>
