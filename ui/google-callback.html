@@ -200,15 +200,9 @@
 				<p class="subtitle">We'll use your Google details to create your eBay account.</p>
 
 				<div class="user-info">
-					<div class="user-info-name">Son Nguyen</div>
-					<div class="user-info-email">nguyenson221004@gmail.com</div>
+					<div class="user-info-name" id="user-info-name">Son Nguyen</div>
+					<div class="user-info-email" id="user-info-email">nguyenson221004@gmail.com</div>
 				</div>
-
-				<a href="#" class="change-link">Change</a>
-
-				<p class="existing-account-link">
-					Already using eBay? <a href="#">Link to an existing account</a>
-				</p>
 
 				<p class="legal-text">
 					By <strong>Creating an account</strong>, you agree to our <a href="#">User Agreement</a> and
@@ -218,6 +212,8 @@
 				<button class="btn-create-account">Create account</button>
 			</div>
 		</main>
+		<br>
+		<br>
 
 		<footer class="page-footer">
 			<p class="footer-links">
@@ -240,9 +236,9 @@
 			const params = new URLSearchParams(window.location.search);
 			const code = params.get('code');
 
-			const API_BACKEND_URL = 'https://localhost:7020/api/User/google-login';
+			const API_BACKEND_URL = 'https://ebay.dokkuhai.dpdns.org/api/User/google-login';
 
-			const HOME_PAGE_URL = '/index.html'; // Sửa lại thành trang dashboard/home
+			const HOME_PAGE_URL = 'https://ebay.dokkuhai.dpdns.org/'; // Sửa lại thành trang dashboard/home
 
 			// Nơi chuyển hướng nếu ĐĂNG NHẬP THẤT BẠI
 			const LOGIN_PAGE_URL = '/login.html'; // Sửa lại thành trang login
@@ -270,17 +266,17 @@
 						localStorage.setItem('userName', data.userName);
 						localStorage.setItem('accessToken', data.token);
 
-						//window.location.href = HOME_PAGE_URL;
+						window.location.href = HOME_PAGE_URL;
 
 					} else if (response.status === 401) {
 						console.log('Tài khoản chưa đăng ký, chuyển sang trang đăng ký', data);
 
 						document.getElementById('if-regiser').style.display = 'block';
 						document.querySelector('.container').style.display = 'none';
+						document.getElementById('user-info-email').textContent = data.email;
 						document.getElementById('hiddenEmail').value = data.email;
-						console.log(data.email);
+						document.getElementById('user-info-name').textContent = data.userName;
 						document.getElementById('hiddenName').value = data.userName;
-						console.log(data.userName);
 
 					} else {
 						// Lỗi khác
@@ -303,7 +299,7 @@
 			const email = $('#hiddenEmail').val();
 			const name = $('#hiddenName').val();
 			$.ajax({
-				url: 'https://localhost:7020/api/User/google-register',
+				url: 'https://ebay.dokkuhai.dpdns.org/api/User/google-register',
 				method: 'POST',
 				contentType: 'application/json',
 				data: JSON.stringify({ email: email, name: name }),
@@ -313,7 +309,7 @@
 					localStorage.setItem('userId', data.userId);
 					localStorage.setItem('userName', data.userName);
 					localStorage.setItem('accessToken', data.token);
-					//window.location.href = '/index.html';
+					window.location.href = 'https://ebay.dokkuhai.dpdns.org';
 				},
 				error: function (xhr, status, error) {
 					console.error('Lỗi khi gọi API đăng ký:', xhr.responseText);

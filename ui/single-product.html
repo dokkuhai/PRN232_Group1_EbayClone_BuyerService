@@ -366,8 +366,7 @@ async function loadProduct() {
         document.getElementById("p-title").textContent = product.title;
         document.getElementById("p-price").textContent = "$" + product.price;
         document.getElementById("p-description").textContent = product.description;
-
-        // -------- CATEGORY --------
+		// -------- CATEGORY --------
         document.getElementById("p-category").textContent =
             product.category?.name ?? "Unknown";
 			// ---------- isAuction ----------
@@ -397,8 +396,7 @@ if (product.isAuction === true) {
             product.inventories?.length > 0
                 ? product.inventories[0].quantity
                 : "N/A";
-
-        // -------- COUPONS --------
+// -------- COUPONS --------
         const couponList = document.getElementById("coupon-list");
         couponList.innerHTML = "";
         if (product.coupons?.length > 0) {
@@ -419,8 +417,7 @@ if (product.isAuction === true) {
         } else {
             reviewList.innerHTML = "<li>No reviews yet</li>";
         }
-
-        // -------- AVG RATING --------
+		// -------- AVG RATING --------
         const reviews = product.reviews ?? [];
         let avgRating = 0;
 
@@ -441,8 +438,6 @@ if (product.isAuction === true) {
         console.error("Error loading product:", err);
     }
 }
-
-
 // ============================
 // LOAD RELATED PRODUCTS
 // ============================
@@ -463,7 +458,7 @@ async function loadRelatedProducts(categoryId, currentProductId) {
             return;
         }
 
-        related.slice(0, 3).forEach(p => {
+		related.slice(0, 3).forEach(p => {
             container.innerHTML += `
                 <div class="col-lg-4 col-md-6 text-center">
                     <div class="single-product-item">
@@ -488,9 +483,7 @@ async function loadRelatedProducts(categoryId, currentProductId) {
     }
 }
 
-
-// Load product on page load
-document.addEventListener("DOMContentLoaded", loadProduct);
+    document.addEventListener("DOMContentLoaded", loadProduct);
 </script>
 
 

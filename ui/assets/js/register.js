@@ -1,25 +1,25 @@
 $('#registerBtn').on('click', function (event) {
     event.preventDefault();
 
-    const userName = $('#fullName').val().trim();
-    const email = $('#registerEmail').val().trim();
-    const password = $('#registerPassword').val().trim();
-    const confirmPassword = $('#confirmPassword').val().trim();
+    const firstName = $('#first-name').val().trim();
+    const lastName = $('#last-name').val().trim();
+    const userName = firstName + " " + lastName;
+    console.log("Full name:", userName);
+    const email = $('#email').val().trim();
+    console.log("Email:", email);
+    const password = $('#password').val().trim();
+    console.log("Password:", password);
 
     $("#error-message, #success-message").hide();
 
-    if (!userName || !email || !password || !confirmPassword) {
+    if (!userName || !email || !password) {
         $("#error-message").text("Please fill in all required fields.").show();
         return;
     }
 
-    if (password !== confirmPassword) {
-        $("#error-message").text("Passwords do not match.").show();
-        return;
-    }
 
     $.ajax({
-        url: 'https://localhost:7020/api/User/register',
+        url: 'https://ebay.dokkuhai.dpdns.org/api/User/register',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({ userName, email, password }),
@@ -43,7 +43,7 @@ $('#registerBtn').on('click', function (event) {
 });
 
 $('#googleRegisterBtn').on('click', function () {
-    const feCallbackUrl = 'http://127.0.0.1:5500/PRN232_Group1_EbayClone_BuyerService/ui/google-callback.html';
+    const feCallbackUrl = 'https://ebay.dokkuhai.dpdns.org/google-callback.html';
 
     const googleOAuthUrl = 'https://accounts.google.com/o/oauth2/v2/auth' +
         '?client_id=399694141537-0t854jihnmp6h6qfqnb9hnv66eb4oa53.apps.googleusercontent.com' +
