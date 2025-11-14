@@ -30,6 +30,50 @@
 	<link rel="stylesheet" href="assets/css/main.css">
 	<!-- responsive -->
 	<link rel="stylesheet" href="assets/css/responsive.css">
+<style>
+.related-item {
+    transition: 0.25s ease;
+    border-radius: 8px;
+}
+
+.related-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+}
+
+.related-item img {
+    border-radius: 8px;
+}
+
+.related-item h3 a:hover {
+    color: #ff5e00;
+}
+.shipping-box, .confidence-box {
+    background: #fff;
+    padding: 18px;
+    border-radius: 8px;
+    border: 1px solid #e4e4e4;
+    margin-bottom: 16px;
+}
+
+.shipping-box h4, .confidence-box h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.payment-icons img {
+    height: 28px;
+    margin-right: 8px;
+    filter: grayscale(10%);
+}
+
+.confidence-box i {
+    color: #0055cc;
+    margin-right: 6px;
+}
+
+</style>
 
 </head>
 <body>
@@ -156,7 +200,7 @@
 				</div>
 				<div class="single-product-content">
     <h3 id="p-title">Loading...</h3>
-    <p class="single-product-pricing"><span>Price</span> <span id="p-price">$0</span></p>
+    <p class="single-product-pricing"><span>Price</span> <span id="p-price">0</span></p>
 
     <p id="p-description">...</p>
 
@@ -224,6 +268,35 @@
 
 		</div>
 	</div>
+	<div class="shipping-box mt-4">
+<h4>Shipping:</h4>
+<div id="shipping-info" class="mb-3"></div>
+
+    <div class="payment-icons mt-3">
+        <img src="https://th.bing.com/th/id/OIP.vRQZ8vcw73umQSZ0Pg45HgHaFj?w=240&h=180&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1">
+        <img src="https://th.bing.com/th/id/OIP._8BbSAJ5rW8jQVnJPmo3qgHaHa?w=152&h=180&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1">
+        <img src="https://th.bing.com/th?q=Visa+Card+Icon&w=120&h=120&c=1&rs=1&qlt=70&o=7&cb=1&pid=InlineBlock&rm=3&ucfimg=1&mkt=en-WW&cc=VN&setlang=en&adlt=moderate&t=1&mw=247">
+        <img src="https://th.bing.com/th/id/OIP.4pi_kYxf7wRDRjkxQLyUsAHaEK?w=331&h=186&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1">
+    </div>
+</div>
+<div class="confidence-box mt-4">
+    <h4>Shop with confidence</h4>
+
+    <p>
+        <i class="fas fa-badge-check"></i> 
+        <strong>Top Rated Plus</strong><br>
+        Top rated seller, fast shipping, and free returns. 
+        <a href="#">Learn more</a>
+    </p>
+
+    <p>
+        <i class="fas fa-shield-alt"></i>
+        <strong>Money Back Guarantee</strong><br>
+        Get the item you ordered or your money back.
+        <a href="#">Learn more</a>
+    </p>
+</div>
+
 	<!-- end more products -->
 
 	<!-- logo carousel -->
@@ -391,7 +464,7 @@ async function loadProduct() {
 
         // -------- BASIC INFO --------
         document.getElementById("p-title").textContent = name;
-        document.getElementById("p-price").textContent = "$" + price;
+        document.getElementById("p-price").textContent = price + " VND";
         document.getElementById("p-description").textContent = desc;
 
         // -------- CATEGORY --------
@@ -456,6 +529,7 @@ async function loadProduct() {
             reviews?.length > 0
                 ? `${avgRating} / 5 ⭐ (${reviews.length} reviews)`
                 : "No ratings yet";
+        renderExtraSections(product);
 
         // -------- RELATED PRODUCTS --------
         loadRelatedProducts(categoryId, product.Id ?? product.id);
@@ -464,17 +538,60 @@ async function loadProduct() {
         console.error("❌ Error loading product:", err);
     }
 }
+function renderExtraSections(product) {
+    /* ====== SHIPPING INFO ====== */
+    const shippingBox = document.getElementById("shipping-info");
+
+    // Lấy shipping info từ order
+    let ship = null;
+
+    if (product.orderItems?.length > 0) {
+        for (let oi of product.orderItems) {
+            if (oi.order?.shippingInfos?.length > 0) {
+                ship = oi.order.shippingInfos[0];
+                break;
+            }
+        }
+    }
+
+    if (ship) {
+        shippingBox.innerHTML = `
+            <p><strong>Carrier:</strong> ${ship.carrier}</p>
+            <p><strong>Status:</strong> ${ship.status}</p>
+            <p><strong>Tracking:</strong> ${ship.trackingNumber}</p>
+            <p><strong>Estimated Arrival:</strong>
+                ${new Date(ship.estimatedArrival).toLocaleDateString()}
+            </p>
+        `;
+    } else {
+        // FALLBACK
+        const min = new Date(Date.now() + 7 * 86400000);
+        const max = new Date(Date.now() + 21 * 86400000);
+
+        shippingBox.innerHTML = `
+            <p><strong>Carrier:</strong> Standard Shipping</p>
+            <p><strong>Delivery:</strong>
+                Estimated between 
+                <b>${min.toDateString()}</b> and
+                <b>${max.toDateString()}</b>
+            </p>
+        `;
+    }
+}
 
 
 // ============================
 // LOAD RELATED PRODUCTS
+// ============================
+// ============================
+// LOAD RELATED PRODUCTS (FINAL)
 // ============================
 async function loadRelatedProducts(categoryId, currentProductId) {
     try {
         const res = await fetch(`${baseUrl}/api/Product`);
         const data = await res.json();
 
-        const list = Array.isArray(data) ? data : data.value ?? [];
+        const list = Array.isArray(data) ? data : (data.value ?? []);
 
         const related = list.filter(p =>
             (p.categoryId ?? p.CategoryId) === categoryId &&
@@ -491,36 +608,44 @@ async function loadRelatedProducts(categoryId, currentProductId) {
 
         related.slice(0, 3).forEach(p => {
             const id = p.id ?? p.Id;
-            const img = p.images ?? p.Images;
-            const title = p.title ?? p.Title;
-            const price = p.price ?? p.Price;
+            const img = p.images ?? p.Images ?? "";
+            const name = p.title ?? p.Title ?? "Unnamed";
+            const price = p.price ?? p.Price ?? "N/A";
 
-            const imgUrl = img?.startsWith("http")
+            const imgUrl = img.startsWith("http")
                 ? img
-                : `https://th.bing.com/th/id/OIP.ipTpmWrouGNDkLY582e2hQHaEK?w=294&h=180&c=7&r=0&o=7&cb=ucfimg2&dpr=1.3&pid=1.7&rm=3&ucfimg=1`;
+                : `https://th.bing.com/th/id/OIP.ipTpmWrouGNDkLY582e2hQHaEK?w=294&h=180&c=7&r=0&o=7&cb=ucfimg2&dpr=1.3&pid=1.7&rm=3&ucfimg=1"}`;
 
-            container.innerHTML += `
+            container.insertAdjacentHTML(
+                "beforeend",
+                `
                 <div class="col-lg-4 col-md-6 text-center">
-                    <div class="single-product-item">
+                    <div class="single-product-item related-item">
                         <div class="product-image">
                             <a href="single-product.html?id=${id}">
-                                <img src="${imgUrl}" alt="">
+                                <img src="${imgUrl}" alt="${name}">
                             </a>
                         </div>
-                        <h3>${title}</h3>
+                        <h3>
+							<a href="single-product.html?id=${id}" style="text-decoration:none;color:#333;">
+								${name}
+							</a>
+						</h3>
                         <p class="product-price">${price} VND</p>
-                        <a href="cart.html" class="cart-btn">
-                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        <a href="single-product.html?id=${id}" class="cart-btn">
+                            <i class="fas fa-eye"></i> View
                         </a>
                     </div>
                 </div>
-            `;
+                `
+            );
         });
 
     } catch (err) {
         console.error("❌ Error loading related products:", err);
     }
 }
+
 
 document.addEventListener("DOMContentLoaded", loadProduct);
 </script>

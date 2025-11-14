@@ -23,7 +23,7 @@ namespace EbayCloneBuyerService_CoreAPI.Repositories.Impl
         public async Task<Product?> GetByIdAsync(int id)
         {
             return await _context.Products.Include(p => p.Category).Include(s => s.Seller).
-                Include(i => i.Inventories).Include(r => r.Reviews).Include(c => c.Coupons)
+                Include(i => i.Inventories).Include(r => r.Reviews).Include(c => c.Coupons).Include(od => od.OrderItems).ThenInclude(o => o.Order).ThenInclude(s => s.ShippingInfos)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
     }
