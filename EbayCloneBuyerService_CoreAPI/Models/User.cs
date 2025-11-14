@@ -40,4 +40,6 @@ public partial class User
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
     public virtual ICollection<Store> Stores { get; set; } = new List<Store>();
+
+    public virtual ICollection<UserRememberToken> UserRememberTokens { get; set; } = new List<UserRememberToken>();
 }
