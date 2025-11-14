@@ -15,13 +15,16 @@ namespace EbayCloneBuyerService_CoreAPI.Repositories.Impl
 
         public  IQueryable<Product> GetAllAsync()
         {
-            return _context.Products.Include(p => p.Category).Include(s => s.Seller).AsQueryable();
+            return _context.Products.Include(p => p.Category).Include(s => s.Seller).
+                Include(i => i.Inventories).Include(r => r.Reviews).Include(c => c.Coupons)
+                .AsQueryable();
         }
 
         public async Task<Product?> GetByIdAsync(int id)
         {
-            return await _context.Products.Include(p => p.Category)
-                .Include(p => p.Seller).FirstOrDefaultAsync(p => p.Id == id);
+            return await _context.Products.Include(p => p.Category).Include(s => s.Seller).
+                Include(i => i.Inventories).Include(r => r.Reviews).Include(c => c.Coupons)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
     }
 }
