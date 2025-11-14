@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EbayCloneBuyerService_CoreAPI.Models;
 
-public partial class Returnrequest
+public partial class ReturnRequest
 {
     public int Id { get; set; }
 
@@ -17,7 +17,7 @@ public partial class Returnrequest
 
     public DateTime? CreatedAt { get; set; }
 
-    public virtual Ordertable? Order { get; set; }
+    public virtual OrderTable? Order { get; set; }
 
     public virtual User? User { get; set; }
 }

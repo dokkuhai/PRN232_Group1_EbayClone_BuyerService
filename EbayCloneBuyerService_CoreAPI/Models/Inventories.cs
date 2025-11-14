@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EbayCloneBuyerService_CoreAPI.Models;
 
-public partial class Inventory
+public partial class Inventories
 {
     public int Id { get; set; }
 

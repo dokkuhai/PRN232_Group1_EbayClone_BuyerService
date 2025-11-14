@@ -19,7 +19,7 @@ public partial class Payment
 
     public DateTime? PaidAt { get; set; }
 
-    public virtual Ordertable? Order { get; set; }
+    public virtual OrderTable? Order { get; set; }
 
     public virtual User? User { get; set; }
 }

@@ -382,6 +382,10 @@ body {
   border-bottom: 1px solid var(--border-color);
   margin-bottom: 16px;
 }
+.out-of-stock{
+  color: red;
+  font-weight: 700;
+}
 
 .checkout-btn {
   width: 100%;

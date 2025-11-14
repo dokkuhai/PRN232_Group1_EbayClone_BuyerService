@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EbayCloneBuyerService_CoreAPI.Models;
 
-public partial class Ordertable
+public partial class OrderTable
 {
     public int Id { get; set; }
 
@@ -25,11 +25,11 @@ public partial class Ordertable
 
     public virtual ICollection<Dispute> Disputes { get; set; } = new List<Dispute>();
 
-    public virtual ICollection<Orderitem> Orderitems { get; set; } = new List<Orderitem>();
+    public virtual ICollection<Orderitem> OrderItems { get; set; } = new List<Orderitem>();
 
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
-    public virtual ICollection<Returnrequest> Returnrequests { get; set; } = new List<Returnrequest>();
+    public virtual ICollection<ReturnRequest> ReturnRequests { get; set; } = new List<ReturnRequest>();
 
-    public virtual ICollection<Shippinginfo> Shippinginfos { get; set; } = new List<Shippinginfo>();
+    public virtual ICollection<Shippinginfo> ShippingInfos { get; set; } = new List<Shippinginfo>();
 }

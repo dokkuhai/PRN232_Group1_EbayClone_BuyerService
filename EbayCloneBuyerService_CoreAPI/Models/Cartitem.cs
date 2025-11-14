@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EbayCloneBuyerService_CoreAPI.Models;
 
-public partial class Cartitem
+public partial class CartItem
 {
     public int Id { get; set; }
 

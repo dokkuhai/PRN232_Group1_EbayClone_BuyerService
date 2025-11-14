@@ -15,7 +15,7 @@ public partial class Orderitem
 
     public decimal? UnitPrice { get; set; }
 
-    public virtual Ordertable? Order { get; set; }
+    public virtual OrderTable? Order { get; set; }
 
     public virtual Product? Product { get; set; }
 }

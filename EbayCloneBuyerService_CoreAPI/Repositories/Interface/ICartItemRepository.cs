@@ -2,9 +2,9 @@
 
 namespace EbayCloneBuyerService_CoreAPI.Repositories.Interface
 {
-    public interface ICartItemRepository : IGenericRepository<Cartitem>
+    public interface ICartItemRepository : IGenericRepository<CartItem>
     {
-        Task<Cartitem> CheckCartItem(string token, int cartItemId);
+        Task<CartItem> CheckCartItem(string token, int cartItemId);
 
     }
 }

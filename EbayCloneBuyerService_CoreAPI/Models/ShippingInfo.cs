@@ -17,5 +17,5 @@ public partial class Shippinginfo
 
     public DateTime? EstimatedArrival { get; set; }
 
-    public virtual Ordertable? Order { get; set; }
+    public virtual OrderTable? Order { get; set; }
 }

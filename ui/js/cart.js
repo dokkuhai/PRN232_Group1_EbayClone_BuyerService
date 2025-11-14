@@ -35,6 +35,9 @@ function fetchCartData() {
     },
     error: function (xhr) {
       console.error("Fetch cart lỗi:", xhr.responseText);
+      if(xhr.status === 401 && accessToken){
+        // localStorage.removeItem("accessToken");
+      }
     },
   });
 }
@@ -46,7 +49,7 @@ function onQuantityInputChange(id, value) {
   if (isNaN(quantity) || quantity < 1) quantity = 1;
   if (quantity > item.availableStock) {
     quantity = item.availableStock;
-    showToast(`Chỉ còn ${item.availableStock} sản phẩm trong kho`);
+    showToast(`Only ${item.availableStock} item${item.availableStock > 1 ? 's' : ''} left in stock`);
   }
 
   item.quantity = quantity;
@@ -81,7 +84,7 @@ function renderCart() {
 
     let quantityControls = "";
     if (item.availableStock === 0) {
-      quantityControls = `<div class="out-of-stock">Hết hàng</div>`;
+      quantityControls = `<div class="out-of-stock">Out of stock</div>`;
     } else {
       quantityControls = `
         <div class="quantity-control">

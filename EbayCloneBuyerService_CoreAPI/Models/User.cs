@@ -32,13 +32,13 @@ public partial class User
 
     public virtual ICollection<Message> MessageSenders { get; set; } = new List<Message>();
 
-    public virtual ICollection<Ordertable> Ordertables { get; set; } = new List<Ordertable>();
+    public virtual ICollection<OrderTable> Ordertables { get; set; } = new List<OrderTable>();
 
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
-    public virtual ICollection<Returnrequest> Returnrequests { get; set; } = new List<Returnrequest>();
+    public virtual ICollection<ReturnRequest> Returnrequests { get; set; } = new List<ReturnRequest>();
 
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 

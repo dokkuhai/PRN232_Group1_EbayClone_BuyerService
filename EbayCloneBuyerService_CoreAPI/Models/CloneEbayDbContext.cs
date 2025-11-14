@@ -22,7 +22,7 @@ public partial class CloneEbayDbContext : DbContext
 
     public virtual DbSet<Cart> Carts { get; set; }
 
-    public virtual DbSet<Cartitem> Cartitems { get; set; }
+    public virtual DbSet<CartItem> CartItems { get; set; }
 
     public virtual DbSet<Category> Categories { get; set; }
 
@@ -36,23 +36,23 @@ public partial class CloneEbayDbContext : DbContext
 
     public virtual DbSet<Feedback> Feedbacks { get; set; }
 
-    public virtual DbSet<Inventory> Inventories { get; set; }
+    public virtual DbSet<Inventories> Inventories { get; set; }
 
     public virtual DbSet<Message> Messages { get; set; }
 
-    public virtual DbSet<Orderitem> Orderitems { get; set; }
+    public virtual DbSet<Orderitem> OrderItems { get; set; }
 
-    public virtual DbSet<Ordertable> Ordertables { get; set; }
+    public virtual DbSet<OrderTable> OrderTables { get; set; }
 
     public virtual DbSet<Payment> Payments { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
 
-    public virtual DbSet<Returnrequest> Returnrequests { get; set; }
+    public virtual DbSet<ReturnRequest> ReturnRequests { get; set; }
 
     public virtual DbSet<Review> Reviews { get; set; }
 
-    public virtual DbSet<Shippinginfo> Shippinginfos { get; set; }
+    public virtual DbSet<Shippinginfo> ShippingInfos { get; set; }
 
     public virtual DbSet<Store> Stores { get; set; }
 
@@ -164,7 +164,7 @@ public partial class CloneEbayDbContext : DbContext
                 .HasConstraintName("fk_cart_user");
         });
 
-        modelBuilder.Entity<Cartitem>(entity =>
+        modelBuilder.Entity<CartItem>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
@@ -335,7 +335,7 @@ public partial class CloneEbayDbContext : DbContext
                 .HasConstraintName("feedback_ibfk_1");
         });
 
-        modelBuilder.Entity<Inventory>(entity =>
+        modelBuilder.Entity<Inventories>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
@@ -350,8 +350,8 @@ public partial class CloneEbayDbContext : DbContext
             entity.Property(e => e.ProductId).HasColumnName("productId");
             entity.Property(e => e.Quantity).HasColumnName("quantity");
 
-            entity.HasOne(d => d.Product).WithOne(p => p.Inventory)
-                .HasForeignKey<Inventory>(d => d.ProductId)
+            entity.HasOne(d => d.Product).WithOne(p => p.Inventories)
+                .HasForeignKey<Inventories>(d => d.ProductId)
                 .HasConstraintName("inventory_ibfk_1");
         });
 
@@ -402,7 +402,7 @@ public partial class CloneEbayDbContext : DbContext
                 .HasPrecision(10, 2)
                 .HasColumnName("unitPrice");
 
-            entity.HasOne(d => d.Order).WithMany(p => p.Orderitems)
+            entity.HasOne(d => d.Order).WithMany(p => p.OrderItems)
                 .HasForeignKey(d => d.OrderId)
                 .HasConstraintName("orderitem_ibfk_1");
 
@@ -411,7 +411,7 @@ public partial class CloneEbayDbContext : DbContext
                 .HasConstraintName("orderitem_ibfk_2");
         });
 
-        modelBuilder.Entity<Ordertable>(entity =>
+        modelBuilder.Entity<OrderTable>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
@@ -517,7 +517,7 @@ public partial class CloneEbayDbContext : DbContext
                 .HasConstraintName("product_ibfk_2");
         });
 
-        modelBuilder.Entity<Returnrequest>(entity =>
+        modelBuilder.Entity<ReturnRequest>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
@@ -540,7 +540,7 @@ public partial class CloneEbayDbContext : DbContext
                 .HasColumnName("status");
             entity.Property(e => e.UserId).HasColumnName("userId");
 
-            entity.HasOne(d => d.Order).WithMany(p => p.Returnrequests)
+            entity.HasOne(d => d.Order).WithMany(p => p.ReturnRequests)
                 .HasForeignKey(d => d.OrderId)
                 .HasConstraintName("returnrequest_ibfk_1");
 
@@ -602,7 +602,7 @@ public partial class CloneEbayDbContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("trackingNumber");
 
-            entity.HasOne(d => d.Order).WithMany(p => p.Shippinginfos)
+            entity.HasOne(d => d.Order).WithMany(p => p.ShippingInfos)
                 .HasForeignKey(d => d.OrderId)
                 .HasConstraintName("shippinginfo_ibfk_1");
         });

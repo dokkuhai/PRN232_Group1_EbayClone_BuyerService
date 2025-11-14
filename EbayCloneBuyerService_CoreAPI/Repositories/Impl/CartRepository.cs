@@ -11,7 +11,29 @@ namespace EbayCloneBuyerService_CoreAPI.Repositories.Impl
         {
         }
 
+        public async Task<Cart?> GetCartByGuestToken(string token)
+        {
+            return await _context.Carts
+                .FirstOrDefaultAsync(c => c.GuestToken == token);
+        }
 
+        public async Task<Cart?> GetCartByUserIdAsync(int userId)
+        {
+            return await _context.Carts
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+        }
+
+        public async Task<Cart?> GetCartByTokenOrId(string token)
+        {
+            if (int.TryParse(token, out int userId))
+            {
+                return await _context.Carts.FirstOrDefaultAsync(c => c.UserId == userId);
+            }
+            else
+            {
+                return await _context.Carts.FirstOrDefaultAsync(c => c.GuestToken == token);
+            }
+        }
 
         public async Task<IEnumerable<UserCart>> GetUserCartItemsAsync(string token)
         {
@@ -19,9 +41,12 @@ namespace EbayCloneBuyerService_CoreAPI.Repositories.Impl
             if (int.TryParse(token, out int userId))
             {
                 cart = await _context.Carts
-                    .Include(c => c.Cartitems)
-                    .ThenInclude(ci => ci.Product)
-                    .ThenInclude(p => p.Seller)
+    .Include(c => c.Cartitems)
+        .ThenInclude(ci => ci.Product)
+            .ThenInclude(p => p.Inventories)
+    .Include(c => c.Cartitems)
+        .ThenInclude(ci => ci.Product)
+            .ThenInclude(p => p.Seller)
                     .FirstOrDefaultAsync(c => c.UserId == userId);
             }
             else
@@ -29,10 +54,10 @@ namespace EbayCloneBuyerService_CoreAPI.Repositories.Impl
                 cart = await _context.Carts
      .Include(c => c.Cartitems)
          .ThenInclude(ci => ci.Product)
-             .ThenInclude(p => p.Inventory)  
+             .ThenInclude(p => p.Inventories)
      .Include(c => c.Cartitems)
          .ThenInclude(ci => ci.Product)
-             .ThenInclude(p => p.Seller)      
+             .ThenInclude(p => p.Seller)
                      .FirstOrDefaultAsync(c => c.GuestToken == token);
             }
 
@@ -49,7 +74,7 @@ namespace EbayCloneBuyerService_CoreAPI.Repositories.Impl
                 Quantity = ci.Quantity ?? 1,
                 UnitPrice = ci.Product.Price ?? 0,
                 ProductImage = ci.Product.Images ?? string.Empty,
-                AvailableStock = ci.Product.Inventory.Quantity ?? 0
+                AvailableStock = ci.Product.Inventories?.Quantity ?? 0
             });
         }
     }

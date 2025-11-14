@@ -25,13 +25,13 @@ public partial class Product
 
     public virtual ICollection<Bid> Bids { get; set; } = new List<Bid>();
 
-    public virtual ICollection<Cartitem> Cartitems { get; set; } = new List<Cartitem>();
+    public virtual ICollection<CartItem> Cartitems { get; set; } = new List<CartItem>();
 
     public virtual Category? Category { get; set; }
 
     public virtual ICollection<Coupon> Coupons { get; set; } = new List<Coupon>();
 
-    public virtual Inventory? Inventory { get; set; }
+    public virtual Inventories? Inventories { get; set; }
 
     public virtual ICollection<Orderitem> Orderitems { get; set; } = new List<Orderitem>();
 

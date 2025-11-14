@@ -9,14 +9,13 @@ using EbayCloneBuyerService_CoreAPI.Services.Interface;
 using EbayCloneBuyerService_CoreAPI.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OData;
-using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
-using System.Text;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient();
@@ -40,12 +39,17 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath);
+
     options.AddServer(new OpenApiServer
     {
         Url = "https://localhost:7020",
         Description = "Localhost Server"
     });
 });
+
 
 // ===== JWT Authentication & Authorization =====
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");

@@ -15,7 +15,7 @@ public partial class Cart
 
     public DateTime? UpdatedAt { get; set; }
 
-    public virtual ICollection<Cartitem> Cartitems { get; set; } = new List<Cartitem>();
+    public virtual ICollection<CartItem> Cartitems { get; set; } = new List<CartItem>();
 
     public virtual User? User { get; set; }
 }
