@@ -18,10 +18,14 @@
     </PackageReference>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+	  <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.3.1" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Models\Requests\" />
+    <Folder Include="Services\Impl\" />
+    <Folder Include="Services\Interface\" />
+    <Folder Include="Utils\" />
   </ItemGroup>
 
 </Project>
