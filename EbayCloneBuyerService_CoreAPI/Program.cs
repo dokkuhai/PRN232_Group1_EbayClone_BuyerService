@@ -1,4 +1,5 @@
-﻿using EbayCloneBuyerService_CoreAPI.Models;
+﻿using EbayCloneBuyerService_CoreAPI.Hubs;
+using EbayCloneBuyerService_CoreAPI.Models;
 using EbayCloneBuyerService_CoreAPI.Repositories.Impl;
 using EbayCloneBuyerService_CoreAPI.Repositories.Interface;
 using EbayCloneBuyerService_CoreAPI.Services.Impl;
@@ -45,8 +46,16 @@ builder.Services.AddScoped(typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IProductRepo, ProductRepo>();
 builder.Services.AddScoped<IProductServices, ProductServices>();
-
-
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+// SignalR
+builder.Services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = true;
+    options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+});
 
 
 
@@ -72,6 +81,8 @@ app.UseAuthorization();
 app.UseCors("AllowAll");
 
 app.MapControllers();
+// ===== SignalR Hub =====
+app.MapHub<NotificationHub>("/hubs/notification");
 
 app.Run();
 

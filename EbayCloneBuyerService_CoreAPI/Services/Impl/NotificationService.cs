@@ -1,4 +1,5 @@
 ﻿using EbayCloneBuyerService_CoreAPI.DTOs.Notification;
+using EbayCloneBuyerService_CoreAPI.Hubs;
 using EbayCloneBuyerService_CoreAPI.Repositories.Interface;
 using EbayCloneBuyerService_CoreAPI.Services.Interface;
 using Microsoft.AspNetCore.SignalR;
