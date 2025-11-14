@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Feedback - eBay Clone</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/feedback.css">
+    
+    <style>
+        body {
+            background-color: #f7f7f7;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .page-header {
+            background: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .order-summary {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .product-info {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .product-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #e5e5e5;
+        }
+        
+        .product-details h5 {
+            margin: 0;
+            font-size: 1rem;
+            color: #111820;
+        }
+        
+        .product-details p {
+            margin: 0.25rem 0;
+            color: #707a84;
+            font-size: 0.9rem;
+        }
+        
+        .btn-submit {
+            background: #3665f3;
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-submit:hover {
+            background: #2952d6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(54, 101, 243, 0.3);
+        }
+        
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <div class="d-flex align-items-center gap-3">
+                <a href="my-orders.html" class="btn btn-link text-decoration-none">
+                    <i class="bi bi-arrow-left"></i> Back to Orders
+                </a>
+                <h1 class="h3 mb-0">Leave Feedback</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mb-5">
+        <!-- Order Summary -->
+        <div class="order-summary" id="orderSummary">
+            <h5 class="mb-3">Order Information</h5>
+            <div class="product-info">
+                <img src="https://via.placeholder.com/80" alt="Product" class="product-image" id="productImage">
+                <div class="product-details">
+                    <h5 id="productTitle">Loading...</h5>
+                    <p>Sold by: <strong id="sellerName">Loading...</strong></p>
+                    <p>Order #<span id="orderNumber">Loading...</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback Form -->
+        <div class="feedback-form-card">
+            <h4 class="mb-4">How did it go?</h4>
+            
+            <form id="feedbackForm">
+                <!-- Overall Feedback Type -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Rate your experience</label>
+                    <div class="feedback-type-selector">
+                        <button type="button" class="feedback-type-btn positive" data-type="positive">
+                            <i class="bi bi-emoji-smile"></i>
+                            <div>Positive</div>
+                        </button>
+                        <button type="button" class="feedback-type-btn neutral" data-type="neutral">
+                            <i class="bi bi-emoji-neutral"></i>
+                            <div>Neutral</div>
+                        </button>
+                        <button type="button" class="feedback-type-btn negative" data-type="negative">
+                            <i class="bi bi-emoji-frown"></i>
+                            <div>Negative</div>
+                        </button>
+                    </div>
+                    <input type="hidden" id="feedbackType" name="feedbackType" required>
+                </div>
+
+                <!-- Comment -->
+                <div class="mb-4">
+                    <label for="comment" class="form-label fw-bold">What else would you add?</label>
+                    <p class="text-muted small">Help the community with more details</p>
+                    <textarea 
+                        class="form-control" 
+                        id="comment" 
+                        name="comment" 
+                        rows="4" 
+                        maxlength="500"
+                        placeholder="Share your experience with this seller (optional)"></textarea>
+                    <div class="text-end text-muted small mt-1">
+                        <span id="commentCount">0</span> / 500
+                    </div>
+                </div>
+
+                <!-- Detailed Ratings -->
+                <h5 class="mb-3">Rate the details</h5>
+                
+                <!-- Item Description -->
+                <div class="rating-group">
+                    <label class="fw-bold">Item description</label>
+                    <p class="text-muted small mb-2">How accurate was the item description?</p>
+                    <div class="star-rating-input" data-rating-name="itemDescriptionRating">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                    <input type="hidden" id="itemDescriptionRating" name="itemDescriptionRating" required>
+                </div>
+
+                <!-- Communication -->
+                <div class="rating-group">
+                    <label class="fw-bold">Communication</label>
+                    <p class="text-muted small mb-2">How was the seller's communication?</p>
+                    <div class="star-rating-input" data-rating-name="communicationRating">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                    <input type="hidden" id="communicationRating" name="communicationRating" required>
+                </div>
+
+                <!-- Shipping Speed -->
+                <div class="rating-group">
+                    <label class="fw-bold">Shipping speed</label>
+                    <p class="text-muted small mb-2">How fast was the shipping?</p>
+                    <div class="star-rating-input" data-rating-name="shippingSpeedRating">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                    <input type="hidden" id="shippingSpeedRating" name="shippingSpeedRating" required>
+                </div>
+
+                <!-- Shipping Cost -->
+                <div class="rating-group">
+                    <label class="fw-bold">Shipping cost</label>
+                    <p class="text-muted small mb-2">Was the shipping cost reasonable?</p>
+                    <div class="star-rating-input" data-rating-name="shippingCostRating">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                    <input type="hidden" id="shippingCostRating" name="shippingCostRating" required>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        <i class="bi bi-send"></i> Leave Feedback
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Feedback API -->
+    <script src="assets/js/feedback-api.js"></script>
+    
+    <!-- Page Logic -->
+    <script>
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = parseInt(urlParams.get('orderId'));
+        const productId = parseInt(urlParams.get('productId'));
+        const sellerId = parseInt(urlParams.get('sellerId'));
+
+        let selectedFeedbackType = null;
+        const ratings = {
+            itemDescriptionRating: 0,
+            communicationRating: 0,
+            shippingSpeedRating: 0,
+            shippingCostRating: 0
+        };
+
+        // Check if logged in
+        if (!isLoggedIn()) {
+            showToast('Please login to leave feedback', 'error');
+            setTimeout(() => window.location.href = 'login.html', 1500);
+        }
+
+        // Load order info (mock for now - replace with actual API call)
+        async function loadOrderInfo() {
+            // TODO: Replace with actual order API call
+            document.getElementById('productTitle').textContent = 'Sample Product Title';
+            document.getElementById('sellerName').textContent = 'TechStore';
+            document.getElementById('orderNumber').textContent = orderId || '12345';
+            
+            // Check if can leave feedback
+            if (orderId) {
+                const canLeave = await FeedbackAPI.canLeaveFeedback(orderId);
+                if (!canLeave.canLeave) {
+                    showToast(canLeave.reason, 'error');
+                    setTimeout(() => window.location.href = 'my-orders.html', 2000);
+                }
+            }
+        }
+
+        // Feedback type buttons
+        document.querySelectorAll('.feedback-type-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all
+                document.querySelectorAll('.feedback-type-btn').forEach(b => b.classList.remove('active'));
+                
+                // Add active to clicked
+                this.classList.add('active');
+                selectedFeedbackType = this.dataset.type;
+                document.getElementById('feedbackType').value = selectedFeedbackType;
+            });
+        });
+
+        // Star rating interaction
+        document.querySelectorAll('.star-rating-input').forEach(ratingGroup => {
+            const stars = ratingGroup.querySelectorAll('.star');
+            const ratingName = ratingGroup.dataset.ratingName;
+            
+            stars.forEach(star => {
+                // Hover effect
+                star.addEventListener('mouseenter', function() {
+                    const value = parseInt(this.dataset.value);
+                    stars.forEach((s, idx) => {
+                        if (idx < value) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+                
+                // Click to select
+                star.addEventListener('click', function() {
+                    const value = parseInt(this.dataset.value);
+                    ratings[ratingName] = value;
+                    document.getElementById(ratingName).value = value;
+                    
+                    // Keep selected stars active
+                    stars.forEach((s, idx) => {
+                        if (idx < value) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+            });
+            
+            // Reset on mouse leave to show selected rating
+            ratingGroup.addEventListener('mouseleave', function() {
+                const selectedValue = ratings[ratingName];
+                stars.forEach((s, idx) => {
+                    if (idx < selectedValue) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // Comment character count
+        document.getElementById('comment').addEventListener('input', function() {
+            document.getElementById('commentCount').textContent = this.value.length;
+        });
+
+        // Form submission
+        document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validate feedback type
+            if (!selectedFeedbackType) {
+                showToast('Please select your experience type (Positive/Neutral/Negative)', 'error');
+                return;
+            }
+            
+            // Validate all ratings
+            const requiredRatings = ['itemDescriptionRating', 'communicationRating', 'shippingSpeedRating', 'shippingCostRating'];
+            for (const rating of requiredRatings) {
+                if (ratings[rating] === 0) {
+                    showToast('Please rate all categories', 'error');
+                    return;
+                }
+            }
+            
+            // Prepare data
+            const feedbackData = {
+                orderId: orderId || 1,
+                sellerId: sellerId || 1,
+                productId: productId || 1,
+                feedbackType: selectedFeedbackType,
+                comment: document.getElementById('comment').value || "",
+                itemDescriptionRating: ratings.itemDescriptionRating,
+                communicationRating: ratings.communicationRating,
+                shippingSpeedRating: ratings.shippingSpeedRating,
+                shippingCostRating: ratings.shippingCostRating
+            };
+            
+            // Disable submit button
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Submitting...';
+            
+            try {
+                // Submit feedback
+                const result = await FeedbackAPI.leaveFeedback(feedbackData);
+                
+                if (result) {
+                    showToast('Thank you for your feedback!', 'success');
+                    
+                    // Redirect after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = 'my-feedbacks.html';
+                    }, 2000);
+                }
+            } catch (error) {
+                console.error('Error submitting feedback:', error);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="bi bi-send"></i> Leave Feedback';
+            }
+        });
+
+        // Load order info on page load
+        loadOrderInfo();
+    </script>
+</body>
+</html>
