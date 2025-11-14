@@ -35,6 +35,8 @@ builder.Services.AddControllers()
         options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null)
             .AddRouteComponents("api", GetEdmModel()));
 
+builder.Services.AddHttpClient();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -100,6 +102,7 @@ builder.Services.AddSignalR(options =>
     options.KeepAliveInterval = TimeSpan.FromSeconds(15);
 });
 
+builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
