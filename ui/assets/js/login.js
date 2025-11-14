@@ -10,7 +10,7 @@ $(document).ready(function () {
 
     }
     $.ajax({
-        url: 'https://localhost:7020/api/User/login-with-remember-token',
+        url: 'https://ebay.dokkuhai.dpdns.org/api/User/login-with-remember-token',
         method: 'GET',
         data: { token: token },
         success: function (response) {
@@ -22,7 +22,7 @@ $(document).ready(function () {
                 .text("Auto-login successful! Redirecting to home page...")
                 .fadeIn();
             setTimeout(function () {
-                window.location.href = ' https://ebay.dokkuhai.dpdns.org/';
+                window.location.href = 'https://ebay.dokkuhai.dpdns.org/';
             }
                 , 1000);
 
@@ -51,7 +51,7 @@ $('#loginBtn').on('click', function () {
     const rememberMe = $('#stay-signed-in').is(':checked');
     console.log("Attempting login with email:", email, "Remember me:", rememberMe);
     $.ajax({
-        url: '/api/user/login',
+        url: 'https://ebay.dokkuhai.dpdns.org/api/user/login',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({ email, rememberMe }),
@@ -65,7 +65,7 @@ $('#loginBtn').on('click', function () {
                 .fadeIn();
 
             setTimeout(function () {
-                window.location.href = ' https://ebay.dokkuhai.dpdns.org/';
+                window.location.href = 'https://ebay.dokkuhai.dpdns.org/';
             }, 1000);
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -90,7 +90,7 @@ $('#googleLoginBtn').on('click', function () {
 });
 
 $('#facebookLoginBtn').on('click', function () {
-    const feCallbackUrl = ' https://ebay.dokkuhai.dpdns.org/facebook-callback.html';
+    const feCallbackUrl = 'https://ebay.dokkuhai.dpdns.org/facebook-callback.html';
     const facebookOAuthUrl = 'https://www.facebook.com/v16.0/dialog/oauth' +
         '?client_id=2714688805552787' +
         '&redirect_uri=' + feCallbackUrl +
