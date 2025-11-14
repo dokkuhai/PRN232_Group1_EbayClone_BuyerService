@@ -36,7 +36,129 @@
     border-radius: 8px;
     padding: 6px 10px;
   }
-  
+/* ------------------------------
+   LAYOUT: eBay style
+------------------------------ */
+.ebay-container {
+    display: flex;
+    gap: 25px;
+}
+
+/* ------------------------------
+   SIDEBAR FILTER
+------------------------------ */
+.ebay-sidebar {
+    width: 220px;
+    min-width: 200px;
+}
+
+.ebay-sidebar h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.ebay-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ebay-sidebar ul li {
+    padding: 5px 0;
+    cursor: pointer;
+}
+
+.ebay-sidebar ul li:hover {
+    text-decoration: underline;
+}
+
+/* ------------------------------
+   PRODUCT GRID (5 per row)
+------------------------------ */
+.ebay-products {
+    flex: 1;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 18px;
+}
+
+/* ------------------------------
+   PRODUCT CARD (eBay style)
+------------------------------ */
+.product-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 12px;
+    background: #fff;
+    transition: .2s;
+}
+
+.product-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.product-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    background: #fff;
+}
+
+.product-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+    margin: 8px 0;
+    height: 38px;
+    overflow: hidden;
+}
+
+.product-price {
+    font-size: 19px;
+    font-weight: bold;
+    color: #0654ba;
+}
+
+/* ------------------------------
+   SORT BAR
+------------------------------ */
+.sort-bar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.sort-bar select {
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #bbb;
+}
+
+/* ------------------------------
+   PAGINATION
+------------------------------ */
+.ebay-pagination {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.ebay-pagination a {
+    padding: 8px 14px;
+    margin: 0 4px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+.ebay-pagination a.active {
+    background: #0654ba;
+    color: #fff;
+}
+
 </style>
 
 </head>
@@ -154,85 +276,44 @@
 
 	<!-- products -->
 	<div class="product-section mt-150 mb-150">
-		<div class="container">
-			<div class="row product-lists">
-				<div class="col-lg-4 col-md-6 text-center strawberry">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html"><img src="assets/img/products/product-img-1.jpg" alt=""></a>
-						</div>
-						<h3>Strawberry</h3>
-						<p class="product-price"><span>Per Kg</span> 85$ </p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6 text-center berry">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html"><img src="assets/img/products/product-img-2.jpg" alt=""></a>
-						</div>
-						<h3>Berry</h3>
-						<p class="product-price"><span>Per Kg</span> 70$ </p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6 text-center lemon">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html"><img src="assets/img/products/product-img-3.jpg" alt=""></a>
-						</div>
-						<h3>Lemon</h3>
-						<p class="product-price"><span>Per Kg</span> 35$ </p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6 text-center">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html"><img src="assets/img/products/product-img-4.jpg" alt=""></a>
-						</div>
-						<h3>Avocado</h3>
-						<p class="product-price"><span>Per Kg</span> 50$ </p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6 text-center">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html"><img src="assets/img/products/product-img-5.jpg" alt=""></a>
-						</div>
-						<h3>Green Apple</h3>
-						<p class="product-price"><span>Per Kg</span> 45$ </p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6 text-center strawberry">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html"><img src="assets/img/products/product-img-6.jpg" alt=""></a>
-						</div>
-						<h3>Strawberry</h3>
-						<p class="product-price"><span>Per Kg</span> 80$ </p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-					</div>
-				</div>
-			</div>
+    <div class="container">
 
-			<div class="row">
-				<div class="col-lg-12 text-center">
-					<div class="pagination-wrap">
-						<ul>
-							<li><a href="#">Prev</a></li>
-							<li><a href="#">1</a></li>
-							<li><a class="active" href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">Next</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+        <!-- Search bar giống eBay -->
+        <div style="margin-bottom:20px;">
+            <input id="search-box" type="text" placeholder="Search products..."
+                   style="width:100%; padding:12px; border-radius:8px; border:1px solid #bbb;">
+        </div>
+
+        <!-- Sort bar -->
+        <div class="sort-bar">
+
+            <select id="sort-product">
+                <option value="">Best Match</option>
+                <option value="Price asc">Price Low–High</option>
+                <option value="Price desc">Price High–Low</option>
+                <option value="Title asc">Name A–Z</option>
+                <option value="Title desc">Name Z–A</option>
+            </select>
+        </div>
+
+        <div class="ebay-container">
+            <!-- Sidebar -->
+            <div class="ebay-sidebar">
+                <h4>Categories</h4>
+                <ul id="category-list"></ul>
+            </div>
+
+            <!-- Product list -->
+            <div class="ebay-products">
+                <div id="product-grid" class="product-grid"></div>
+
+                <div id="pagination" class="ebay-pagination"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 	<!-- end products -->
 
 	<!-- logo carousel -->
@@ -355,217 +436,179 @@
 	<!-- main js -->
 	<script src="assets/js/main.js"></script>
 <script>
-// =====================
-// FIXED API DOMAIN (NO LOCALHOST)
-// =====================
 const baseUrl = "https://ebay.dokkuhai.dpdns.org";
 const apiUrl = `${baseUrl}/api/Product`;
 
-// =====================
-// ELEMENTS
-// =====================
-const container = document.querySelector(".product-lists");
-const paginationWrap = document.querySelector(".pagination-wrap ul");
+// UI elements
+const grid = document.getElementById("product-grid");
+const categoryList = document.getElementById("category-list");
+const pagination = document.getElementById("pagination");
 
-// =====================
-// CONFIG
-// =====================
+// State
+let productsFull = [];
 let page = 0;
-const pageSize = 3;
-let totalCount = 0;
-let totalPages = 0;
+const pageSize = 10;
 
-let currentKeyword = "";
+let currentSearch = "";
 let currentSort = "";
-let currentCategorySort = "";
+let currentCategory = "";
 
-// =====================
-// LOAD PRODUCTS (DOMAIN JSON ONLY)
-// =====================
+// ==============================
+// LOAD PRODUCTS
+// ==============================
 async function loadProducts() {
-    try {
-        container.innerHTML = "<p>Loading products...</p>";
-
-        // Always fetch full list from domain
-        const res = await fetch(apiUrl);
-        if (!res.ok) throw new Error("Cannot fetch products");
-
-        const raw = await res.json();
-        let products = Array.isArray(raw) ? raw : [];
-
-        // ----- FILTER (search) -----
-        if (currentKeyword.trim() !== "") {
-            const key = currentKeyword.toLowerCase();
-            products = products.filter(p =>
-                (p.title ?? "").toLowerCase().includes(key) ||
-                (p.category?.name ?? "").toLowerCase().includes(key)
-            );
-        }
-
-        // ----- SORT Category -----
-        if (currentCategorySort !== "") {
-            products.sort((a, b) =>
-                currentCategorySort === "asc"
-                    ? (a.category?.name ?? "").localeCompare(b.category?.name ?? "")
-                    : (b.category?.name ?? "").localeCompare(a.category?.name ?? "")
-            );
-        }
-        // ----- SORT Product -----
-        else if (currentSort !== "") {
-            const [field, direction] = currentSort.split(" ");
-            products.sort((a, b) => {
-                const va = a[field.toLowerCase()];
-                const vb = b[field.toLowerCase()];
-                return direction === "asc" ? va - vb : vb - va;
-            });
-        }
-
-        // ----- PAGING -----
-        totalCount = products.length;
-        totalPages = Math.ceil(totalCount / pageSize);
-
-        const skip = page * pageSize;
-        products = products.slice(skip, skip + pageSize);
-
-        // Render UI
-        if (products.length === 0) {
-            container.innerHTML = "<p>No products found.</p>";
-            paginationWrap.innerHTML = "";
-            return;
-        }
-
-        container.innerHTML = "";
-        products.forEach(p => {
-            const img = p.images || p.Images || "default.jpg";
-            const imgUrl = img.startsWith("http") ? img : `https://th.bing.com/th/id/OIP.ipTpmWrouGNDkLY582e2hQHaEK?w=294&h=180&c=7&r=0&o=7&cb=ucfimg2&dpr=1.3&pid=1.7&rm=3&ucfimg=1`;
-            const category = p.category?.name ?? "Unknown";
-
-            container.insertAdjacentHTML(
-                "beforeend",
-                `
-                <div class="col-lg-4 col-md-6 text-center">
-                    <div class="single-product-item">
-                        <div class="product-image">
-                            <a href="single-product.html?id=${p.id}">
-                                <img src="${imgUrl}" alt="${p.title}">
-                            </a>
-                        </div>
-                        <h3>${p.title}</h3>
-                        <p class="product-price">
-                            <span>${category}</span> ${p.price} VND
-                        </p>
-                        <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                    </div>
-                </div>`
-            );
-        });
-
-        renderPagination();
-    } catch (err) {
-        console.error("❌ Error:", err);
-        container.innerHTML = `<p style="color:red">Error loading product list.</p>`;
-    }
+    const res = await fetch(apiUrl);
+    productsFull = await res.json();
+    render();
+    loadCategories();
 }
 
-// =====================
-// PAGINATION RENDER
-// =====================
-function renderPagination() {
-    paginationWrap.innerHTML = "";
+// ==============================
+// CATEGORY LIST (Sidebar)
+// ==============================
+function loadCategories() {
+    const categories = new Set(productsFull.map(p => p.category?.name ?? "Unknown"));
+    categoryList.innerHTML = "";
 
-    const prevDisabled = page === 0 ? "disabled" : "";
-    const nextDisabled = page + 1 >= totalPages ? "disabled" : "";
+    categoryList.insertAdjacentHTML("beforeend", `<li data-cat="">All</li>`);
 
-    paginationWrap.insertAdjacentHTML(
-        "beforeend",
-        `<li><a href="#" class="page-btn" data-page="${page - 1}" ${prevDisabled}>Prev</a></li>`
-    );
-
-    for (let i = 0; i < totalPages; i++) {
-        const active = page === i ? "active" : "";
-        paginationWrap.insertAdjacentHTML(
+    categories.forEach(cat => {
+        categoryList.insertAdjacentHTML(
             "beforeend",
-            `<li><a href="#" class="page-btn ${active}" data-page="${i}">${i + 1}</a></li>`
+            `<li data-cat="${cat}">${cat}</li>`
         );
-    }
+    });
 
-    paginationWrap.insertAdjacentHTML(
-        "beforeend",
-        `<li><a href="#" class="page-btn" data-page="${page + 1}" ${nextDisabled}>Next</a></li>`
-    );
-
-    document.querySelectorAll(".page-btn").forEach(btn => {
-        btn.addEventListener("click", e => {
-            e.preventDefault();
-            const target = parseInt(btn.dataset.page);
-            if (!isNaN(target) && target >= 0 && target < totalPages) {
-                page = target;
-                loadProducts();
-            }
-        });
+    // Sidebar click filter
+    document.querySelectorAll("#category-list li").forEach(li => {
+        li.onclick = () => {
+            currentCategory = li.dataset.cat;
+            page = 0;
+            render();
+        };
     });
 }
 
-// =====================
-// SEARCH
-// =====================
-document.querySelector(".search-bar button").addEventListener("click", () => {
-    currentKeyword = document.querySelector(".search-bar input").value.trim();
-    page = 0;
-    loadProducts();
+// ==============================
+// RENDER PRODUCT GRID
+// ==============================
+function render() {
+    let list = [...productsFull];
+
+    // Filter search
+    if (currentSearch.trim() !== "") {
+        const key = currentSearch.toLowerCase();
+        list = list.filter(p =>
+            (p.title ?? "").toLowerCase().includes(key) ||
+            (p.category?.name ?? "").toLowerCase().includes(key)
+        );
+    }
+
+    // Category filter
+    if (currentCategory !== "") {
+        list = list.filter(p =>
+            (p.category?.name ?? "") === currentCategory
+        );
+    }
+
+    // ----- SORT -----
+if (currentSort !== "") {
+    const [field, direction] = currentSort.split(" ");
+    const key = field.toLowerCase();
+
+    list.sort((a, b) => {
+        const va = a[key];
+        const vb = b[key];
+
+        // Nếu sort theo chữ (title)
+        if (key === "title") {
+            return direction === "asc"
+                ? va.localeCompare(vb)
+                : vb.localeCompare(va);
+        }
+
+        // Nếu sort theo số (price)
+        if (key === "price") {
+            return direction === "asc"
+                ? va - vb
+                : vb - va;
+        }
+        const ca = a.category?.name ?? a.category?.Name ?? "";
+        const cb = b.category?.name ?? b.category?.Name ?? "";
+
+        return currentCategorySort === "asc"
+            ? ca.localeCompare(cb)
+            : cb.localeCompare(ca);
+        return 0;
+    });
+}
+
+
+    // Paging
+    const totalPages = Math.ceil(list.length / pageSize);
+    const skip = page * pageSize;
+    const pageData = list.slice(skip, skip + pageSize);
+
+    // Render grid
+    grid.innerHTML = "";
+    pageData.forEach(p => {
+        const img = p.images?.startsWith("http") ? p.images : "assets/img/products/default.jpg";
+        
+        grid.insertAdjacentHTML(
+            "beforeend",
+            `
+            <div class="product-card">
+                <a href="single-product.html?id=${p.id}">
+                    <img src="${img}">
+                </a>
+                <div class="product-title">${p.title}</div>
+                <div class="product-price">${p.price} VND</div>
+            </div>
+            `
+        );
+    });
+
+    // Render pagination
+    pagination.innerHTML = "";
+    for (let i = 0; i < totalPages; i++) {
+        pagination.insertAdjacentHTML(
+            "beforeend",
+            `<a href="#" data-page="${i}" class="${page === i ? "active" : ""}">${i + 1}</a>`
+        );
+    }
+
+    document.querySelectorAll("#pagination a").forEach(a => {
+        a.onclick = e => {
+            e.preventDefault();
+            page = parseInt(a.dataset.page);
+            render();
+        };
+    });
+}
+
+// ==============================
+// EVENT: Search
+// ==============================
+document.getElementById("search-box").addEventListener("keypress", e => {
+    if (e.key === "Enter") {
+        currentSearch = e.target.value;
+        page = 0;
+        render();
+    }
 });
 
-// =====================
-// SORT UI
-// =====================
-const sortSelect = document.createElement("select");
-sortSelect.innerHTML = `
-<option value="">-- Sort by Product --</option>
-<option value="Price asc">Price ↑</option>
-<option value="Price desc">Price ↓</option>
-<option value="Title asc">Name A–Z</option>
-<option value="Title desc">Name Z–A</option>`;
-sortSelect.classList.add("form-select", "mb-3");
-sortSelect.style.width = "200px";
-
-const categorySortSelect = document.createElement("select");
-categorySortSelect.innerHTML = `
-<option value="">-- Sort by Category --</option>
-<option value="asc">Category A–Z</option>
-<option value="desc">Category Z–A</option>`;
-categorySortSelect.classList.add("form-select", "mb-3");
-categorySortSelect.style.width = "200px";
-
-// Add to UI
-const sortContainer = document.createElement("div");
-sortContainer.style.display = "flex";
-sortContainer.style.gap = "10px";
-sortContainer.style.justifyContent = "flex-end";
-sortContainer.appendChild(categorySortSelect);
-sortContainer.appendChild(sortSelect);
-
-document.querySelector(".product-section .container").prepend(sortContainer);
-
-sortSelect.addEventListener("change", () => {
-    currentSort = sortSelect.value;
-    currentCategorySort = "";
+// ==============================
+// EVENT: Sort
+// ==============================
+document.getElementById("sort-product").onchange = e => {
+    currentSort = e.target.value;
     page = 0;
-    loadProducts();
-});
+    render();
+};
 
-categorySortSelect.addEventListener("change", () => {
-    currentCategorySort = categorySortSelect.value;
-    currentSort = "";
-    page = 0;
-    loadProducts();
-});
-
-// =====================
 // INIT
-// =====================
-document.addEventListener("DOMContentLoaded", loadProducts);
+loadProducts();
 </script>
-
 
 </body>
 </html>
