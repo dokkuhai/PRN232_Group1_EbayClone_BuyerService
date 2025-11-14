@@ -19,6 +19,10 @@ public partial class Coupon
 
     public int? ProductId { get; set; }
 
+    public bool IsOrderCoupon => ProductId == null;
+    public bool IsItemCoupon => ProductId != null;
+
+
     public virtual ICollection<CouponUsage> CouponUsages { get; set; } = new List<CouponUsage>();
 
     public virtual Product? Product { get; set; }
