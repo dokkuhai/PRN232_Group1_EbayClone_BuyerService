@@ -19,5 +19,7 @@ public partial class Coupon
 
     public int? ProductId { get; set; }
 
+    public virtual ICollection<CouponUsage> CouponUsages { get; set; } = new List<CouponUsage>();
+
     public virtual Product? Product { get; set; }
 }
