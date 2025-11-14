@@ -7,8 +7,8 @@ using System.Security.Claims;
 namespace EbayCloneBuyerService_CoreAPI.Controllers;
 
 /// <summary>
-/// FeedbackController v2 - Seller feedback management (eBay style)
-/// Handles buyer feedback after purchase
+/// FeedbackController - Buyer Service Only
+/// Handles buyer feedback after purchase (no seller dashboard)
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
@@ -16,7 +16,7 @@ public class FeedbackController : ControllerBase
 {
     private readonly IFeedbackService _feedbackService;
     private readonly ILogger<FeedbackController> _logger;
-
+    
     public FeedbackController(
         IFeedbackService feedbackService,
         ILogger<FeedbackController> logger)
@@ -24,13 +24,13 @@ public class FeedbackController : ControllerBase
         _feedbackService = feedbackService;
         _logger = logger;
     }
-
+    
     // ============================================================
-    // PUBLIC ENDPOINTS (No auth required)
+    // PUBLIC ENDPOINTS - View seller feedback (for buyer to see)
     // ============================================================
-
+    
     /// <summary>
-    /// Get seller's feedback statistics and recent feedbacks
+    /// Get seller's feedback statistics (public)
     /// GET: api/feedback/seller/5
     /// </summary>
     [HttpGet("seller/{sellerId}")]
@@ -49,9 +49,9 @@ public class FeedbackController : ControllerBase
             return NotFound(new { message = ex.Message });
         }
     }
-
+    
     /// <summary>
-    /// Get all feedbacks for a seller (paginated)
+    /// Get all feedbacks for a seller - paginated (public)
     /// GET: api/feedback/seller/5/list?page=1&pageSize=20
     /// </summary>
     [HttpGet("seller/{sellerId}/list")]
@@ -65,9 +65,9 @@ public class FeedbackController : ControllerBase
         {
             if (page < 1) page = 1;
             if (pageSize < 1 || pageSize > 100) pageSize = 20;
-
+            
             var feedbacks = await _feedbackService.GetSellerFeedbacksAsync(sellerId, page, pageSize);
-
+            
             return Ok(new
             {
                 page,
@@ -82,11 +82,11 @@ public class FeedbackController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
-
+    
     // ============================================================
-    // PROTECTED ENDPOINTS (Auth required)
+    // BUYER ENDPOINTS - Leave and manage own feedback
     // ============================================================
-
+    
     /// <summary>
     /// Leave feedback for seller after purchase
     /// POST: api/feedback
@@ -103,15 +103,15 @@ public class FeedbackController : ControllerBase
             var buyerId = GetCurrentUserId();
             if (buyerId == 0)
                 return Unauthorized(new { message = "User not authenticated" });
-
+            
             var feedback = await _feedbackService.LeaveFeedbackAsync(buyerId, dto);
-
-            _logger.LogInformation("Buyer {BuyerId} left feedback for seller {SellerId}, order {OrderId}",
+            
+            _logger.LogInformation("Buyer {BuyerId} left feedback for seller {SellerId}, order {OrderId}", 
                 buyerId, dto.SellerId, dto.OrderId);
-
+            
             return CreatedAtAction(
-                nameof(GetFeedbackById),
-                new { id = feedback.Id },
+                nameof(GetFeedbackById), 
+                new { id = feedback.Id }, 
                 feedback);
         }
         catch (Exception ex)
@@ -120,7 +120,7 @@ public class FeedbackController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
-
+    
     /// <summary>
     /// Get feedbacks I left as a buyer
     /// GET: api/feedback/my-feedbacks
@@ -136,9 +136,9 @@ public class FeedbackController : ControllerBase
             var buyerId = GetCurrentUserId();
             if (buyerId == 0)
                 return Unauthorized(new { message = "User not authenticated" });
-
+            
             var feedbacks = await _feedbackService.GetBuyerFeedbacksAsync(buyerId);
-
+            
             return Ok(new
             {
                 totalFeedbacks = feedbacks.Count,
@@ -151,45 +151,7 @@ public class FeedbackController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
-
-    /// <summary>
-    /// Get feedbacks I received as a seller
-    /// GET: api/feedback/received?page=1&pageSize=20
-    /// </summary>
-    [Authorize]
-    [HttpGet("received")]
-    [ProducesResponseType(typeof(List<FeedbackDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<List<FeedbackDto>>> GetReceivedFeedbacks(
-        [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 20)
-    {
-        try
-        {
-            var sellerId = GetCurrentUserId();
-            if (sellerId == 0)
-                return Unauthorized(new { message = "User not authenticated" });
-
-            if (page < 1) page = 1;
-            if (pageSize < 1 || pageSize > 100) pageSize = 20;
-
-            var feedbacks = await _feedbackService.GetReceivedFeedbacksAsync(sellerId, page, pageSize);
-
-            return Ok(new
-            {
-                page,
-                pageSize,
-                totalItems = feedbacks.Count,
-                data = feedbacks
-            });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error getting received feedbacks");
-            return BadRequest(new { message = ex.Message });
-        }
-    }
-
+    
     /// <summary>
     /// Check if buyer can leave feedback for an order
     /// GET: api/feedback/order/123/can-leave
@@ -205,7 +167,7 @@ public class FeedbackController : ControllerBase
             var buyerId = GetCurrentUserId();
             if (buyerId == 0)
                 return Unauthorized(new { message = "User not authenticated" });
-
+            
             var result = await _feedbackService.CanLeaveFeedbackAsync(buyerId, orderId);
             return Ok(result);
         }
@@ -215,9 +177,9 @@ public class FeedbackController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
-
+    
     /// <summary>
-    /// Get feedback by ID
+    /// Get feedback by ID (public)
     /// GET: api/feedback/123
     /// </summary>
     [HttpGet("{id}")]
@@ -230,7 +192,7 @@ public class FeedbackController : ControllerBase
             var feedback = await _feedbackService.GetFeedbackByIdAsync(id);
             if (feedback == null)
                 return NotFound(new { message = "Feedback not found" });
-
+            
             return Ok(feedback);
         }
         catch (Exception ex)
@@ -239,7 +201,7 @@ public class FeedbackController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
-
+    
     /// <summary>
     /// Update existing feedback (within 60 days)
     /// PUT: api/feedback/123
@@ -257,24 +219,24 @@ public class FeedbackController : ControllerBase
             var buyerId = GetCurrentUserId();
             if (buyerId == 0)
                 return Unauthorized(new { message = "User not authenticated" });
-
+            
             var feedback = await _feedbackService.UpdateFeedbackAsync(buyerId, id, dto);
-
+            
             _logger.LogInformation("Buyer {BuyerId} updated feedback {FeedbackId}", buyerId, id);
-
+            
             return Ok(feedback);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error updating feedback {FeedbackId}", id);
-
+            
             if (ex.Message.Contains("only update your own"))
                 return Forbid();
-
+            
             return BadRequest(new { message = ex.Message });
         }
     }
-
+    
     /// <summary>
     /// Delete feedback (within 60 days)
     /// DELETE: api/feedback/123
@@ -293,41 +255,41 @@ public class FeedbackController : ControllerBase
             var buyerId = GetCurrentUserId();
             if (buyerId == 0)
                 return Unauthorized(new { message = "User not authenticated" });
-
+            
             var result = await _feedbackService.DeleteFeedbackAsync(buyerId, id);
-
+            
             if (!result)
                 return NotFound(new { message = "Feedback not found" });
-
+            
             _logger.LogInformation("Buyer {BuyerId} deleted feedback {FeedbackId}", buyerId, id);
-
+            
             return NoContent();
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error deleting feedback {FeedbackId}", id);
-
+            
             if (ex.Message.Contains("only delete your own"))
                 return Forbid();
-
+            
             return BadRequest(new { message = ex.Message });
         }
     }
-
+    
     // ============================================================
     // HELPER METHODS
     // ============================================================
-
+    
     /// <summary>
     /// Get current user ID from JWT token
     /// </summary>
     private int GetCurrentUserId()
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
+        
         if (string.IsNullOrEmpty(userIdClaim))
             return 0;
-
+        
         return int.TryParse(userIdClaim, out var userId) ? userId : 0;
     }
 }
