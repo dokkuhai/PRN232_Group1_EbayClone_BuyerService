@@ -47,17 +47,15 @@
 						<li class="nav-item has-submenu active">
 							<a href="#">Personal Info <i class="fas fa-chevron-down"></i></a>
 							<ul class="submenu active">
-								<li><a href="#" class="active">Personal information</a></li>
-								<li><a href="#">Sign in and security</a></li>
-								<li><a href="#">Addresses</a></li>
-								<li><a href="#">Feedback</a></li>
+								<li><a href="#personal-info-section" class="active">Personal information</a></li>
+								<li><a href="#security-section">Sign in and security</a></li>
 							</ul>
 						</li>
 					</ul>
 				</nav>
 			</aside>
 
-			<main class="content-area">
+			<main class="content-area" id="personal-info-section" hidden>
 				<h1>Personal info</h1>
 
 				<div class="info-section">
@@ -85,22 +83,76 @@
 
 					<div class="info-item">
 						<span class="label">Email address</span>
-						<span class="value blurred">a***2@gmail.com</span>
-						<span class="status red">Not verified</span>
-						<a href="#" class="action-link">Verify</a> <a href="#" class="action-link">Edit</a>
+
+						<span class="value blurred" id="currentEmail">a***2@gmail.com</span>
+						<span class="status red" id="emailStatus">Not verified</span>
+						<span class="status green hidden" id="emailVerifiedStatus">Verified</span>
+						<a href="#" class="action-link" id="emailVerifyLink">Verify</a>
 					</div>
+
 
 					<div class="info-item">
 						<span class="label">Phone number</span>
-						<span class="value blurred">+63 xxxxxx005</span>
-						<span class="status red">Not verified</span>
-						<a href="#" class="action-link">Verify</a> <a href="#" class="action-link">Edit</a>
+
+						<span class="value blurred" id="currentPhone">+63 xxxxxx005</span>
+						<button class="edit-btn" id="editPhoneBtn">Edit</button>
+					</div>
+
+
+					<div class="edit-info-form hidden" id="phoneEditForm">
+						<div class="form-row">
+							<label for="newPhone" class="form-label">Phone number</label>
+							<input type="tel" id="newPhone" class="form-input" value="+63 xxxxxx005">
+						</div>
+						<div class="form-actions">
+							<button class="btn btn-secondary" id="cancelPhoneEdit">Cancel</button>
+							<button class="btn btn-primary" id="savePhoneEdit">Save</button>
+						</div>
 					</div>
 				</div>
 			</main>
+			<main class="content-area" id="security-section" hidden>
+				<div id="security-content" class="content-page">
+					<h1 class="page-title">Sign in and security</h1>
+
+					<div class="info-section">
+
+						<div class="info-item security-item">
+							<div class="security-item-text">
+								<span class="label">Password</span>
+								<span class="description">Create a password or modify your existing one.</span>
+							</div>
+							<a href="#" class="action-link">Edit</a>
+						</div>
+
+						<div class="info-item security-item">
+							<div class="security-item-text">
+								<span class="label">Secret questions</span>
+								<span class="description">Give yourself another secure way to recover your
+									account.</span>
+							</div>
+							<a href="#" class="action-link">Edit</a>
+						</div>
+
+						<div class="info-item security-item">
+							<div class="security-item-text">
+								<span class="label">2 step verification</span>
+								<span class="description">Protect your account by adding an extra layer of
+									security.</span>
+							</div>
+							<a href="#" class="action-link">Edit</a>
+						</div>
+
+					</div>
+				</div>
+			</main>
+
 		</div>
 	</div>
-
+	<footer class="page-footer">
+		<p>&copy; 2024 eBay Clone. All rights reserved.</p>
+	</footer>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="assets/js/profile.js"></script>
 	<script>
 		// JavaScript để mở/đóng submenu (tùy chọn)
@@ -118,6 +170,23 @@
 				if (icon) {
 					icon.classList.toggle('fa-chevron-down');
 					icon.classList.toggle('fa-chevron-up');
+				}
+			});
+		});
+	</script>
+	<script>
+		document.querySelectorAll('.submenu a').forEach(link => {
+			link.addEventListener('click', function (e) {
+				e.preventDefault();
+				document.querySelectorAll('.submenu a').forEach(l => l.classList.remove('active'));
+				this.classList.add('active');
+
+				document.querySelectorAll('.content-area').forEach(section => section.hidden = true);
+
+				const targetId = this.getAttribute('href').substring(1);
+				const targetSection = document.getElementById(targetId);
+				if (targetSection) {
+					targetSection.hidden = false;
 				}
 			});
 		});

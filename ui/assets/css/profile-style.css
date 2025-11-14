@@ -418,8 +418,91 @@ ul {
   background-color: #f0f0f0;
 }
 
-/* Override .info-item styles for label in form-row */
-.edit-username-form .info-item .label {
-  flex: initial;
-  /* Reset flex for this specific label */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 20px;
+  border: 1px solid transparent;
+}
+
+.status.red {
+  color: #d9534f;
+  background-color: #fbeaea;
+  border-color: #f5c2c2;
+}
+
+.status.green {
+  color: #28a745;
+  background-color: #e8f6ed;
+  border-color: #b7e4c7;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Optional: icon style */
+.status i {
+  font-size: 14px;
+}
+
+/* Page title */
+.page-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #111;
+}
+
+/* Section wrapper */
+.info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Each item */
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.info-item:hover {
+  border-color: #b7d4ff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Text part */
+.security-item-text .label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #222;
+  display: block;
+}
+
+.security-item-text .description {
+  font-size: 14px;
+  color: #555;
+}
+
+/* Edit link */
+.action-link {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.action-link:hover {
+  text-decoration: underline;
 }

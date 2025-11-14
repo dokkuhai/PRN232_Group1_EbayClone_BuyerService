@@ -65,6 +65,7 @@ builder.Services.AddAuthorization();
 //==== AutoMapper =====
 builder.Services.AddAutoMapper(cfg => {
     cfg.AddProfile<UserProfile>();
+    cfg.AddProfile<ProfileProfile>();
 });
 
 // ===== DB Context =====
@@ -87,7 +88,9 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRememberTokenRepository, RememberTokenRepository>();
 builder.Services.AddScoped<IRememberTokenService, RememberTokenService>();
-
+builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 
 builder.Services.AddScoped<JwtService>();
