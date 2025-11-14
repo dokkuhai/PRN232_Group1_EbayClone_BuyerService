@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>Email Verification Callback</title>
+	<style>
+		body {
+			font-family: sans-serif;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 100vh;
+			background: #f2f2f2;
+		}
+
+		.container {
+			background: white;
+			padding: 30px;
+			border-radius: 12px;
+			box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+			text-align: center;
+			width: 350px;
+		}
+
+		.spinner {
+			width: 40px;
+			height: 40px;
+			border: 4px solid #ccc;
+			border-top-color: #1877f2;
+			border-radius: 50%;
+			animation: spin 1s linear infinite;
+			margin: 20px auto;
+		}
+
+		@keyframes spin {
+			from {
+				transform: rotate(0);
+			}
+
+			to {
+				transform: rotate(360deg);
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<h2>Processing verification...</h2>
+		<div class="spinner"></div>
+		<p>Please wait a moment...</p>
+	</div>
+
+	<script>
+		(async () => {
+			// 1. Lấy code từ URL (ví dụ: ?code=xxxxxxx)
+			const params = new URLSearchParams(window.location.search);
+			const userId = params.get("userId");
+
+			if (!userId) {
+				alert("Invalid verification link!");
+				return;
+			}
+
+			try {
+				const res = await fetch(`https://ebay.dokkuhai.dpdns.org/api/Profile/verify-email/${userId}`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+				});
+
+				const data = await res.json();
+
+				if (!res.ok) {
+					alert("Email verification failed");
+					return;
+				}
+
+				window.location.href = "https://ebay.dokkuhai.dpdns.org/ui/profile.html";
+
+			} catch (err) {
+				console.error(err);
+				alert("Có lỗi xảy ra khi xác thực Facebook!");
+			}
+		})();
+	</script>
+</body>
+
+</html>

@@ -21,6 +21,8 @@ public partial class User
 
     public DateTime? LastUpdated { get; set; }
 
+    public bool? IsEmailVerified { get; set; }
+
     public virtual ICollection<Address1> Address1s { get; set; } = new List<Address1>();
 
     public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();

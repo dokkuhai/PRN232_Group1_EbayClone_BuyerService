@@ -71,6 +71,7 @@ builder.Services.AddAuthorization();
 //==== AutoMapper =====
 builder.Services.AddAutoMapper(cfg => {
     cfg.AddProfile<UserProfile>();
+    cfg.AddProfile<ProfileProfile>();
 });
 
 // ===== DB Context =====
@@ -109,10 +110,14 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRememberTokenRepository, RememberTokenRepository>();
 builder.Services.AddScoped<IRememberTokenService, RememberTokenService>();
-
+builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IProductRepo, ProductRepo>();
 builder.Services.AddScoped<IProductServices, ProductServices>();
+builder.Services.AddScoped<ICouponRepository, CouponRepository>();
+builder.Services.AddScoped<ICouponService, CouponService>();
 
 builder.Services.AddScoped<JwtService>();
 
@@ -126,7 +131,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
     {
-        builder.AllowAnyOrigin()
+        builder.WithOrigins("https://ebay.dokkuhai.dpdns.org")
                .AllowAnyMethod()
                .AllowAnyHeader();
     });

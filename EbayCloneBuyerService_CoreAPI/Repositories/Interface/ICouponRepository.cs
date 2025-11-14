@@ -2,10 +2,10 @@
 
 namespace EbayCloneBuyerService_CoreAPI.Repositories.Interface
 {
-    public interface ICouponRepository : IGenericRepository<Coupon>
+    public interface ICouponRepository
     {
         Coupon GetByCode(string code);
         int GetUsageCount(int couponId);
-        bool HasUserUsedCoupon(int couponId, int userId);
+        void AddUsage(CouponUsage usage);
     }
 }

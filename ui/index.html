@@ -1,10 +1,11 @@
-<!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
+	<meta name="description"
+		content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
 
 	<!-- title -->
 	<title>Fruitkha</title>
@@ -32,16 +33,17 @@
 	<link rel="stylesheet" href="assets/css/responsive.css">
 
 </head>
+
 <body>
-	
+
 	<!--PreLoader-->
-    <div class="loader">
-        <div class="loader-inner">
-            <div class="circle"></div>
-        </div>
-    </div>
-    <!--PreLoader Ends-->
-	
+	<div class="loader">
+		<div class="loader-inner">
+			<div class="circle"></div>
+		</div>
+	</div>
+	<!--PreLoader Ends-->
+
 	<!-- header -->
 	<div class="top-header-area" id="sticker">
 		<div class="container">
@@ -94,8 +96,54 @@
 								</li>
 								<li>
 									<div class="header-icons">
-										<a class="shopping-cart" href="cart.html"><i class="fas fa-shopping-cart"></i></a>
-										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+										<a class="shopping-cart" href="cart.html"><i
+												class="fas fa-shopping-cart"></i></a>
+										<a class="mobile-hide search-bar-icon" href="#"><i
+												class="fas fa-search"></i></a>
+												<a class="order-history" href="order-history.html"><i class="fas fa-receipt"></i></a>
+										<script>
+											const userId = localStorage.getItem('userId');
+											if (userId) {
+												document.write(`
+											<a class="user-login" href="#">
+											 <i class="fas fa-user"></i>
+											</a>
+
+											<a class="user-name" href="#" style="margin-left:4px;" id="logoutBtn">
+											 <i class="fas fa-sign-out-alt" id="logoutBtn" style="margin-left:8px; cursor:pointer;"></i>
+											</a>
+										 
+										`);
+											} else {
+												document.write(`
+												<a class="user-login" href="login.html"><i class="fas fa-user"></i></a>
+
+											`);
+											}
+										</script>
+
+										<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+										<script>
+											$('#logoutBtn').click(function (e) {
+												e.preventDefault();
+												$.ajax({
+													url: 'https://ebay.dokkuhai.dpdns.org/api/User/logout',
+													type: 'POST',
+													headers: {
+														'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+													},
+													success: function () {
+														localStorage.removeItem('accessToken');
+														localStorage.removeItem('userId');
+														localStorage.removeItem('userName');
+														window.location.href = 'https://ebay.dokkuhai.dpdns.org';
+													},
+													error: function () {
+														alert('Logout failed. Please try again.');
+													}
+												});
+											});
+										</script>
 									</div>
 								</li>
 							</ul>
@@ -109,7 +157,7 @@
 		</div>
 	</div>
 	<!-- end header -->
-	
+
 	<!-- search area -->
 	<div class="search-area">
 		<div class="container">
@@ -196,65 +244,82 @@
 
 	<!-- product section -->
 	<div class="product-section mt-150 mb-150">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-8 offset-lg-2 text-center">
-				<div class="section-title">	
-					<h3><span class="orange-text">Our</span> Products</h3>
-					<p>Discover our latest collection — powered by real data from your API.</p>
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 offset-lg-2 text-center">
+					<div class="section-title">
+						<h3><span class="orange-text">Our</span> Products</h3>
+						<p>Discover our latest collection — powered by real data from your API.</p>
+					</div>
 				</div>
 			</div>
-		</div>
 
-		<!-- Product list container -->
-		<div class="row" id="product-container"></div>
+			<!-- Product list container -->
+			<div class="row" id="product-container"></div>
 
-		<!-- Pagination controls -->
-		<div class="text-center mt-4">
-			<button id="prev-page" class="boxed-btn" disabled>Previous</button>
-			<span id="page-info" class="mx-3"></span>
-			<button id="next-page" class="boxed-btn">Next</button>
-		</div>
+			<!-- Pagination controls -->
+			<div class="text-center mt-4">
+				<button id="prev-page" class="boxed-btn" disabled>Previous</button>
+				<span id="page-info" class="mx-3"></span>
+				<button id="next-page" class="boxed-btn">Next</button>
+			</div>
 
-		<!-- Jump to page -->
-		<div class="text-center mt-3">
-			<input type="number" id="page-input" min="1" style="width:80px; text-align:center;" placeholder="Page">
-			<button id="go-page" class="boxed-btn">Go</button>
+			<!-- Jump to page -->
+			<div class="text-center mt-3">
+				<input type="number" id="page-input" min="1" style="width:80px; text-align:center;" placeholder="Page">
+				<button id="go-page" class="boxed-btn">Go</button>
+			</div>
 		</div>
 	</div>
-</div>
 	<!-- end product section -->
 
 	<!-- cart banner section -->
 	<section class="cart-banner pt-100 pb-100">
-    	<div class="container">
-        	<div class="row clearfix">
-            	<!--Image Column-->
-            	<div class="image-column col-lg-6">
-                	<div class="image">
-                    	<div class="price-box">
-                        	<div class="inner-price">
-                                <span class="price">
-                                    <strong>30%</strong> <br> off per kg
-                                </span>
-                            </div>
-                        </div>
-                    	<img src="assets/img/a.jpg" alt="">
-                    </div>
-                </div>
-                <!--Content Column-->
-                <div class="content-column col-lg-6">
+		<div class="container">
+			<div class="row clearfix">
+				<!--Image Column-->
+				<div class="image-column col-lg-6">
+					<div class="image">
+						<div class="price-box">
+							<div class="inner-price">
+								<span class="price">
+									<strong>30%</strong> <br> off per kg
+								</span>
+							</div>
+						</div>
+						<img src="assets/img/a.jpg" alt="">
+					</div>
+				</div>
+				<!--Content Column-->
+				<div class="content-column col-lg-6">
 					<h3><span class="orange-text">Deal</span> of the month</h3>
-                    <h4>Hikan Strwaberry</h4>
-                    <div class="text">Quisquam minus maiores repudiandae nobis, minima saepe id, fugit ullam similique! Beatae, minima quisquam molestias facere ea. Perspiciatis unde omnis iste natus error sit voluptatem accusant</div>
-                    <!--Countdown Timer-->
-                    <div class="time-counter"><div class="time-countdown clearfix" data-countdown="2020/2/01"><div class="counter-column"><div class="inner"><span class="count">00</span>Days</div></div> <div class="counter-column"><div class="inner"><span class="count">00</span>Hours</div></div>  <div class="counter-column"><div class="inner"><span class="count">00</span>Mins</div></div>  <div class="counter-column"><div class="inner"><span class="count">00</span>Secs</div></div></div></div>
-                	<a href="cart.html" class="cart-btn mt-3"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- end cart banner section -->
+					<h4>Hikan Strwaberry</h4>
+					<div class="text">Quisquam minus maiores repudiandae nobis, minima saepe id, fugit ullam similique!
+						Beatae, minima quisquam molestias facere ea. Perspiciatis unde omnis iste natus error sit
+						voluptatem accusant</div>
+					<!--Countdown Timer-->
+					<div class="time-counter">
+						<div class="time-countdown clearfix" data-countdown="2020/2/01">
+							<div class="counter-column">
+								<div class="inner"><span class="count">00</span>Days</div>
+							</div>
+							<div class="counter-column">
+								<div class="inner"><span class="count">00</span>Hours</div>
+							</div>
+							<div class="counter-column">
+								<div class="inner"><span class="count">00</span>Mins</div>
+							</div>
+							<div class="counter-column">
+								<div class="inner"><span class="count">00</span>Secs</div>
+							</div>
+						</div>
+					</div>
+					<a href="cart.html" class="cart-btn mt-3"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- end cart banner section -->
 
 	<!-- testimonail-section -->
 	<div class="testimonail-section mt-150 mb-150">
@@ -269,7 +334,9 @@
 							<div class="client-meta">
 								<h3>Saira Hakim <span>Local shop owner</span></h3>
 								<p class="testimonial-body">
-									" Sed ut perspiciatis unde omnis iste natus error veritatis et  quasi architecto beatae vitae dict eaque ipsa quae ab illo inventore Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium "
+									" Sed ut perspiciatis unde omnis iste natus error veritatis et quasi architecto
+									beatae vitae dict eaque ipsa quae ab illo inventore Sed ut perspiciatis unde omnis
+									iste natus error sit voluptatem accusantium "
 								</p>
 								<div class="last-icon">
 									<i class="fas fa-quote-right"></i>
@@ -283,7 +350,9 @@
 							<div class="client-meta">
 								<h3>David Niph <span>Local shop owner</span></h3>
 								<p class="testimonial-body">
-									" Sed ut perspiciatis unde omnis iste natus error veritatis et  quasi architecto beatae vitae dict eaque ipsa quae ab illo inventore Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium "
+									" Sed ut perspiciatis unde omnis iste natus error veritatis et quasi architecto
+									beatae vitae dict eaque ipsa quae ab illo inventore Sed ut perspiciatis unde omnis
+									iste natus error sit voluptatem accusantium "
 								</p>
 								<div class="last-icon">
 									<i class="fas fa-quote-right"></i>
@@ -297,7 +366,9 @@
 							<div class="client-meta">
 								<h3>Jacob Sikim <span>Local shop owner</span></h3>
 								<p class="testimonial-body">
-									" Sed ut perspiciatis unde omnis iste natus error veritatis et  quasi architecto beatae vitae dict eaque ipsa quae ab illo inventore Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium "
+									" Sed ut perspiciatis unde omnis iste natus error veritatis et quasi architecto
+									beatae vitae dict eaque ipsa quae ab illo inventore Sed ut perspiciatis unde omnis
+									iste natus error sit voluptatem accusantium "
 								</p>
 								<div class="last-icon">
 									<i class="fas fa-quote-right"></i>
@@ -310,22 +381,26 @@
 		</div>
 	</div>
 	<!-- end testimonail-section -->
-	
+
 	<!-- advertisement section -->
 	<div class="abt-section mb-150">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-6 col-md-12">
 					<div class="abt-bg">
-						<a href="https://www.youtube.com/watch?v=DBLlFWYcIGQ" class="video-play-btn popup-youtube"><i class="fas fa-play"></i></a>
+						<a href="https://www.youtube.com/watch?v=DBLlFWYcIGQ" class="video-play-btn popup-youtube"><i
+								class="fas fa-play"></i></a>
 					</div>
 				</div>
 				<div class="col-lg-6 col-md-12">
 					<div class="abt-text">
 						<p class="top-sub">Since Year 1999</p>
 						<h2>We are <span class="orange-text">Fruitkha</span></h2>
-						<p>Etiam vulputate ut augue vel sodales. In sollicitudin neque et massa porttitor vestibulum ac vel nisi. Vestibulum placerat eget dolor sit amet posuere. In ut dolor aliquet, aliquet sapien sed, interdum velit. Nam eu molestie lorem.</p>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente facilis illo repellat veritatis minus, et labore minima mollitia qui ducimus.</p>
+						<p>Etiam vulputate ut augue vel sodales. In sollicitudin neque et massa porttitor vestibulum ac
+							vel nisi. Vestibulum placerat eget dolor sit amet posuere. In ut dolor aliquet, aliquet
+							sapien sed, interdum velit. Nam eu molestie lorem.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente facilis illo repellat
+							veritatis minus, et labore minima mollitia qui ducimus.</p>
 						<a href="about.html" class="boxed-btn mt-4">know more</a>
 					</div>
 				</div>
@@ -333,15 +408,15 @@
 		</div>
 	</div>
 	<!-- end advertisement section -->
-	
+
 	<!-- shop banner -->
 	<section class="shop-banner">
-    	<div class="container">
-        	<h3>December sale is on! <br> with big <span class="orange-text">Discount...</span></h3>
-            <div class="sale-percent"><span>Sale! <br> Upto</span>50% <span>off</span></div>
-            <a href="shop.html" class="cart-btn btn-lg">Shop Now</a>
-        </div>
-    </section>
+		<div class="container">
+			<h3>December sale is on! <br> with big <span class="orange-text">Discount...</span></h3>
+			<div class="sale-percent"><span>Sale! <br> Upto</span>50% <span>off</span></div>
+			<a href="shop.html" class="cart-btn btn-lg">Shop Now</a>
+		</div>
+	</section>
 	<!-- end shop banner -->
 
 	<!-- latest news -->
@@ -350,9 +425,10 @@
 
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 text-center">
-					<div class="section-title">	
+					<div class="section-title">
 						<h3><span class="orange-text">Our</span> News</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet beatae optio.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet
+							beatae optio.</p>
 					</div>
 				</div>
 			</div>
@@ -360,43 +436,55 @@
 			<div class="row">
 				<div class="col-lg-4 col-md-6">
 					<div class="single-latest-news">
-						<a href="single-news.html"><div class="latest-news-bg news-bg-1"></div></a>
+						<a href="single-news.html">
+							<div class="latest-news-bg news-bg-1"></div>
+						</a>
 						<div class="news-text-box">
 							<h3><a href="single-news.html">You will vainly look for fruit on it in autumn.</a></h3>
 							<p class="blog-meta">
 								<span class="author"><i class="fas fa-user"></i> Admin</span>
 								<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
 							</p>
-							<p class="excerpt">Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi. Praesent vitae mattis nunc, egestas viverra eros.</p>
-							<a href="single-news.html" class="read-more-btn">read more <i class="fas fa-angle-right"></i></a>
+							<p class="excerpt">Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi.
+								Praesent vitae mattis nunc, egestas viverra eros.</p>
+							<a href="single-news.html" class="read-more-btn">read more <i
+									class="fas fa-angle-right"></i></a>
 						</div>
 					</div>
 				</div>
 				<div class="col-lg-4 col-md-6">
 					<div class="single-latest-news">
-						<a href="single-news.html"><div class="latest-news-bg news-bg-2"></div></a>
+						<a href="single-news.html">
+							<div class="latest-news-bg news-bg-2"></div>
+						</a>
 						<div class="news-text-box">
 							<h3><a href="single-news.html">A man's worth has its season, like tomato.</a></h3>
 							<p class="blog-meta">
 								<span class="author"><i class="fas fa-user"></i> Admin</span>
 								<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
 							</p>
-							<p class="excerpt">Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi. Praesent vitae mattis nunc, egestas viverra eros.</p>
-							<a href="single-news.html" class="read-more-btn">read more <i class="fas fa-angle-right"></i></a>
+							<p class="excerpt">Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi.
+								Praesent vitae mattis nunc, egestas viverra eros.</p>
+							<a href="single-news.html" class="read-more-btn">read more <i
+									class="fas fa-angle-right"></i></a>
 						</div>
 					</div>
 				</div>
 				<div class="col-lg-4 col-md-6 offset-md-3 offset-lg-0">
 					<div class="single-latest-news">
-						<a href="single-news.html"><div class="latest-news-bg news-bg-3"></div></a>
+						<a href="single-news.html">
+							<div class="latest-news-bg news-bg-3"></div>
+						</a>
 						<div class="news-text-box">
 							<h3><a href="single-news.html">Good thoughts bear good fresh juicy fruit.</a></h3>
 							<p class="blog-meta">
 								<span class="author"><i class="fas fa-user"></i> Admin</span>
 								<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
 							</p>
-							<p class="excerpt">Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi. Praesent vitae mattis nunc, egestas viverra eros.</p>
-							<a href="single-news.html" class="read-more-btn">read more <i class="fas fa-angle-right"></i></a>
+							<p class="excerpt">Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi.
+								Praesent vitae mattis nunc, egestas viverra eros.</p>
+							<a href="single-news.html" class="read-more-btn">read more <i
+									class="fas fa-angle-right"></i></a>
 						</div>
 					</div>
 				</div>
@@ -445,7 +533,8 @@
 				<div class="col-lg-3 col-md-6">
 					<div class="footer-box about-widget">
 						<h2 class="widget-title">About us</h2>
-						<p>Ut enim ad minim veniam perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae.</p>
+						<p>Ut enim ad minim veniam perspiciatis unde omnis iste natus error sit voluptatem accusantium
+							doloremque laudantium, totam rem aperiam, eaque ipsa quae.</p>
 					</div>
 				</div>
 				<div class="col-lg-3 col-md-6">
@@ -484,13 +573,14 @@
 		</div>
 	</div>
 	<!-- end footer -->
-	
+
 	<!-- copyright -->
 	<div class="copyright">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-6 col-md-12">
-					<p>Copyrights &copy; 2019 - <a href="https://imransdesign.com/">Imran Hossain</a>,  All Rights Reserved.<br>
+					<p>Copyrights &copy; 2019 - <a href="https://imransdesign.com/">Imran Hossain</a>, All Rights
+						Reserved.<br>
 						Distributed By - <a href="https://themewagon.com/">Themewagon</a>
 					</p>
 				</div>
@@ -509,7 +599,7 @@
 		</div>
 	</div>
 	<!-- end copyright -->
-	
+
 	<!-- jquery -->
 	<script src="assets/js/jquery-1.11.3.min.js"></script>
 	<!-- bootstrap -->
@@ -532,109 +622,146 @@
 	<script src="assets/js/main.js"></script>
 
 <script>
-const apiUrl = "https://localhost:7020/api/Product?$expand=Category&$count=true";
-let page = 0;
-const pageSize = 3;
-let totalCount = 0;
-let totalPages = 0;
+    // ===== FIXED API BASE URL (ALWAYS USE DOMAIN) =====
+    const baseUrl = "https://ebay.dokkuhai.dpdns.org";
+    const apiUrl = `${baseUrl}/api/Product`;
 
-const container = document.getElementById("product-container");
-const btnPrev = document.getElementById("prev-page");
-const btnNext = document.getElementById("next-page");
-const pageInfo = document.getElementById("page-info");
-const pageInput = document.getElementById("page-input");
-const goPageBtn = document.getElementById("go-page");
+    let page = 0;
+    const pageSize = 3;
+    let totalCount = 0;
+    let totalPages = 0;
 
-async function loadProducts() {
-	try {
-		container.innerHTML = '<p>Loading products...</p>';
+    const container = document.getElementById("product-container");
+    const btnPrev = document.getElementById("prev-page");
+    const btnNext = document.getElementById("next-page");
+    const pageInfo = document.getElementById("page-info");
+    const pageInput = document.getElementById("page-input");
+    const goPageBtn = document.getElementById("go-page");
 
-		const skip = page * pageSize;
-		const url = apiUrl + `&$top=${pageSize}&$skip=${skip}`;
-		console.log("Fetching:", url);
+    async function loadProducts() {
+        try {
+            container.innerHTML = "<p>Loading products...</p>";
 
-		const res = await fetch(url);
-		if (!res.ok) throw new Error("Cannot fetch products");
-		const data = await res.json();
-		const products = data.value ?? data;
-        if (totalCount === 0) {
-        const countRes = await fetch("https://localhost:7020/api/Product");
-        const countData = await countRes.json();
-         totalCount = countData.length;
+            const res = await fetch(apiUrl);
+            if (!res.ok) throw new Error("Fetch error");
+
+            const data = await res.json();
+            const products = Array.isArray(data) ? data : [];
+
+            // Setup pagination
+            if (totalCount === 0) {
+                totalCount = products.length;
+                totalPages = Math.ceil(totalCount / pageSize);
+            }
+
+            const skip = page * pageSize;
+            const paged = products.slice(skip, skip + pageSize);
+
+            if (paged.length === 0) {
+                container.innerHTML = "<p>No products found.</p>";
+                return;
+            }
+
+            // Render UI
+            container.innerHTML = "";
+            paged.forEach(p => {
+                const img = p.images || p.Images || "default.jpg";
+                const imageUrl = img.startsWith("http")
+                    ? img
+                    : `https://th.bing.com/th/id/OIP.ipTpmWrouGNDkLY582e2hQHaEK?w=294&h=180&c=7&r=0&o=7&cb=ucfimg2&dpr=1.3&pid=1.7&rm=3&ucfimg=1`;
+                const categoryName = p.category?.name ?? "Unknown";
+
+                const html = `
+                    <div class="col-lg-4 col-md-6 text-center">
+                        <div class="single-product-item">
+                            <div class="product-image">
+                                <a href="single-product.html?id=${p.id}">
+                                    <img src="${imageUrl}" alt="${p.title}">
+                                </a>
+                            </div>
+                            <h3>${p.title}</h3>
+                            <p class="product-price">
+                                <span>${categoryName}</span> ${p.price} VND
+                            </p>
+                            <a href="cart.html" class="cart-btn">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </a>
+                        </div>
+                    </div>`;
+                container.insertAdjacentHTML("beforeend", html);
+            });
+
+            pageInfo.textContent = `Page ${page + 1} / ${totalPages}`;
+            btnPrev.disabled = page === 0;
+            btnNext.disabled = page + 1 >= totalPages;
+
+        } catch (err) {
+            console.error("❌ Load error:", err);
+            container.innerHTML = '<p style="color:red;">Error loading products.</p>';
+        }
     }
-        totalPages = Math.ceil(totalCount / pageSize);
 
-		if (products.length === 0) {
-			container.innerHTML = '<p>No products found.</p>';
-			btnNext.disabled = true;
-			pageInfo.textContent = "";
-			return;
-		}
+    // Pagination events
+    btnPrev.addEventListener("click", () => {
+        if (page > 0) { page--; loadProducts(); }
+    });
 
-		container.innerHTML = "";
-		for (const p of products) {
-			const categoryName = (p.Category && p.Category.Name) ? p.Category.Name : "Unknown";
-			const imageUrl = p.Images ? `assets/img/products/${p.Images}` : "assets/img/products/default.jpg";
+    btnNext.addEventListener("click", () => {
+        if (page + 1 < totalPages) { page++; loadProducts(); }
+    });
 
-			const html = `
-				<div class="col-lg-4 col-md-6 text-center">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html?id=${p.Id}">
-								<img src="${imageUrl}" alt="${p.Title}">
-							</a>
-						</div>
-						<h3>${p.Title}</h3>
-						<p class="product-price"><span>${categoryName}</span> $${p.Price ?? "N/A"}</p>
-						<a href="cart.html" class="cart-btn">
-							<i class="fas fa-shopping-cart"></i> Add to Cart
-						</a>
-					</div>
-				</div>`;
-			container.insertAdjacentHTML("beforeend", html);
-		}
+    goPageBtn.addEventListener("click", () => {
+        const target = parseInt(pageInput.value);
+        if (target >= 1 && target <= totalPages) {
+            page = target - 1;
+            loadProducts();
+        }
+    });
 
-		pageInfo.textContent = `Page ${page + 1} / ${totalPages}`;
-		btnPrev.disabled = page === 0;
-		btnNext.disabled = page + 1 >= totalPages;
-
-	} catch (err) {
-		console.error("❌ Error loading products:", err);
-		container.innerHTML = '<p style="color:red;">Error loading product list.</p>';
-	}
-}
-
-btnPrev.addEventListener("click", function () {
-	if (page > 0) {
-		page--;
-		loadProducts();
-		window.scrollTo({ top: 0, behavior: "smooth" });
-	}
-});
-
-btnNext.addEventListener("click", function () {
-	if (page + 1 < totalPages) {
-		page++;
-		loadProducts();
-		window.scrollTo({ top: 0, behavior: "smooth" });
-	}
-});
-
-goPageBtn.addEventListener("click", function () {
-	const target = parseInt(pageInput.value);
-	if (!isNaN(target) && target >= 1 && target <= totalPages) {
-		page = target - 1;
-		loadProducts();
-		window.scrollTo({ top: 0, behavior: "smooth" });
-	} else {
-		alert(`Enter a valid page number (1–${totalPages})`);
-	}
-});
-
-document.addEventListener("DOMContentLoaded", loadProducts);
+    document.addEventListener("DOMContentLoaded", loadProducts);
 </script>
 
 
 
+
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
 </body>
+
 </html>
