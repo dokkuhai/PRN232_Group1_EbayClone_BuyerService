@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EbayCloneBuyerService_CoreAPI.Models;
 
-public partial class OrderItem
+public partial class Orderitem
 {
     public int Id { get; set; }
 
@@ -15,7 +15,7 @@ public partial class OrderItem
 
     public decimal? UnitPrice { get; set; }
 
-    public virtual OrderTable? Order { get; set; }
+    public virtual Ordertable? Order { get; set; }
 
     public virtual Product? Product { get; set; }
 }

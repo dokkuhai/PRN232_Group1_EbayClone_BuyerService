@@ -17,7 +17,7 @@ public partial class Dispute
 
     public string? Resolution { get; set; }
 
-    public virtual OrderTable? Order { get; set; }
+    public virtual Ordertable? Order { get; set; }
 
     public virtual User? RaisedByNavigation { get; set; }
 }

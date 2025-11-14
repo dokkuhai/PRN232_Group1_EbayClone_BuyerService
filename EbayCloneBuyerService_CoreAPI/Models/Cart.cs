@@ -3,21 +3,19 @@ using System.Collections.Generic;
 
 namespace EbayCloneBuyerService_CoreAPI.Models;
 
-public partial class Returnrequest
+public partial class Cart
 {
     public int Id { get; set; }
 
-    public int? OrderId { get; set; }
-
     public int? UserId { get; set; }
 
-    public string? Reason { get; set; }
-
-    public string? Status { get; set; }
+    public string? GuestToken { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
-    public virtual Ordertable? Order { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+
+    public virtual ICollection<Cartitem> Cartitems { get; set; } = new List<Cartitem>();
 
     public virtual User? User { get; set; }
 }

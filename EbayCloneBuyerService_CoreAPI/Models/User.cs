@@ -21,6 +21,8 @@ public partial class User
 
     public virtual ICollection<Bid> Bids { get; set; } = new List<Bid>();
 
+    public virtual Cart? Cart { get; set; }
+
     public virtual ICollection<Dispute> Disputes { get; set; } = new List<Dispute>();
 
     public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
@@ -29,13 +31,13 @@ public partial class User
 
     public virtual ICollection<Message> MessageSenders { get; set; } = new List<Message>();
 
-    public virtual ICollection<OrderTable> OrderTables { get; set; } = new List<OrderTable>();
+    public virtual ICollection<Ordertable> Ordertables { get; set; } = new List<Ordertable>();
 
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
-    public virtual ICollection<ReturnRequest> ReturnRequests { get; set; } = new List<ReturnRequest>();
+    public virtual ICollection<Returnrequest> Returnrequests { get; set; } = new List<Returnrequest>();
 
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 

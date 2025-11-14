@@ -175,3 +175,30 @@ CREATE TABLE Store (
     bannerImageURL TEXT,
     FOREIGN KEY (sellerId) REFERENCES User(id)
 );
+-- Bảng giỏ hàng chính
+CREATE TABLE Cart (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userId INT NULL,
+    guestToken VARCHAR(100) NULL,
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    CONSTRAINT fk_cart_user FOREIGN KEY (userId) REFERENCES User(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_user_cart (userId),
+    UNIQUE KEY unique_guest_cart (guestToken)
+);
+
+-- Bảng sản phẩm trong giỏ
+CREATE TABLE CartItem (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cartId INT NOT NULL,
+    productId INT NOT NULL,
+    quantity INT DEFAULT 1 CHECK (quantity > 0),
+    
+    CONSTRAINT fk_cartitem_cart FOREIGN KEY (cartId) REFERENCES Cart(id) ON DELETE CASCADE,
+    CONSTRAINT fk_cartitem_product FOREIGN KEY (productId) REFERENCES Product(id)
+);
+
+ALTER TABLE Inventory
+ADD CONSTRAINT uq_inventory_product UNIQUE (ProductId);
+

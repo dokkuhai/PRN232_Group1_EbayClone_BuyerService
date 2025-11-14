@@ -23,7 +23,7 @@ public partial class Address
 
     public bool? IsDefault { get; set; }
 
-    public virtual ICollection<OrderTable> OrderTables { get; set; } = new List<OrderTable>();
+    public virtual ICollection<Ordertable> Ordertables { get; set; } = new List<Ordertable>();
 
     public virtual User? User { get; set; }
 }

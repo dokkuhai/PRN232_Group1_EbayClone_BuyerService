@@ -20,6 +20,10 @@ public partial class CloneEbayDbContext : DbContext
 
     public virtual DbSet<Bid> Bids { get; set; }
 
+    public virtual DbSet<Cart> Carts { get; set; }
+
+    public virtual DbSet<Cartitem> Cartitems { get; set; }
+
     public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Coupon> Coupons { get; set; }
@@ -32,27 +36,28 @@ public partial class CloneEbayDbContext : DbContext
 
     public virtual DbSet<Message> Messages { get; set; }
 
-    public virtual DbSet<OrderItem> OrderItems { get; set; }
+    public virtual DbSet<Orderitem> Orderitems { get; set; }
 
-    public virtual DbSet<OrderTable> OrderTables { get; set; }
+    public virtual DbSet<Ordertable> Ordertables { get; set; }
 
     public virtual DbSet<Payment> Payments { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
 
-    public virtual DbSet<ReturnRequest> ReturnRequests { get; set; }
+    public virtual DbSet<Returnrequest> Returnrequests { get; set; }
 
     public virtual DbSet<Review> Reviews { get; set; }
 
-    public virtual DbSet<ShippingInfo> ShippingInfos { get; set; }
+    public virtual DbSet<Shippinginfo> Shippinginfos { get; set; }
 
     public virtual DbSet<Store> Stores { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=localhost;port=3306;database=CloneEbayDB;user=root;password=root", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.43-mysql"));
+    {
+
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -64,7 +69,7 @@ public partial class CloneEbayDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("Address");
+            entity.ToTable("address");
 
             entity.HasIndex(e => e.UserId, "userId");
 
@@ -92,14 +97,14 @@ public partial class CloneEbayDbContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Addresses)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("Address_ibfk_1");
+                .HasConstraintName("address_ibfk_1");
         });
 
         modelBuilder.Entity<Bid>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("Bid");
+            entity.ToTable("bid");
 
             entity.HasIndex(e => e.BidderId, "bidderId");
 
@@ -117,18 +122,76 @@ public partial class CloneEbayDbContext : DbContext
 
             entity.HasOne(d => d.Bidder).WithMany(p => p.Bids)
                 .HasForeignKey(d => d.BidderId)
-                .HasConstraintName("Bid_ibfk_2");
+                .HasConstraintName("bid_ibfk_2");
 
             entity.HasOne(d => d.Product).WithMany(p => p.Bids)
                 .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("Bid_ibfk_1");
+                .HasConstraintName("bid_ibfk_1");
+        });
+
+        modelBuilder.Entity<Cart>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("cart");
+
+            entity.HasIndex(e => e.GuestToken, "unique_guest_cart").IsUnique();
+
+            entity.HasIndex(e => e.UserId, "unique_user_cart").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("datetime")
+                .HasColumnName("createdAt");
+            entity.Property(e => e.GuestToken)
+                .HasMaxLength(100)
+                .HasColumnName("guestToken");
+            entity.Property(e => e.UpdatedAt)
+                .ValueGeneratedOnAddOrUpdate()
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("datetime")
+                .HasColumnName("updatedAt");
+            entity.Property(e => e.UserId).HasColumnName("userId");
+
+            entity.HasOne(d => d.User).WithOne(p => p.Cart)
+                .HasForeignKey<Cart>(d => d.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("fk_cart_user");
+        });
+
+        modelBuilder.Entity<Cartitem>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("cartitem");
+
+            entity.HasIndex(e => e.CartId, "fk_cartitem_cart");
+
+            entity.HasIndex(e => e.ProductId, "fk_cartitem_product");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CartId).HasColumnName("cartId");
+            entity.Property(e => e.ProductId).HasColumnName("productId");
+            entity.Property(e => e.Quantity)
+                .HasDefaultValueSql("'1'")
+                .HasColumnName("quantity");
+
+            entity.HasOne(d => d.Cart).WithMany(p => p.Cartitems)
+                .HasForeignKey(d => d.CartId)
+                .HasConstraintName("fk_cartitem_cart");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.Cartitems)
+                .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_cartitem_product");
         });
 
         modelBuilder.Entity<Category>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("Category");
+            entity.ToTable("category");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Name)
@@ -140,7 +203,7 @@ public partial class CloneEbayDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("Coupon");
+            entity.ToTable("coupon");
 
             entity.HasIndex(e => e.ProductId, "productId");
 
@@ -162,14 +225,14 @@ public partial class CloneEbayDbContext : DbContext
 
             entity.HasOne(d => d.Product).WithMany(p => p.Coupons)
                 .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("Coupon_ibfk_1");
+                .HasConstraintName("coupon_ibfk_1");
         });
 
         modelBuilder.Entity<Dispute>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("Dispute");
+            entity.ToTable("dispute");
 
             entity.HasIndex(e => e.OrderId, "orderId");
 
@@ -190,18 +253,18 @@ public partial class CloneEbayDbContext : DbContext
 
             entity.HasOne(d => d.Order).WithMany(p => p.Disputes)
                 .HasForeignKey(d => d.OrderId)
-                .HasConstraintName("Dispute_ibfk_1");
+                .HasConstraintName("dispute_ibfk_1");
 
             entity.HasOne(d => d.RaisedByNavigation).WithMany(p => p.Disputes)
                 .HasForeignKey(d => d.RaisedBy)
-                .HasConstraintName("Dispute_ibfk_2");
+                .HasConstraintName("dispute_ibfk_2");
         });
 
         modelBuilder.Entity<Feedback>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("Feedback");
+            entity.ToTable("feedback");
 
             entity.HasIndex(e => e.SellerId, "sellerId");
 
@@ -217,16 +280,16 @@ public partial class CloneEbayDbContext : DbContext
 
             entity.HasOne(d => d.Seller).WithMany(p => p.Feedbacks)
                 .HasForeignKey(d => d.SellerId)
-                .HasConstraintName("Feedback_ibfk_1");
+                .HasConstraintName("feedback_ibfk_1");
         });
 
         modelBuilder.Entity<Inventory>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("Inventory");
+            entity.ToTable("inventory");
 
-            entity.HasIndex(e => e.ProductId, "productId");
+            entity.HasIndex(e => e.ProductId, "uq_inventory_product").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.LastUpdated)
@@ -235,16 +298,16 @@ public partial class CloneEbayDbContext : DbContext
             entity.Property(e => e.ProductId).HasColumnName("productId");
             entity.Property(e => e.Quantity).HasColumnName("quantity");
 
-            entity.HasOne(d => d.Product).WithMany(p => p.Inventories)
-                .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("Inventory_ibfk_1");
+            entity.HasOne(d => d.Product).WithOne(p => p.Inventory)
+                .HasForeignKey<Inventory>(d => d.ProductId)
+                .HasConstraintName("inventory_ibfk_1");
         });
 
         modelBuilder.Entity<Message>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("Message");
+            entity.ToTable("message");
 
             entity.HasIndex(e => e.ReceiverId, "receiverId");
 
@@ -262,18 +325,18 @@ public partial class CloneEbayDbContext : DbContext
 
             entity.HasOne(d => d.Receiver).WithMany(p => p.MessageReceivers)
                 .HasForeignKey(d => d.ReceiverId)
-                .HasConstraintName("Message_ibfk_2");
+                .HasConstraintName("message_ibfk_2");
 
             entity.HasOne(d => d.Sender).WithMany(p => p.MessageSenders)
                 .HasForeignKey(d => d.SenderId)
-                .HasConstraintName("Message_ibfk_1");
+                .HasConstraintName("message_ibfk_1");
         });
 
-        modelBuilder.Entity<OrderItem>(entity =>
+        modelBuilder.Entity<Orderitem>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("OrderItem");
+            entity.ToTable("orderitem");
 
             entity.HasIndex(e => e.OrderId, "orderId");
 
@@ -287,20 +350,20 @@ public partial class CloneEbayDbContext : DbContext
                 .HasPrecision(10, 2)
                 .HasColumnName("unitPrice");
 
-            entity.HasOne(d => d.Order).WithMany(p => p.OrderItems)
+            entity.HasOne(d => d.Order).WithMany(p => p.Orderitems)
                 .HasForeignKey(d => d.OrderId)
-                .HasConstraintName("OrderItem_ibfk_1");
+                .HasConstraintName("orderitem_ibfk_1");
 
-            entity.HasOne(d => d.Product).WithMany(p => p.OrderItems)
+            entity.HasOne(d => d.Product).WithMany(p => p.Orderitems)
                 .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("OrderItem_ibfk_2");
+                .HasConstraintName("orderitem_ibfk_2");
         });
 
-        modelBuilder.Entity<OrderTable>(entity =>
+        modelBuilder.Entity<Ordertable>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("OrderTable");
+            entity.ToTable("ordertable");
 
             entity.HasIndex(e => e.AddressId, "addressId");
 
@@ -319,20 +382,20 @@ public partial class CloneEbayDbContext : DbContext
                 .HasPrecision(10, 2)
                 .HasColumnName("totalPrice");
 
-            entity.HasOne(d => d.Address).WithMany(p => p.OrderTables)
+            entity.HasOne(d => d.Address).WithMany(p => p.Ordertables)
                 .HasForeignKey(d => d.AddressId)
-                .HasConstraintName("OrderTable_ibfk_2");
+                .HasConstraintName("ordertable_ibfk_2");
 
-            entity.HasOne(d => d.Buyer).WithMany(p => p.OrderTables)
+            entity.HasOne(d => d.Buyer).WithMany(p => p.Ordertables)
                 .HasForeignKey(d => d.BuyerId)
-                .HasConstraintName("OrderTable_ibfk_1");
+                .HasConstraintName("ordertable_ibfk_1");
         });
 
         modelBuilder.Entity<Payment>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("Payment");
+            entity.ToTable("payment");
 
             entity.HasIndex(e => e.OrderId, "orderId");
 
@@ -356,18 +419,18 @@ public partial class CloneEbayDbContext : DbContext
 
             entity.HasOne(d => d.Order).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.OrderId)
-                .HasConstraintName("Payment_ibfk_1");
+                .HasConstraintName("payment_ibfk_1");
 
             entity.HasOne(d => d.User).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("Payment_ibfk_2");
+                .HasConstraintName("payment_ibfk_2");
         });
 
         modelBuilder.Entity<Product>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("Product");
+            entity.ToTable("product");
 
             entity.HasIndex(e => e.CategoryId, "categoryId");
 
@@ -395,18 +458,18 @@ public partial class CloneEbayDbContext : DbContext
 
             entity.HasOne(d => d.Category).WithMany(p => p.Products)
                 .HasForeignKey(d => d.CategoryId)
-                .HasConstraintName("Product_ibfk_1");
+                .HasConstraintName("product_ibfk_1");
 
             entity.HasOne(d => d.Seller).WithMany(p => p.Products)
                 .HasForeignKey(d => d.SellerId)
-                .HasConstraintName("Product_ibfk_2");
+                .HasConstraintName("product_ibfk_2");
         });
 
-        modelBuilder.Entity<ReturnRequest>(entity =>
+        modelBuilder.Entity<Returnrequest>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ReturnRequest");
+            entity.ToTable("returnrequest");
 
             entity.HasIndex(e => e.OrderId, "orderId");
 
@@ -425,20 +488,20 @@ public partial class CloneEbayDbContext : DbContext
                 .HasColumnName("status");
             entity.Property(e => e.UserId).HasColumnName("userId");
 
-            entity.HasOne(d => d.Order).WithMany(p => p.ReturnRequests)
+            entity.HasOne(d => d.Order).WithMany(p => p.Returnrequests)
                 .HasForeignKey(d => d.OrderId)
-                .HasConstraintName("ReturnRequest_ibfk_1");
+                .HasConstraintName("returnrequest_ibfk_1");
 
-            entity.HasOne(d => d.User).WithMany(p => p.ReturnRequests)
+            entity.HasOne(d => d.User).WithMany(p => p.Returnrequests)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("ReturnRequest_ibfk_2");
+                .HasConstraintName("returnrequest_ibfk_2");
         });
 
         modelBuilder.Entity<Review>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("Review");
+            entity.ToTable("review");
 
             entity.HasIndex(e => e.ProductId, "productId");
 
@@ -457,18 +520,18 @@ public partial class CloneEbayDbContext : DbContext
 
             entity.HasOne(d => d.Product).WithMany(p => p.Reviews)
                 .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("Review_ibfk_1");
+                .HasConstraintName("review_ibfk_1");
 
             entity.HasOne(d => d.Reviewer).WithMany(p => p.Reviews)
                 .HasForeignKey(d => d.ReviewerId)
-                .HasConstraintName("Review_ibfk_2");
+                .HasConstraintName("review_ibfk_2");
         });
 
-        modelBuilder.Entity<ShippingInfo>(entity =>
+        modelBuilder.Entity<Shippinginfo>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ShippingInfo");
+            entity.ToTable("shippinginfo");
 
             entity.HasIndex(e => e.OrderId, "orderId");
 
@@ -487,16 +550,16 @@ public partial class CloneEbayDbContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("trackingNumber");
 
-            entity.HasOne(d => d.Order).WithMany(p => p.ShippingInfos)
+            entity.HasOne(d => d.Order).WithMany(p => p.Shippinginfos)
                 .HasForeignKey(d => d.OrderId)
-                .HasConstraintName("ShippingInfo_ibfk_1");
+                .HasConstraintName("shippinginfo_ibfk_1");
         });
 
         modelBuilder.Entity<Store>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("Store");
+            entity.ToTable("store");
 
             entity.HasIndex(e => e.SellerId, "sellerId");
 
@@ -514,14 +577,14 @@ public partial class CloneEbayDbContext : DbContext
 
             entity.HasOne(d => d.Seller).WithMany(p => p.Stores)
                 .HasForeignKey(d => d.SellerId)
-                .HasConstraintName("Store_ibfk_1");
+                .HasConstraintName("store_ibfk_1");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("User");
+            entity.ToTable("user");
 
             entity.HasIndex(e => e.Email, "email").IsUnique();
 

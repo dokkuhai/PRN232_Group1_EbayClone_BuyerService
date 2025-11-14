@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EbayCloneBuyerService_CoreAPI.Models;
 
-public partial class ShippingInfo
+public partial class Shippinginfo
 {
     public int Id { get; set; }
 
@@ -17,5 +17,5 @@ public partial class ShippingInfo
 
     public DateTime? EstimatedArrival { get; set; }
 
-    public virtual OrderTable? Order { get; set; }
+    public virtual Ordertable? Order { get; set; }
 }
