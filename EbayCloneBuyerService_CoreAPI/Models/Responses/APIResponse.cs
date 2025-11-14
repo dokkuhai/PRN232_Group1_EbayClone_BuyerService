@@ -1,4 +1,4 @@
-﻿namespace EbayCloneBuyerService_CoreAPI.Models.Reponses
+﻿namespace EbayCloneBuyerService_CoreAPI.Models.Responses
 {
     public class APIResponse<T>
     {
