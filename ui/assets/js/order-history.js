@@ -1,6 +1,5 @@
 // Order History Management
 const OrderHistory = {
-    BUYER_ID: parseInt(localStorage.getItem('userId')), // Get from authentication
     currentPage: 1,
     pageSize: 10,
     allOrders: [],
@@ -30,13 +29,26 @@ const OrderHistory = {
     async loadOrders() {
         const loading = document.getElementById('loading');
         const container = document.getElementById('ordersContainer');
+        const buyerId = parseInt(localStorage.getItem('userId')); // Get buyerId here
+
+        if (!buyerId) {
+            console.error("Buyer ID not found. Redirecting to login.");
+            // Optionally, show an error message to the user
+            const errorDiv = document.getElementById('error-message');
+            if (errorDiv) {
+                errorDiv.textContent = 'Failed to identify user. Please log in again.';
+                errorDiv.classList.remove('d-none');
+            }
+            // window.location.href = 'login.html'; // Or redirect
+            return;
+        }
 
         if (loading) loading.classList.remove('d-none');
 
         try {
             const token = localStorage.getItem('accessToken');
             const statusFilter = document.getElementById('statusFilter')?.value || '';
-            let url = `/api/orders?buyerId=${this.BUYER_ID}&page=${this.currentPage}&pageSize=${this.pageSize}`;
+            let url = `/api/orders?buyerId=${buyerId}&page=${this.currentPage}&pageSize=${this.pageSize}`;
 
             if (statusFilter) {
                 url += `&status=${encodeURIComponent(statusFilter)}`;
