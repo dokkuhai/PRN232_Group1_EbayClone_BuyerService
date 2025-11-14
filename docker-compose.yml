@@ -12,18 +12,12 @@ services:
     ports:
       - "3307:3306"
     restart: always
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
 
   api1:
     build:
       context: .
-      dockerfile: ./Dockerfile     # Dockerfile nằm ở root
-    image: ebayclone_buyer_api1:latest
+      dockerfile: ./Dockerfile     
+    image: dokkuhaidev/ebayclone_buyer_api1:latest
     container_name: ebayclone_buyer_api1
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
@@ -32,15 +26,14 @@ services:
     expose:
       - "8081"
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     restart: always
 
   api2:
     build:
       context: .
       dockerfile: ./Dockerfile
-    image: ebayclone_buyer_api2:latest
+    image: dokkuhaidev/ebayclone_buyer_api2:latest
     container_name: ebayclone_buyer_api2
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
@@ -49,8 +42,7 @@ services:
     expose:
       - "8081"
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     restart: always
 
   nginx:

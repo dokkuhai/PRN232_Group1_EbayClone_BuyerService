@@ -1,10 +1,17 @@
 // Order Detail Management
 const OrderDetail = {
-    BUYER_ID: 1, // In real app, this would come from authentication/session
+    BUYER_ID: parseInt(localStorage.getItem('userId')), // Get from authentication
     currentOrderId: null,
     orderData: null,
 
     init() {
+        // Redirect to login if not authenticated
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            window.location.href = 'login.html';
+            return;
+        }
+        
         const urlParams = new URLSearchParams(window.location.search);
         this.currentOrderId = urlParams.get('orderId');
 
@@ -21,7 +28,12 @@ const OrderDetail = {
         if (loading) loading.classList.remove('d-none');
 
         try {
-            const response = await fetch(`/api/orders/${this.currentOrderId}`);
+            const token = localStorage.getItem('accessToken');
+            const response = await fetch(`/api/orders/${this.currentOrderId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             const result = await response.json();
 
             if (result.statusCode === 200) {
@@ -178,10 +190,12 @@ const OrderDetail = {
         }
 
         try {
+            const token = localStorage.getItem('accessToken');
             const response = await fetch(`/api/orders/${this.currentOrderId}/return-requests`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     userId: this.BUYER_ID,

@@ -166,6 +166,8 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
                 userId = user.Id,
                 userName = user.Username,
                 token = tokenString,
+                userId = user.Id,
+                userName = user.Username
             });
         }
 
