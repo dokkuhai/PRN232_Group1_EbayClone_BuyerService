@@ -1,11 +1,18 @@
 // Order History Management
 const OrderHistory = {
-    BUYER_ID: 1, // In real app, this would come from authentication/session
+    BUYER_ID: parseInt(localStorage.getItem('userId')), // Get from authentication
     currentPage: 1,
     pageSize: 10,
     allOrders: [],
 
     init() {
+        // Redirect to login if not authenticated
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            window.location.href = 'login.html';
+            return;
+        }
+        
         this.loadOrders();
         this.attachEventListeners();
     },
@@ -27,6 +34,7 @@ const OrderHistory = {
         if (loading) loading.classList.remove('d-none');
 
         try {
+            const token = localStorage.getItem('accessToken');
             const statusFilter = document.getElementById('statusFilter')?.value || '';
             let url = `/api/orders?buyerId=${this.BUYER_ID}&page=${this.currentPage}&pageSize=${this.pageSize}`;
 
@@ -34,7 +42,11 @@ const OrderHistory = {
                 url += `&status=${encodeURIComponent(statusFilter)}`;
             }
 
-            const response = await fetch(url);
+            const response = await fetch(url, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             const result = await response.json();
 
             if (result.statusCode === 200) {

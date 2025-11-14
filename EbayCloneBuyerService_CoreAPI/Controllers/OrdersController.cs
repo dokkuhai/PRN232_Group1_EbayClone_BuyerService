@@ -3,9 +3,11 @@ using EbayCloneBuyerService_CoreAPI.Models.Reponses;
 using EbayCloneBuyerService_CoreAPI.Models.Requests;
 using EbayCloneBuyerService_CoreAPI.Models.Responses;
 using EbayCloneBuyerService_CoreAPI.Repositories.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Security.Claims;
 
 namespace EbayCloneBuyerService_CoreAPI.Controllers
 {
@@ -24,8 +26,11 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
 
         // GET: api/orders?buyerId=1&page=1&pageSize=10&status=Pending
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public ActionResult<APIResponse<List<OrderListItemDto>>> GetOrders(
             [FromQuery] int buyerId,
             [FromQuery] int page = 1,
@@ -34,6 +39,16 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
         {
             try
             {
+                // Validate user from JWT token
+                var userIdFromToken = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userIdFromToken) || userIdFromToken != buyerId.ToString())
+                {
+                    return StatusCode((int)HttpStatusCode.Forbidden, new APIResponse<List<OrderListItemDto>>(
+                        (int)HttpStatusCode.Forbidden,
+                        "You are not authorized to view orders for this buyer",
+                        null));
+                }
+
                 if (buyerId <= 0)
                 {
                     return BadRequest(new APIResponse<List<OrderListItemDto>>(
