@@ -25,12 +25,18 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
         private readonly JwtService _jwtTokenGenerator;
-        public UserController(IUserService userService, IHttpClientFactory httpClientFactory, IConfiguration configuration, JwtService jwtTokenGenerator)
+        private readonly IRememberTokenService _rememberTokenService;
+        public UserController(IUserService userService,
+            IHttpClientFactory httpClientFactory,
+            IConfiguration configuration,
+            JwtService jwtTokenGenerator,
+            IRememberTokenService rememberTokenService)
         {
             _userService = userService;
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
             _jwtTokenGenerator = jwtTokenGenerator;
+            _rememberTokenService = rememberTokenService;
         }
 
         [HttpPost("google-login")]
@@ -38,12 +44,13 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
         {
             if (string.IsNullOrEmpty(request.Code))
             {
-                return BadRequest("Không có code");
+                return BadRequest("No code");
             }
-
-            // === 1. Đổi 'code' lấy 'access_token' và 'id_token' ===
             var client = _httpClientFactory.CreateClient();
             var tokenEndpoint = "https://oauth2.googleapis.com/token";
+
+            var clientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
+            var clientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET");
 
             var tokenParams = new Dictionary<string, string>
         {
@@ -57,7 +64,7 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
             var response = await client.PostAsync(tokenEndpoint, new FormUrlEncodedContent(tokenParams));
             if (!response.IsSuccessStatusCode)
             {
-                return BadRequest("Không thể đổi code lấy token.");
+                return BadRequest("Can not get token.");
             }
 
             var json = await response.Content.ReadAsStringAsync();
@@ -69,18 +76,59 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
             var userInfoResponse = await client.GetAsync(userInfoEndpoint);
             if (!userInfoResponse.IsSuccessStatusCode)
             {
-                return BadRequest("Không thể lấy thông tin người dùng.");
+                return BadRequest("Can not get user information.");
             }
 
             var userInfoJson = await userInfoResponse.Content.ReadAsStringAsync();
             var userInfo = JsonSerializer.Deserialize<GoogleUserInfo>(userInfoJson);
+            Console.WriteLine("User Info: " + userInfoJson);
 
-            var myJwt = "day_la_token_jwt_cua_ban_sau_khi_tao_xong";
+            var user = await _userService.GetUserByEmailAsync(userInfo.Email);
+            if (user == null)
+            {
+                Console.WriteLine("User not registered: " + userInfo.Name);
+                return Unauthorized(new
+                {                   
+                    email = userInfo.Email,
+                    userName = userInfo.Name,
+                    message = "User not registered."
+                });
+            }
+            var myJwt = _jwtTokenGenerator.GenerateToken(user);
 
-            // === 5. Trả JWT về cho FE ===
-            return Ok(new { token = myJwt });
+            return Ok(new { 
+                userId = user.Id,
+                userName = user.Username,
+                token = myJwt 
+            });
         }
-    
+
+        [HttpPost("google-register")]
+        public async Task<IActionResult> GoogleRegister([FromBody] GoogleRegisterRequest request)
+        {
+            var user = new Models.User
+            {
+                Username = request.Name,
+                Email = request.Email,
+            };
+            await _userService.RegisterAsync(new RegisterRequest
+            {
+                UserName = user.Username,
+                Email = user.Email,
+                Password = Guid.NewGuid().ToString(), 
+            });
+            var registeredUser = await _userService.GetUserByEmailAsync(request.Email);
+            var myJwt = _jwtTokenGenerator.GenerateToken(registeredUser);
+
+            return Ok(new
+            {
+                userId = registeredUser.Id,
+                userName = registeredUser.Username,
+                token = myJwt
+            });
+        }
+
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest model)
@@ -92,6 +140,20 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
 
             if (user == null)
                 return Unauthorized(new { message = "Invalid email or password." });
+            if (model.RememberMe)
+            {
+                var tokenhash = Guid.NewGuid().ToString();
+                Response.Cookies.Append("RememberMeToken", tokenhash, new CookieOptions
+                {
+                    Expires = DateTime.Now.AddDays(30),
+                    HttpOnly = false,            
+                    Secure = false,               
+                    SameSite = SameSiteMode.None,   
+                    Path = "/"                    
+                });
+                await _rememberTokenService.AddRememberTokenAsync(user.Id, tokenhash);
+
+            }
 
             var roleName = user.Role??"User";
             if (roleName.Equals("admin", StringComparison.OrdinalIgnoreCase))
@@ -101,9 +163,45 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
 
             return Ok(new
             {
+                userId = user.Id,
+                userName = user.Username,
                 token = tokenString,
                 userId = user.Id,
                 userName = user.Username
+            });
+        }
+
+        [HttpGet("login-with-remember-token")]
+        public async Task<IActionResult> LoginWithRememberToken()
+        {
+            if (Request.Cookies.TryGetValue("RememberMeToken", out var tokenhash))
+            {
+                var user = await _rememberTokenService.GetRememberTokenByHashAsync(tokenhash);
+                if (user != null)
+                {
+                    var tokenString = _jwtTokenGenerator.GenerateToken(user);
+                    return Ok(new
+                    {
+                        userId = user.Id,
+                        userName = user.Username,
+                        token = tokenString,
+                    });
+                }
+            }
+            return Unauthorized(new { message = "Invalid remember me token." });
+        }
+
+        [HttpDelete("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            if (Request.Cookies.TryGetValue("RememberMeToken", out var tokenhash))
+            {
+                await _rememberTokenService.DeleteRememberTokenAsync(tokenhash);
+                Response.Cookies.Delete("RememberMeToken");
+            }
+            return Ok(new
+            {
+                message = "Successfully logged out."
             });
         }
 
@@ -114,7 +212,7 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
             {
                 return BadRequest(new
                 {
-                    message = "Dữ liệu không hợp lệ",
+                    message = "Invalid Data",
                     errors = ModelState.Values.SelectMany(v => v.Errors)
                                               .Select(e => e.ErrorMessage)
                 });
@@ -123,7 +221,7 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
 
                 return Ok(new
                 {
-                    message = "Đăng ký tài khoản thành công! Vui lòng đăng nhập."
+                    message = "Successfully registered."
                 });
         }
     }

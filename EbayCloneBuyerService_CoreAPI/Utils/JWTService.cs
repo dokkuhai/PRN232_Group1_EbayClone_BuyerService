@@ -25,8 +25,7 @@ namespace EbayCloneBuyerService_CoreAPI.Utils
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email)
             };
 
             var token = new JwtSecurityToken(

@@ -23,8 +23,6 @@ builder.Services.AddHttpClient();
 // Load file .env
 Env.Load();
 
-var googleClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
-var googleClientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET");
 
 builder.Services.AddControllers()
  .AddJsonOptions(x =>
@@ -82,7 +80,11 @@ builder.Services.AddDbContext<CloneEbayDbContext>(options =>
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRememberTokenRepository, RememberTokenRepository>();
+builder.Services.AddScoped<IRememberTokenService, RememberTokenService>();
+
 builder.Services.AddScoped<IOrderService, OrderService>();
+
 builder.Services.AddScoped<JwtService>();
 
 
@@ -101,16 +103,31 @@ builder.Services.AddCors(options =>
     });
 });
 
-var app = builder.Build();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin", builder =>
+    {
+        builder.WithOrigins("http://127.0.0.1:5500") 
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials()
+           .SetIsOriginAllowed(_ => true);
+});
+});
+
+    var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAll");
+app.UseCors("AllowSpecificOrigin");
+//app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
+
+
 
 app.MapControllers();
 //====== Exception Middleware =====
