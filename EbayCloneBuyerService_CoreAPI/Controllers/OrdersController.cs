@@ -25,7 +25,7 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
 
         // GET: api/orders?buyerId=1&page=1&pageSize=10&status=Pending
         [HttpGet]
-        [Authorize]
+        [Authorize(Policy = "BuyerOnly")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -79,6 +79,7 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
 
         // GET: api/orders/5
         [HttpGet("{orderId}")]
+        [Authorize(Policy = "BuyerOnly")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<APIResponse<OrderDetailDto>>> GetOrderDetail(int orderId)
@@ -116,6 +117,7 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
 
         // GET: api/orders/5/status
         [HttpGet("{orderId}/status")]
+        [Authorize(Policy = "BuyerOnly")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<APIResponse<OrderStatusDto>>> GetOrderStatus(int orderId)
@@ -153,6 +155,7 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
 
         // POST: api/orders/5/return-requests
         [HttpPost("{orderId}/return-requests")]
+        [Authorize(Policy = "BuyerOnly")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -195,6 +198,7 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
 
         // GET: api/orders/5/return-requests
         [HttpGet("{orderId}/return-requests")]
+        [Authorize(Policy = "BuyerOnly")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<APIResponse<List<ReturnRequestDto>>>> GetReturnRequests(int orderId)
