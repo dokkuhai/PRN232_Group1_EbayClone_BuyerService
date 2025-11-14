@@ -1,25 +1,25 @@
 $('#registerBtn').on('click', function (event) {
     event.preventDefault();
 
-    const userName = $('#fullName').val().trim();
-    const email = $('#registerEmail').val().trim();
-    const password = $('#registerPassword').val().trim();
-    const confirmPassword = $('#confirmPassword').val().trim();
+    const firstName = $('#first-name').val().trim();
+    const lastName = $('#last-name').val().trim();
+    const userName = firstName + " " + lastName;
+    console.log("Full name:", userName);
+    const email = $('#email').val().trim();
+    console.log("Email:", email);
+    const password = $('#password').val().trim();
+    console.log("Password:", password);
 
     $("#error-message, #success-message").hide();
 
-    if (!userName || !email || !password || !confirmPassword) {
+    if (!userName || !email || !password) {
         $("#error-message").text("Please fill in all required fields.").show();
         return;
     }
 
-    if (password !== confirmPassword) {
-        $("#error-message").text("Passwords do not match.").show();
-        return;
-    }
 
     $.ajax({
-        url: 'https://localhost:7020/api/User/register',
+        url: 'https://ebay.dokkuhai.dpdns.org/api/User/register',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({ userName, email, password }),
