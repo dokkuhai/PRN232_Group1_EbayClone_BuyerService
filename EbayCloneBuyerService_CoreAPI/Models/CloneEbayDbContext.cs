@@ -695,6 +695,9 @@ public partial class CloneEbayDbContext : DbContext
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");
+            entity.Property(e => e.IsEmailVerified)
+                .HasDefaultValueSql("'0'")
+                .HasColumnName("isEmailVerified");
             entity.Property(e => e.LastUpdated)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime");

@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -40,6 +39,7 @@
     <!-- responsive -->
     <link rel="stylesheet" href="assets/css/responsive.css" />
   </head>
+
   <body>
     <!--PreLoader-->
     <div class="loader">
@@ -111,6 +111,54 @@
                       <a class="mobile-hide search-bar-icon" href="#"
                         ><i class="fas fa-search"></i
                       ></a>
+                      <a class="order-history" href="order-history.html"
+                        ><i class="fas fa-receipt"></i
+                      ></a>
+                      <script>
+                        const userId = localStorage.getItem("userId");
+                        if (userId) {
+                          document.write(`
+											<a class="user-login" href="profile.html">
+											 <i class="fas fa-user"></i>
+											</a>
+
+											<a class="user-name" href="#" style="margin-left:4px;" id="logoutBtn">
+											 <i class="fas fa-sign-out-alt" id="logoutBtn" style="margin-left:8px; cursor:pointer;"></i>
+											</a>
+										 
+										`);
+                        } else {
+                          document.write(`
+												<a class="user-login" href="login.html"><i class="fas fa-user"></i></a>
+
+											`);
+                        }
+                      </script>
+
+                      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                      <script>
+                        $("#logoutBtn").click(function (e) {
+                          e.preventDefault();
+                          $.ajax({
+                            url: "https://ebay.dokkuhai.dpdns.org/api/User/logout",
+                            type: "POST",
+                            headers: {
+                              Authorization:
+                                "Bearer " + localStorage.getItem("accessToken"),
+                            },
+                            success: function () {
+                              localStorage.removeItem("accessToken");
+                              localStorage.removeItem("userId");
+                              localStorage.removeItem("userName");
+                              window.location.href =
+                                "https://ebay.dokkuhai.dpdns.org";
+                            },
+                            error: function () {
+                              alert("Logout failed. Please try again.");
+                            },
+                          });
+                        });
+                      </script>
                     </div>
                   </li>
                 </ul>
@@ -440,11 +488,23 @@
         </div>
 
         <div class="row">
+          <div class="col-lg-8 offset-lg-2 text-center">
+            <div class="section-title">
+              <h3><span class="orange-text">Our</span> News</h3>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Aliquid, fuga quas itaque eveniet beatae optio.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
           <div class="col-lg-4 col-md-6">
             <div class="single-latest-news">
-              <a href="single-news.html"
-                ><div class="latest-news-bg news-bg-1"></div
-              ></a>
+              <a href="single-news.html">
+                <div class="latest-news-bg news-bg-1"></div>
+              </a>
               <div class="news-text-box">
                 <h3>
                   <a href="single-news.html"
@@ -470,9 +530,9 @@
           </div>
           <div class="col-lg-4 col-md-6">
             <div class="single-latest-news">
-              <a href="single-news.html"
-                ><div class="latest-news-bg news-bg-2"></div
-              ></a>
+              <a href="single-news.html">
+                <div class="latest-news-bg news-bg-2"></div>
+              </a>
               <div class="news-text-box">
                 <h3>
                   <a href="single-news.html"
@@ -498,9 +558,9 @@
           </div>
           <div class="col-lg-4 col-md-6 offset-md-3 offset-lg-0">
             <div class="single-latest-news">
-              <a href="single-news.html"
-                ><div class="latest-news-bg news-bg-3"></div
-              ></a>
+              <a href="single-news.html">
+                <div class="latest-news-bg news-bg-3"></div>
+              </a>
               <div class="news-text-box">
                 <h3>
                   <a href="single-news.html"
@@ -534,33 +594,58 @@
     </div>
     <!-- end latest news -->
 
-    <!-- logo carousel -->
-    <div class="logo-carousel-section">
+    <!-- footer -->
+    <div class="footer-area">
       <div class="container">
         <div class="row">
-          <div class="col-lg-12">
-            <div class="logo-carousel-inner">
-              <div class="single-logo-item">
-                <img src="assets/img/company-logos/1.png" alt="" />
-              </div>
-              <div class="single-logo-item">
-                <img src="assets/img/company-logos/2.png" alt="" />
-              </div>
-              <div class="single-logo-item">
-                <img src="assets/img/company-logos/3.png" alt="" />
-              </div>
-              <div class="single-logo-item">
-                <img src="assets/img/company-logos/4.png" alt="" />
-              </div>
-              <div class="single-logo-item">
-                <img src="assets/img/company-logos/5.png" alt="" />
-              </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="footer-box about-widget">
+              <h2 class="widget-title">About us</h2>
+              <p>
+                Ut enim ad minim veniam perspiciatis unde omnis iste natus error
+                sit voluptatem accusantium doloremque laudantium, totam rem
+                aperiam, eaque ipsa quae.
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="footer-box get-in-touch">
+              <h2 class="widget-title">Get in Touch</h2>
+              <ul>
+                <li>34/8, East Hukupara, Gifirtok, Sadan.</li>
+                <li>support@fruitkha.com</li>
+                <li>+00 111 222 3333</li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="footer-box pages">
+              <h2 class="widget-title">Pages</h2>
+              <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="services.html">Shop</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="contact.html">Contact</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="footer-box subscribe">
+              <h2 class="widget-title">Subscribe</h2>
+              <p>Subscribe to our mailing list to get the latest updates.</p>
+              <form action="index.html">
+                <input type="email" placeholder="Email" />
+                <button type="submit">
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </form>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- end logo carousel -->
+    <!-- end footer -->
 
     <!-- footer -->
     <div class="footer-area">
@@ -681,141 +766,160 @@
     <script src="assets/js/sticker.js"></script>
     <!-- main js -->
     <script src="assets/js/main.js"></script>
-<script>
-  const apiUrl = "https://localhost:7020/api/Product?$expand=Category&$count=true";
-  let page = 0;
-  const pageSize = 3;
-  let totalCount = 0;
-  let totalPages = 0;
 
-  const container = document.getElementById("product-container");
-  const btnPrev = document.getElementById("prev-page");
-  const btnNext = document.getElementById("next-page");
-  const pageInfo = document.getElementById("page-info");
-  const pageInput = document.getElementById("page-input");
-  const goPageBtn = document.getElementById("go-page");
+    <!-- jquery -->
+    <script src="assets/js/jquery-1.11.3.min.js"></script>
+    <!-- bootstrap -->
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <!-- count down -->
+    <script src="assets/js/jquery.countdown.js"></script>
+    <!-- isotope -->
+    <script src="assets/js/jquery.isotope-3.0.6.min.js"></script>
+    <!-- waypoints -->
+    <script src="assets/js/waypoints.js"></script>
+    <!-- owl carousel -->
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <!-- magnific popup -->
+    <script src="assets/js/jquery.magnific-popup.min.js"></script>
+    <!-- mean menu -->
+    <script src="assets/js/jquery.meanmenu.min.js"></script>
+    <!-- sticker js -->
+    <script src="assets/js/sticker.js"></script>
+    <!-- main js -->
+    <script src="assets/js/main.js"></script>
+    <script>
+      // ===== FIXED API BASE URL (ALWAYS USE DOMAIN) =====
+      const baseUrl = "https://ebay.dokkuhai.dpdns.org";
+      const apiUrl = `${baseUrl}/api/Product`;
 
-  async function loadProducts() {
-    try {
-      container.innerHTML = "<p>Loading products...</p>";
+      let page = 0;
+      const pageSize = 3;
+      let totalCount = 0;
+      let totalPages = 0;
 
-      const skip = page * pageSize;
-      const url = apiUrl + `&$top=${pageSize}&$skip=${skip}`;
+      const container = document.getElementById("product-container");
+      const btnPrev = document.getElementById("prev-page");
+      const btnNext = document.getElementById("next-page");
+      const pageInfo = document.getElementById("page-info");
+      const pageInput = document.getElementById("page-input");
+      const goPageBtn = document.getElementById("go-page");
 
-      const res = await fetch(url);
-      if (!res.ok) throw new Error("Cannot fetch products");
-      const data = await res.json();
-      const products = data.value ?? data;
+      async function loadProducts() {
+        try {
+          container.innerHTML = "<p>Loading products...</p>";
 
-      if (totalCount === 0) {
-        const countRes = await fetch("https://localhost:7020/api/Product");
-        const countData = await countRes.json();
-        totalCount = countData.length;
-        totalPages = Math.ceil(totalCount / pageSize);
+          const res = await fetch(apiUrl);
+          if (!res.ok) throw new Error("Fetch error");
+
+          const data = await res.json();
+          const products = Array.isArray(data) ? data : [];
+
+          // Setup pagination
+          if (totalCount === 0) {
+            totalCount = products.length;
+            totalPages = Math.ceil(totalCount / pageSize);
+          }
+
+          const skip = page * pageSize;
+          const paged = products.slice(skip, skip + pageSize);
+
+          if (paged.length === 0) {
+            container.innerHTML = "<p>No products found.</p>";
+            return;
+          }
+
+          // Render UI
+          container.innerHTML = "";
+          paged.forEach((p) => {
+            const img = p.images || p.Images || "default.jpg";
+            const imageUrl = img.startsWith("http")
+              ? img
+              : `https://th.bing.com/th/id/OIP.ipTpmWrouGNDkLY582e2hQHaEK?w=294&h=180&c=7&r=0&o=7&cb=ucfimg2&dpr=1.3&pid=1.7&rm=3&ucfimg=1`;
+            const categoryName = p.category?.name ?? "Unknown";
+
+            const html = `
+                    <div class="col-lg-4 col-md-6 text-center">
+                        <div class="single-product-item">
+                            <div class="product-image">
+                                <a href="single-product.html?id=${p.id}">
+                                    <img src="${imageUrl}" alt="${p.title}">
+                                </a>
+                            </div>
+                            <h3>${p.title}</h3>
+                            <p class="product-price">
+                                <span>${categoryName}</span> ${p.price} VND
+                            </p>
+                            <a href="cart.html" class="cart-btn">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </a>
+                        </div>
+                    </div>`;
+            container.insertAdjacentHTML("beforeend", html);
+          });
+
+          pageInfo.textContent = `Page ${page + 1} / ${totalPages}`;
+          btnPrev.disabled = page === 0;
+          btnNext.disabled = page + 1 >= totalPages;
+        } catch (err) {
+          console.error("❌ Load error:", err);
+          container.innerHTML =
+            '<p style="color:red;">Error loading products.</p>';
+        }
       }
 
-      if (products.length === 0) {
-        container.innerHTML = "<p>No products found.</p>";
-        btnNext.disabled = true;
-        pageInfo.textContent = "";
-        return;
-      }
+      // Pagination events
+      btnPrev.addEventListener("click", () => {
+        if (page > 0) {
+          page--;
+          loadProducts();
+        }
+      });
 
-      container.innerHTML = "";
-      for (const p of products) {
-        const categoryName = p.Category?.Name ?? "Unknown";
-        const imageUrl = p.Images
-          ? p.Images
-          : "assets/img/products/default.jpg";
+      btnNext.addEventListener("click", () => {
+        if (page + 1 < totalPages) {
+          page++;
+          loadProducts();
+        }
+      });
 
-        const html = `
-          <div class="col-lg-4 col-md-6 text-center single-product-item" data-id="${p.Id}">
-            <div class="product-image">
-              <a href="single-product.html?id=${p.Id}">
-                <img src="${imageUrl}" alt="${p.Title}">
-              </a>
-            </div>
-            <h3>${p.Title}</h3>
-            <p class="product-price"><span>${categoryName}</span> $${p.Price ?? "N/A"}</p>
-            <a href="#" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-          </div>`;
-        container.insertAdjacentHTML("beforeend", html);
-      }
+      goPageBtn.addEventListener("click", () => {
+        const target = parseInt(pageInput.value);
+        if (target >= 1 && target <= totalPages) {
+          page = target - 1;
+          loadProducts();
+        }
+      });
 
-      pageInfo.textContent = `Page ${page + 1} / ${totalPages}`;
-      btnPrev.disabled = page === 0;
-      btnNext.disabled = page + 1 >= totalPages;
-    } catch (err) {
-      console.error("❌ Error loading products:", err);
-      container.innerHTML = '<p style="color:red;">Error loading product list.</p>';
-    }
-  }
+      document.addEventListener("DOMContentLoaded", loadProducts);
+    </script>
 
-  btnPrev.addEventListener("click", function () {
-    if (page > 0) {
-      page--;
-      loadProducts();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  });
+    <script>
+        $.ajax({
+          url: `/api/Cart?token=${encodeURIComponent(token)}`,
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ productId, quantity }),
+          success: function (response) {
+            console.log("Added to cart:", response);
+            alert("Product added to cart!");
+          },
+          error: function (xhr, status, error) {
+            console.error("Error adding to cart:", status, error, xhr.responseText);
+            alert("Failed to add product to cart. See console for details.");
+          },
+        });
+      
 
-  btnNext.addEventListener("click", function () {
-    if (page + 1 < totalPages) {
-      page++;
-      loadProducts();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  });
-
-  goPageBtn.addEventListener("click", function () {
-    const target = parseInt(pageInput.value);
-    if (!isNaN(target) && target >= 1 && target <= totalPages) {
-      page = target - 1;
-      loadProducts();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } else {
-      alert(`Enter a valid page number (1–${totalPages})`);
-    }
-  });
-
-  document.addEventListener("DOMContentLoaded", loadProducts);
-
-  // ------------------------
-  // AJAX Add to Cart
-  // ------------------------
-  function addToCart(productId, quantity = 1) {
-    const token = localStorage.getItem("guestToken");
-    if (!token) {
-      alert("No token found. Please login or start a guest session.");
-      return;
-    }
-
-    $.ajax({
-      url: `/api/Cart?token=${encodeURIComponent(token)}`,
-      method: "POST",
-      contentType: "application/json",
-      data: JSON.stringify({ productId, quantity }),
-      success: function (response) {
-        console.log("Added to cart:", response);
-        alert("Product added to cart!");
-      },
-      error: function (xhr, status, error) {
-        console.error("Error adding to cart:", status, error, xhr.responseText);
-        alert("Failed to add product to cart. See console for details.");
-      },
-    });
-  }
-
-  // Gắn event click cho tất cả nút Add to Cart
-  document.addEventListener("click", function (e) {
-    if (e.target.closest(".cart-btn")) {
-      e.preventDefault();
-      const productCard = e.target.closest(".single-product-item");
-      const productId = parseInt(productCard.dataset.id);
-      addToCart(productId);
-    }
-  });
-</script>	
+      // Gắn event click cho tất cả nút Add to Cart
+      document.addEventListener("click", function (e) {
+        if (e.target.closest(".cart-btn")) {
+          e.preventDefault();
+          const productCard = e.target.closest(".single-product-item");
+          const productId = parseInt(productCard.dataset.id);
+          addToCart(productId);
+        }
+      });
+    </script>
     <script src="./assets/js/api.js"></script>
   </body>
 </html>
