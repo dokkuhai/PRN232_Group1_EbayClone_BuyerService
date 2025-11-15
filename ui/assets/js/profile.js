@@ -27,7 +27,7 @@ saveUsernameEditBtn.addEventListener('click', function () {
     const updatedUsername = newUsernameInput.value.trim();
     if (updatedUsername) {
         currentUsernameSpan.textContent = updatedUsername;
-        const userId = 3; // Giả sử userId là 3, thay đổi theo logic của bạn
+        const userId = localStorage.getItem('userId');
         $.ajax({
             url: `https://ebay.dokkuhai.dpdns.org/api/Profile/update`,
             method: 'PUT',
@@ -94,7 +94,7 @@ savePhoneEditBtn.addEventListener('click', function () {
         currentPhoneSpan.textContent = updatedPhone;
         if (!updatedPhone.match(/^\d{10,15}$/))
             return alert('Invalid phone number format!');
-        const userId = 3; // Giả sử userId là 3, thay đổi theo logic của bạn
+        const userId = localStorage.getItem('userId');
         $.ajax({
             url: `https://ebay.dokkuhai.dpdns.org/api/Profile/update`,
             method: 'PUT',
@@ -116,7 +116,7 @@ savePhoneEditBtn.addEventListener('click', function () {
 
 
 $(document).ready(function () {
-    const userId = 3;
+    const userId = localStorage.getItem('userId');
 
     $.ajax({
         url: `https://ebay.dokkuhai.dpdns.org/api/Profile/${userId}`,
@@ -144,7 +144,7 @@ $(document).ready(function () {
 // === Email Verification Logic ===
 $('#emailVerifyLink').on('click', function (e) {
     e.preventDefault();
-    const userId = 3; // Giả sử userId là 3, thay đổi theo logic của bạn
+    const userId = localStorage.getItem('userId');
     $.ajax({
         url: `https://ebay.dokkuhai.dpdns.org/api/Profile/send-verification-email/${userId}`,
         method: 'POST',

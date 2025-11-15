@@ -20,8 +20,14 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Load file .env
+builder.Services.Configure<HostOptions>(options =>
+{
+    options.ShutdownTimeout = TimeSpan.FromSeconds(20);
+});
+
+
+builder.Services.AddHttpClient();
+
 Env.Load();
 
 
