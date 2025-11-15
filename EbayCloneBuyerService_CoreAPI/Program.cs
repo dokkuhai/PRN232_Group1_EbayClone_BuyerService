@@ -18,9 +18,15 @@ using Microsoft.OData.ModelBuilder;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<HostOptions>(options =>
+{
+    options.ShutdownTimeout = TimeSpan.FromSeconds(20);
+});
+
+
 builder.Services.AddHttpClient();
-// Add services to the container.
-// Load file .env
+
 Env.Load();
 
 
