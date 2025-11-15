@@ -787,139 +787,157 @@
     <script src="assets/js/sticker.js"></script>
     <!-- main js -->
     <script src="assets/js/main.js"></script>
-    <script>
-      // ===== FIXED API BASE URL (ALWAYS USE DOMAIN) =====
-      const baseUrl = "https://ebay.dokkuhai.dpdns.org";
-      const apiUrl = `${baseUrl}/api/Product`;
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  // ===== AJAX SETUP =====
+  const API_BASE_URL = "https://localhost:5000";
 
-      let page = 0;
-      const pageSize = 3;
-      let totalCount = 0;
-      let totalPages = 0;
+  $.ajaxSetup({
+    beforeSend: function (xhr, settings) {
+      const token = localStorage.getItem("accessToken");
+      if (token) {
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
+      }
+      if (!/^https?:\/\//i.test(settings.url)) {
+        settings.url = API_BASE_URL + settings.url;
+      }
+    }
+  });
 
-      const container = document.getElementById("product-container");
-      const btnPrev = document.getElementById("prev-page");
-      const btnNext = document.getElementById("next-page");
-      const pageInfo = document.getElementById("page-info");
-      const pageInput = document.getElementById("page-input");
-      const goPageBtn = document.getElementById("go-page");
+  // ===== PRODUCT PAGINATION =====
+  let page = 0;
+  const pageSize = 3;
+  let totalCount = 0;
+  let totalPages = 0;
 
-      async function loadProducts() {
-        try {
-          container.innerHTML = "<p>Loading products...</p>";
+  const container = document.getElementById("product-container");
+  const btnPrev = document.getElementById("prev-page");
+  const btnNext = document.getElementById("next-page");
+  const pageInfo = document.getElementById("page-info");
+  const pageInput = document.getElementById("page-input");
+  const goPageBtn = document.getElementById("go-page");
 
-          const res = await fetch(apiUrl);
-          if (!res.ok) throw new Error("Fetch error");
+  async function loadProducts() {
+    try {
+      container.innerHTML = "<p>Loading products...</p>";
 
-          const data = await res.json();
-          const products = Array.isArray(data) ? data : [];
+      const res = await fetch(`${API_BASE_URL}/api/Product`);
+      if (!res.ok) throw new Error("Fetch error");
 
-          // Setup pagination
-          if (totalCount === 0) {
-            totalCount = products.length;
-            totalPages = Math.ceil(totalCount / pageSize);
-          }
+      const data = await res.json();
+      const products = Array.isArray(data) ? data : [];
 
-          const skip = page * pageSize;
-          const paged = products.slice(skip, skip + pageSize);
-
-          if (paged.length === 0) {
-            container.innerHTML = "<p>No products found.</p>";
-            return;
-          }
-
-          // Render UI
-          container.innerHTML = "";
-          paged.forEach((p) => {
-            const img = p.images || p.Images || "default.jpg";
-            const imageUrl = img.startsWith("http")
-              ? img
-              : `https://th.bing.com/th/id/OIP.ipTpmWrouGNDkLY582e2hQHaEK?w=294&h=180&c=7&r=0&o=7&cb=ucfimg2&dpr=1.3&pid=1.7&rm=3&ucfimg=1`;
-            const categoryName = p.category?.name ?? "Unknown";
-
-            const html = `
-                    <div class="col-lg-4 col-md-6 text-center">
-                        <div class="single-product-item">
-                            <div class="product-image">
-                                <a href="single-product.html?id=${p.id}">
-                                    <img src="${imageUrl}" alt="${p.title}">
-                                </a>
-                            </div>
-                            <h3>${p.title}</h3>
-                            <p class="product-price">
-                                <span>${categoryName}</span> ${p.price} VND
-                            </p>
-                            <a href="cart.html" class="cart-btn">
-                                <i class="fas fa-shopping-cart"></i> Add to Cart
-                            </a>
-                        </div>
-                    </div>`;
-            container.insertAdjacentHTML("beforeend", html);
-          });
-
-          pageInfo.textContent = `Page ${page + 1} / ${totalPages}`;
-          btnPrev.disabled = page === 0;
-          btnNext.disabled = page + 1 >= totalPages;
-        } catch (err) {
-          console.error("❌ Load error:", err);
-          container.innerHTML =
-            '<p style="color:red;">Error loading products.</p>';
-        }
+      // Setup pagination
+      if (totalCount === 0) {
+        totalCount = products.length;
+        totalPages = Math.ceil(totalCount / pageSize);
       }
 
-      // Pagination events
-      btnPrev.addEventListener("click", () => {
-        if (page > 0) {
-          page--;
-          loadProducts();
-        }
+      const skip = page * pageSize;
+      const paged = products.slice(skip, skip + pageSize);
+
+      if (paged.length === 0) {
+        container.innerHTML = "<p>No products found.</p>";
+        return;
+      }
+
+      // Render UI
+      container.innerHTML = "";
+      paged.forEach((p) => {
+        const img = p.images || p.Images || "";
+        const imageUrl = img.startsWith("http")
+          ? img
+          : "https://th.bing.com/th/id/OIP.ipTpmWrouGNDkLY582e2hQHaEK?w=294&h=180&c=7&r=0&o=7&cb=ucfimg2&dpr=1.3&pid=1.7&rm=3&ucfimg=1";
+        const categoryName = p.category?.name ?? "Unknown";
+
+        const html = `
+  <div class="col-lg-4 col-md-6 text-center">
+    <div class="single-product-item">
+      <div class="product-image">
+        <a href="single-product.html?id=${p.id}">
+          <img src="${imageUrl}" alt="${p.title}">
+        </a>
+      </div>
+      <h3>${p.title}</h3>
+      <p class="product-price">
+        <span>${categoryName}</span> ${p.price} VND
+      </p>
+      <a href="#" class="cart-btn" data-id="${p.id}">
+        <i class="fas fa-shopping-cart"></i> Add to Cart
+      </a>
+    </div>
+  </div>
+`;
+
+        container.insertAdjacentHTML("beforeend", html);
       });
 
-      btnNext.addEventListener("click", () => {
-        if (page + 1 < totalPages) {
-          page++;
-          loadProducts();
-        }
-      });
+      pageInfo.textContent = `Page ${page + 1} / ${totalPages}`;
+      btnPrev.disabled = page === 0;
+      btnNext.disabled = page + 1 >= totalPages;
+    } catch (err) {
+      console.error("❌ Load error:", err);
+      container.innerHTML =
+        '<p style="color:red;">Error loading products.</p>';
+    }
+  }
 
-      goPageBtn.addEventListener("click", () => {
-        const target = parseInt(pageInput.value);
-        if (target >= 1 && target <= totalPages) {
-          page = target - 1;
-          loadProducts();
-        }
-      });
+  // Pagination events
+  btnPrev.addEventListener("click", () => {
+    if (page > 0) {
+      page--;
+      loadProducts();
+    }
+  });
 
-      document.addEventListener("DOMContentLoaded", loadProducts);
-    </script>
+  btnNext.addEventListener("click", () => {
+    if (page + 1 < totalPages) {
+      page++;
+      loadProducts();
+    }
+  });
 
-    <script>
-        $.ajax({
-          url: `/api/Cart?token=${encodeURIComponent(token)}`,
-          method: "POST",
-          contentType: "application/json",
-          data: JSON.stringify({ productId, quantity }),
-          success: function (response) {
-            console.log("Added to cart:", response);
-            alert("Product added to cart!");
-          },
-          error: function (xhr, status, error) {
-            console.error("Error adding to cart:", status, error, xhr.responseText);
-            alert("Failed to add product to cart. See console for details.");
-          },
-        });
-      
+  goPageBtn.addEventListener("click", () => {
+    const target = parseInt(pageInput.value);
+    if (target >= 1 && target <= totalPages) {
+      page = target - 1;
+      loadProducts();
+    }
+  });
 
-      // Gắn event click cho tất cả nút Add to Cart
-      document.addEventListener("click", function (e) {
-        if (e.target.closest(".cart-btn")) {
-          e.preventDefault();
-          const productCard = e.target.closest(".single-product-item");
-          const productId = parseInt(productCard.dataset.id);
-          addToCart(productId);
-        }
-      });
-    </script>
+  document.addEventListener("DOMContentLoaded", loadProducts);
+
+  // ===== ADD TO CART =====
+  function addToCart(productId) {
+    const guestToken = localStorage.getItem("guestToken") || "";
+
+    $.ajax({
+      url: `/api/Cart?token=${encodeURIComponent(guestToken)}`,
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({ productId, quantity: 1 }),
+      success: function (res) {
+        console.log("Added to cart:", res);
+        alert("Product added to cart!");
+      },
+      error: function (xhr) {
+        console.error("Add to cart error:", xhr.responseText);
+        alert("Failed to add product to cart.");
+      }
+    });
+  }
+
+  // Event click Add to Cart
+  document.addEventListener("click", function (e) {
+  const btn = e.target.closest(".cart-btn");
+  if (btn) {
+    e.preventDefault(); // prevent default navigation
+    const productId = btn.dataset.id;
+    addToCart(productId);
+  }
+});
+
+</script>
     <script src="./assets/js/api.js"></script>
   </body>
 </html>

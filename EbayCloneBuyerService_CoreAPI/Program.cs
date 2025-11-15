@@ -43,7 +43,7 @@ builder.Services.AddSwaggerGen(options =>
 
     options.AddServer(new OpenApiServer
     {
-        Url = "https://localhost:7020",
+        Url = "https://localhost:5000",
         Description = "Localhost Server"
     });
 });
@@ -124,7 +124,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
     {
-        builder.WithOrigins("https://ebay.dokkuhai.dpdns.org")
+        builder.WithOrigins("*")
                .AllowAnyMethod()
                .AllowAnyHeader();
     });

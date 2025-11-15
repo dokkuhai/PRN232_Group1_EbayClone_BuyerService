@@ -26,8 +26,337 @@
             align-items: center;
         }
 
-	<link rel="stylesheet" href="assets/css/checkout.css">
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
+        .ebay-logo {
+            width: 100px;
+            height: auto;
+        }
+
+        .checkout-text {
+            font-size: 28px;
+            font-weight: 400;
+            color: #191919;
+        }
+
+        .feedback-link {
+            color: #3665f3;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .paypal-banner {
+            background: #d5f0ff;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .paypal-logo {
+            width: 80px;
+            height: 24px;
+            background: #0070ba;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 24px;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 4px;
+            padding: 24px;
+            border: 1px solid #e5e5e5;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        .payment-option:hover {
+            background: #f7f7f7;
+        }
+
+        .radio-btn {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #767676;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .payment-logo {
+            height: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-icons {
+            display: flex;
+            gap: 4px;
+        }
+
+        .card-icon {
+            width: 32px;
+            height: 20px;
+            border: 1px solid #e5e5e5;
+            border-radius: 2px;
+            font-size: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .address-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #191919;
+        }
+
+        .change-link {
+            color: #3665f3;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 12px;
+            display: inline-block;
+        }
+
+        .product-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .seller-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .seller-badge {
+            background: #e53238;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .product-image {
+            width: 80px;
+            height: 80px;
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+            background: #f7f7f7;
+        }
+
+        .product-details {
+            flex: 1;
+        }
+
+        .last-one-badge {
+            background: #f4f4f4;
+            color: #e53238;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .product-title {
+            font-size: 14px;
+            color: #191919;
+            margin-bottom: 8px;
+        }
+
+        .product-price {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .delivery-options {
+            margin-top: 16px;
+        }
+
+        .delivery-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .delivery-option:hover {
+            background: #f7f7f7;
+        }
+
+        .delivery-selected {
+            border-color: #3665f3;
+            background: #f0f5ff;
+        }
+
+        .coupon-input {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .coupon-input input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .apply-btn {
+            padding: 12px 24px;
+            background: #e5e5e5;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #767676;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 24px;
+            height: fit-content;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 16px;
+            border-top: 1px solid #e5e5e5;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .vnd-price {
+            font-size: 12px;
+            color: #767676;
+            text-align: right;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            padding: 16px;
+            background: #e5e5e5;
+            border: none;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #767676;
+            cursor: not-allowed;
+            margin-top: 16px;
+        }
+
+        .payment-notice {
+            text-align: center;
+            font-size: 13px;
+            color: #767676;
+            margin-top: 12px;
+        }
+
+        .guarantee-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+            padding: 12px;
+            background: #f7f7f7;
+            border-radius: 4px;
+        }
+
+        .shield-icon {
+            width: 20px;
+            height: 20px;
+            background: #3665f3;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .guarantee-link {
+            color: #3665f3;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .info-icon {
+            width: 16px;
+            height: 16px;
+            border: 1px solid #767676;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: #767676;
+            margin-left: 4px;
+        }
+    </style>
 </head>
 <body>
     <div class="header">
@@ -60,230 +389,48 @@
                     </div>
                 </div>
 
-	<main class="main-container">
-        <div class="container">
-            <div class="checkout-layout">
-                <!-- Left Column - Form -->
-                <div class="checkout-form">
-                    <!-- Shipping Address -->
-                   <section class="form-section">
-                        <div class="section-header">
-                            <h2>Shipping Address</h2>
-                            <a href="#" class="change-link">Change</a>
+                <div class="payment-option">
+                    <div class="radio-btn"></div>
+                    <div style="flex: 1;">
+                        <div style="font-size: 14px; font-weight: 500; margin-bottom: 8px;">Add new card</div>
+                        <div class="card-icons">
+                            <div class="card-icon" style="background: #1434CB; color: white;">VISA</div>
+                            <div class="card-icon" style="background: #EB001B; color: white;">●●</div>
+                            <div class="card-icon" style="background: #016FD0; color: white;">AMEX</div>
+                            <div class="card-icon" style="background: #FF6000; color: white;">DC</div>
                         </div>
-                        <div class="form-group">
-                            <label for="name">Full Name *</label>
-                            <input type="text" id="name" placeholder="John Doe" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="address">Street Address *</label>
-                            <input type="text" id="address" placeholder="123 Main Street" required>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="city">City *</label>
-                                <input type="text" id="city" placeholder="New York" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="state">State *</label>
-                                <input type="text" id="state" placeholder="NY" required>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="country">Country *</label>
-                                <input type="text" id="country" placeholder="United States" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="phone">Phone Number *</label>
-                                <input type="tel" id="phone" placeholder="(123) 456-7890" required>
-                            </div>
-                        </div>
-                        </section>
-
-                    Shipping Method
-                    <section class="form-section">
-                        <div class="section-header">
-                            <h2>Shipping Method</h2>
-                        </div>
-                        <div class="shipping-options">
-                            <label class="radio-option selected">
-                                <input type="radio" name="shipping" value="standard" checked>
-                                <div class="option-content">
-                                    <span class="option-title">Standard Shipping (5-7 business days)</span>
-                                    <span class="option-price">FREE</span>
-                                </div>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="shipping" value="express">
-                                <div class="option-content">
-                                    <span class="option-title">Express Shipping (2-3 business days)</span>
-                                    <span class="option-price">$9.99</span>
-                                </div>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="shipping" value="overnight">
-                                <div class="option-content">
-                                    <span class="option-title">Overnight Shipping (1 business day)</span>
-                                    <span class="option-price">$19.99</span>
-                                </div>
-                            </label>
-                        </div>
-                    </section>
-
-                    <!-- Payment Method -->
-                    <section class="form-section">
-                        <div class="section-header">
-                            <h2>Payment Method</h2>
-                        </div>
-                        <div class="payment-options">
-                            <label class="radio-option selected">
-                                <input type="radio" name="payment" value="credit" checked>
-                                <span class="option-title">Credit Card</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="payment" value="paypal">
-                                <span class="option-title">PayPal</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="payment" value="apple">
-                                <span class="option-title">Apple Pay</span>
-                            </label>
-                        </div>
-
-                        <!-- Credit Card Form -->
-                        <!-- <div class="payment-form" id="credit-card-form">
-                            <div class="form-group">
-                                <label for="cardname">Cardholder Name *</label>
-                                <input type="text" id="cardname" placeholder="John Doe" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="cardnumber">Card Number *</label>
-                                <input type="text" id="cardnumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="expiry">Expiry Date *</label>
-                                    <input type="text" id="expiry" placeholder="MM/YY" maxlength="5" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="cvv">CVV *</label>
-                                    <input type="text" id="cvv" placeholder="123" maxlength="4" required>
-                                </div>
-                            </div>
-                        </div>
-                    </section> -->
-
-                    <!-- Billing Address
-                    <section class="form-section">
-                        <div class="section-header">
-                            <h2>Billing Address</h2>
-                            <label class="checkbox">
-                                <input type="checkbox" id="same-address" checked>
-                                Same as shipping
-                            </label>
-                        </div>
-                        <div id="billing-form" style="display: none;">
-                            <div class="form-group">
-                                <label for="billing-address">Street Address *</label>
-                                <input type="text" id="billing-address" placeholder="123 Main Street">
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="billing-city">City *</label>
-                                    <input type="text" id="billing-city" placeholder="New York">
-                                </div>
-                                <div class="form-group">
-                                    <label for="billing-state">State *</label>
-                                    <input type="text" id="billing-state" placeholder="NY">
-                                </div>
-                            </div>
-                        </div>
-                    </section> -->
+                    </div>
                 </div>
 
-                <!-- Right Column - Order Summary -->
-                <aside class="order-summary">
-                    <h3>Order Summary</h3>
-                    
-                    <!-- Cart Items -->
-                    <div class="cart-items">
-                        <div class="cart-item">
-                            <img src="/placeholder.svg?height=80&width=80" alt="Product">
-                            <div class="item-details">
-                                <h4>Premium Wireless Headphones</h4>
-                                <p class="seller">by TechStore</p>
-                                <p class="quantity">Qty: 1</p>
-                            </div>
-                            <div class="item-price">$79.99</div>
-                        </div>
-                        <div class="cart-item">
-                            <img src="/placeholder.svg?height=80&width=80" alt="Product">
-                            <div class="item-details">
-                                <h4>USB-C Cable (2-pack)</h4>
-                                <p class="seller">by AudioGear</p>
-                                <p class="quantity">Qty: 2</p>
-                            </div>
-                            <div class="item-price">$19.98</div>
-                        </div>
+                <div class="payment-option">
+                    <div class="radio-btn"></div>
+                    <div class="payment-logo">
+                        <div style="width: 60px; height: 24px; border: 1px solid #e5e5e5; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 10px;">G Pay</div>
+                        <span style="font-size: 14px; font-weight: 500;">Google Pay</span>
                     </div>
+                </div>
 
-                    <!-- Price Breakdown -->
-                    <div class="price-breakdown">
-                        <div class="price-row">
-                            <span>Subtotal</span>
-                            <span>$99.97</span>
-                        </div>
-                        <div class="price-row">
-                            <span>Shipping</span>
-                            <span id="shipping-cost">FREE</span>
-                        </div>
-                        <div class="price-row">
-                            <span>Tax</span>
-                            <span>$8.49</span>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="price-row total">
-                            <span>Total</span>
-                            <span id="total-price">$108.46</span>
-                        </div>
+                <div class="payment-option">
+                    <div class="radio-btn"></div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="width: 60px; height: 24px; border: 1px solid #e5e5e5; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 9px;">Apple Pay</div>
+                        <span class="info-icon">i</span>
                     </div>
+                </div>
+            </div>
 
-                    <!-- Place Order Button -->
-                    <button class="btn-primary" id="place-order-btn">Place Your Order</button>
-                    
-                    <!-- Continue Shopping -->
-                    <button class="btn-secondary">Continue Shopping</button>
-
-                    <!-- Trust Signals -->
-                    <div class="trust-signals">
-                        <p>✓ Secure payment</p>
-                        <p>✓ eBay Money Back Guarantee</p>
-                        <p>✓ Buyer Protection</p>
-                    </div>
-                </aside>
+            <!-- Ship to Section -->
+            <div class="section">
+                <h2 class="section-title">Ship to</h2>
+                <div class="address-text">
+                    <div style="font-weight: 600; margin-bottom: 4px;">Vu Duc Hai 14</div>
+                    <div>Hai Duong Province, Tu Ky District, Dan Chu</div>
+                    <div>Hai Duong, Hai Duong Province, Tu Ky District, Dan Chu 02203</div>
+                    <div>Vietnam</div>
+                    <div>966457993</div>
+                </div>
+                <a href="#" class="change-link">Change</a>
             </div>
-        </div>
-    </main>
-
-	<!-- Order Confirmation Modal -->
-    <div class="modal" id="confirmation-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Order Confirmed!</h2>
-                <button class="close-btn">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="success-icon">✓</div>
-                <p>Thank you for your purchase!</p>
-                <p class="order-id">Order #<span id="order-number"></span></p>
-                <p>A confirmation email has been sent to your email address.</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-primary" onclick="window.location.reload()">Back to Shopping</button>
-            </div>
-        </div>
-    </div>
 
             <!-- Review order Section -->
             <div class="section">
@@ -307,7 +454,81 @@
                     </div>
                 </div>
 
-	<script src="assets/js/checkout.js"></script>
+                <div class="delivery-options">
+                    <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Delivery</h3>
+                    
+                    <div class="delivery-option delivery-selected">
+                        <div class="radio-btn"></div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600; margin-bottom: 4px;">Free Economy International Shipping</div>
+                            <div style="font-size: 13px; color: #767676;">Est. delivery: Dec 22 – Jan 20</div>
+                        </div>
+                    </div>
 
+                    <div class="delivery-option">
+                        <div class="radio-btn"></div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600; margin-bottom: 4px;">Est. delivery: Dec 15 - Dec 31</div>
+                            <div style="font-size: 13px; color: #767676;">Standard International Shipping</div>
+                            <div style="font-size: 14px; font-weight: 600; margin-top: 4px;">US $1.99</div>
+                        </div>
+                    </div>
+
+                    <div class="delivery-option">
+                        <div class="radio-btn"></div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600; margin-bottom: 4px;">Est. delivery: Nov 25 - Dec 5</div>
+                            <div style="font-size: 13px; color: #767676;">Expedited International Shipping</div>
+                            <div style="font-size: 14px; font-weight: 600; margin-top: 4px;">US $12.99</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gift cards and coupons Section -->
+            <div class="section">
+                <h2 class="section-title">Gift cards and coupons</h2>
+                <p style="font-size: 13px; color: #767676; margin-bottom: 12px;">Apply coupons or add eBay gift cards to your account. Once added, gift cards can't be removed.</p>
+                <div class="coupon-input">
+                    <input type="text" placeholder="Enter code:">
+                    <button class="apply-btn">Apply</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary Sidebar -->
+        <div class="sidebar">
+            <div class="section">
+                <h2 class="section-title">Order Summary</h2>
+                
+                <div class="summary-row">
+                    <span>Item (1)</span>
+                    <span>US $14.58</span>
+                </div>
+                
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span>Free</span>
+                </div>
+
+                <div class="total-row">
+                    <span>Order total</span>
+                    <div>
+                        <div>US $14.58</div>
+                        <div class="vnd-price">456,495.00 VND</div>
+                    </div>
+                </div>
+
+                <button class="confirm-btn">Confirm and pay</button>
+                <div class="payment-notice">Select a payment method</div>
+
+                <div class="guarantee-badge">
+                    <div class="shield-icon">🛡</div>
+                    <span style="font-size: 13px;">Purchases protected by</span>
+                    <a href="#" class="guarantee-link">eBay Money Back Guarantee</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

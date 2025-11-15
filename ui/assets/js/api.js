@@ -1,5 +1,5 @@
 // Base URL
-const API_BASE_URL = "https://localhost:7020";
+const API_BASE_URL = "https://localhost:5000";
 
 $.ajaxSetup({
     beforeSend: function (xhr, settings) {
