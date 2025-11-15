@@ -1,467 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Feedbacks - eBay Clone</title>
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/feedback.css">
-    
-    <style>
-        body {
-            background-color: #f7f7f7;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        .page-header {
-            background: white;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .feedback-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-        
-        .feedback-actions .btn {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-        }
-        
-        .edit-within-60 {
-            color: #16c79a;
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
-        }
-        
-        .cannot-edit {
-            color: #707a84;
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
-        }
-        
-        .product-link {
-            color: #3665f3;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        .product-link:hover {
-            text-decoration: underline;
-        }
-    </style>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>My Feedbacks - eBay Clone</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="assets/css/feedback-management.css">
 </head>
+
 <body>
-    <!-- Page Header -->
-    <div class="page-header">
-        <div class="container">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-3">
-                    <a href="my-orders.html" class="btn btn-link text-decoration-none">
-                        <i class="bi bi-arrow-left"></i> Back
-                    </a>
-                    <h1 class="h3 mb-0">My Feedback</h1>
-                </div>
-                <div>
-                    <span class="badge bg-primary" id="totalFeedbacksBadge">0 Feedbacks</span>
-                </div>
-            </div>
-        </div>
-    </div>
+	<!-- Back Button -->
+	<div class="container mt-3">
+		<a href="index.html" class="btn btn-back">
+			<i class="fas fa-arrow-left me-2"></i>Back to Home
+		</a>
+	</div>
 
-    <div class="container mb-5">
-        <!-- Summary Stats -->
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h3 class="text-success" id="positiveCount">0</h3>
-                        <p class="text-muted mb-0">Positive</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h3 class="text-warning" id="neutralCount">0</h3>
-                        <p class="text-muted mb-0">Neutral</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h3 class="text-danger" id="negativeCount">0</h3>
-                        <p class="text-muted mb-0">Negative</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+	<!-- Header -->
+	<div class="feedback-page-header">
+		<div class="container">
+			<h1 class="mb-0"><i class="fas fa-star me-2"></i>My Feedback</h1>
+			<p class="mb-0 mt-2">View and manage your feedback history</p>
+		</div>
+	</div>
 
-        <!-- Feedback List -->
-        <div class="feedback-list">
-            <h5 class="mb-4">Feedback History</h5>
-            <div id="feedbackListContainer">
-                <!-- Loading spinner -->
-                <div class="text-center py-5">
-                    <div class="loading-spinner"></div>
-                    <p class="text-muted mt-3">Loading your feedbacks...</p>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="container">
+		<!-- Summary Stats -->
+		<div class="row mb-4">
+			<div class="col-md-4">
+				<div class="stat-card stat-positive">
+					<div class="stat-icon"><i class="fas fa-smile"></i></div>
+					<div class="stat-content">
+						<h3 id="positiveCount">0</h3>
+						<p>Positive</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="stat-card stat-neutral">
+					<div class="stat-icon"><i class="fas fa-meh"></i></div>
+					<div class="stat-content">
+						<h3 id="neutralCount">0</h3>
+						<p>Neutral</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="stat-card stat-negative">
+					<div class="stat-icon"><i class="fas fa-frown"></i></div>
+					<div class="stat-content">
+						<h3 id="negativeCount">0</h3>
+						<p>Negative</p>
+					</div>
+				</div>
+			</div>
+		</div>
 
-    <!-- Edit Feedback Modal -->
-    <div class="modal fade" id="editFeedbackModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Feedback</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editFeedbackForm">
-                        <input type="hidden" id="editFeedbackId">
-                        
-                        <!-- Feedback Type -->
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Experience Type</label>
-                            <div class="feedback-type-selector">
-                                <button type="button" class="feedback-type-btn positive" data-type="positive">
-                                    Positive
-                                </button>
-                                <button type="button" class="feedback-type-btn neutral" data-type="neutral">
-                                    Neutral
-                                </button>
-                                <button type="button" class="feedback-type-btn negative" data-type="negative">
-                                    Negative
-                                </button>
-                            </div>
-                            <input type="hidden" id="editFeedbackType">
-                        </div>
-                        
-                        <!-- Comment -->
-                        <div class="mb-3">
-                            <label for="editComment" class="form-label fw-bold">Comment</label>
-                            <textarea class="form-control" id="editComment" rows="4" maxlength="500"></textarea>
-                        </div>
-                        
-                        <!-- Ratings -->
-                        <div class="rating-group">
-                            <label class="fw-bold">Item Description</label>
-                            <div class="star-rating-input" data-rating-name="editItemDescRating">
-                                <span class="star" data-value="1">★</span>
-                                <span class="star" data-value="2">★</span>
-                                <span class="star" data-value="3">★</span>
-                                <span class="star" data-value="4">★</span>
-                                <span class="star" data-value="5">★</span>
-                            </div>
-                            <input type="hidden" id="editItemDescRating">
-                        </div>
-                        
-                        <div class="rating-group">
-                            <label class="fw-bold">Communication</label>
-                            <div class="star-rating-input" data-rating-name="editCommRating">
-                                <span class="star" data-value="1">★</span>
-                                <span class="star" data-value="2">★</span>
-                                <span class="star" data-value="3">★</span>
-                                <span class="star" data-value="4">★</span>
-                                <span class="star" data-value="5">★</span>
-                            </div>
-                            <input type="hidden" id="editCommRating">
-                        </div>
-                        
-                        <div class="rating-group">
-                            <label class="fw-bold">Shipping Speed</label>
-                            <div class="star-rating-input" data-rating-name="editShipSpeedRating">
-                                <span class="star" data-value="1">★</span>
-                                <span class="star" data-value="2">★</span>
-                                <span class="star" data-value="3">★</span>
-                                <span class="star" data-value="4">★</span>
-                                <span class="star" data-value="5">★</span>
-                            </div>
-                            <input type="hidden" id="editShipSpeedRating">
-                        </div>
-                        
-                        <div class="rating-group">
-                            <label class="fw-bold">Shipping Cost</label>
-                            <div class="star-rating-input" data-rating-name="editShipCostRating">
-                                <span class="star" data-value="1">★</span>
-                                <span class="star" data-value="2">★</span>
-                                <span class="star" data-value="3">★</span>
-                                <span class="star" data-value="4">★</span>
-                                <span class="star" data-value="5">★</span>
-                            </div>
-                            <input type="hidden" id="editShipCostRating">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="saveEditBtn">Save Changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
+		<!-- Filters -->
+		<div class="filter-card">
+			<div class="row g-3">
+				<div class="col-md-4">
+					<label class="form-label"><i class="fas fa-filter me-2"></i>Filter by Type</label>
+					<select id="typeFilter" class="form-select">
+						<option value="">All Feedbacks</option>
+						<option value="positive">Positive</option>
+						<option value="neutral">Neutral</option>
+						<option value="negative">Negative</option>
+					</select>
+				</div>
+				<div class="col-md-4">
+					<label class="form-label"><i class="fas fa-sort me-2"></i>Sort By</label>
+					<select id="sortOrder" class="form-select">
+						<option value="newest">Newest First</option>
+						<option value="oldest">Oldest First</option>
+					</select>
+				</div>
+				<div class="col-md-4 d-flex align-items-end">
+					<button id="applyFilters" class="btn btn-view-detail w-100">
+						<i class="fas fa-search me-2"></i>Apply Filters
+					</button>
+				</div>
+			</div>
+		</div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Feedback API -->
-    <script src="assets/js/feedback-api.js"></script>
-    <!-- Feedback UI -->
-    <script src="assets/js/feedback-ui.js"></script>
-    
-    <!-- Page Logic -->
-    <script>
-        let myFeedbacks = [];
-        let editModal = null;
-        let editRatings = {};
+		<!-- Feedbacks List -->
+		<div id="feedbacksContainer">
+			<!-- Loading indicator -->
+			<div id="loading" class="text-center py-5">
+				<div class="spinner-border text-primary" role="status">
+					<span class="visually-hidden">Loading...</span>
+				</div>
+				<p class="mt-3">Loading your feedbacks...</p>
+			</div>
+		</div>
+	</div>
 
-        // Check if logged in
-        if (!isLoggedIn()) {
-            showToast('Please login to view your feedbacks', 'error');
-            setTimeout(() => window.location.href = 'login.html', 1500);
-        }
+	<!-- Edit Feedback Modal -->
+	<div class="modal fade" id="editFeedbackModal" tabindex="-1">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title"><i class="fas fa-edit me-2"></i>Edit Feedback</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<form id="editFeedbackForm">
+						<input type="hidden" id="editFeedbackId">
+						
+						<!-- Feedback Type -->
+						<div class="mb-3">
+							<label class="form-label fw-bold">Experience Type</label>
+							<div class="feedback-type-selector">
+								<button type="button" class="feedback-type-btn positive" data-type="positive">
+									<i class="fas fa-smile"></i> Positive
+								</button>
+								<button type="button" class="feedback-type-btn neutral" data-type="neutral">
+									<i class="fas fa-meh"></i> Neutral
+								</button>
+								<button type="button" class="feedback-type-btn negative" data-type="negative">
+									<i class="fas fa-frown"></i> Negative
+								</button>
+							</div>
+							<input type="hidden" id="editFeedbackType">
+						</div>
+						
+						<!-- Comment -->
+						<div class="mb-3">
+							<label for="editComment" class="form-label fw-bold">Comment</label>
+							<textarea class="form-control" id="editComment" rows="4" maxlength="500"></textarea>
+							<div class="text-end text-muted small mt-1">
+								<span id="editCommentCount">0</span> / 500
+							</div>
+						</div>
+						
+						<!-- Ratings -->
+						<div class="rating-group">
+							<label class="fw-bold">Item Description</label>
+							<div class="star-rating-input" data-rating-name="editItemDescRating">
+								<span class="star" data-value="1">★</span>
+								<span class="star" data-value="2">★</span>
+								<span class="star" data-value="3">★</span>
+								<span class="star" data-value="4">★</span>
+								<span class="star" data-value="5">★</span>
+							</div>
+							<input type="hidden" id="editItemDescRating">
+						</div>
+						
+						<div class="rating-group">
+							<label class="fw-bold">Communication</label>
+							<div class="star-rating-input" data-rating-name="editCommRating">
+								<span class="star" data-value="1">★</span>
+								<span class="star" data-value="2">★</span>
+								<span class="star" data-value="3">★</span>
+								<span class="star" data-value="4">★</span>
+								<span class="star" data-value="5">★</span>
+							</div>
+							<input type="hidden" id="editCommRating">
+						</div>
+						
+						<div class="rating-group">
+							<label class="fw-bold">Shipping Speed</label>
+							<div class="star-rating-input" data-rating-name="editShipSpeedRating">
+								<span class="star" data-value="1">★</span>
+								<span class="star" data-value="2">★</span>
+								<span class="star" data-value="3">★</span>
+								<span class="star" data-value="4">★</span>
+								<span class="star" data-value="5">★</span>
+							</div>
+							<input type="hidden" id="editShipSpeedRating">
+						</div>
+						
+						<div class="rating-group">
+							<label class="fw-bold">Shipping Cost</label>
+							<div class="star-rating-input" data-rating-name="editShipCostRating">
+								<span class="star" data-value="1">★</span>
+								<span class="star" data-value="2">★</span>
+								<span class="star" data-value="3">★</span>
+								<span class="star" data-value="4">★</span>
+								<span class="star" data-value="5">★</span>
+							</div>
+							<input type="hidden" id="editShipCostRating">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-view-detail" id="saveEditBtn">
+						<i class="fas fa-save me-2"></i>Save Changes
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
-        // Load my feedbacks
-        async function loadMyFeedbacks() {
-            try {
-                const response = await FeedbackAPI.getMyFeedbacks();
-                myFeedbacks = response.data || [];
-                
-                // Update stats
-                const positive = myFeedbacks.filter(f => f.feedbackType === 'positive').length;
-                const neutral = myFeedbacks.filter(f => f.feedbackType === 'neutral').length;
-                const negative = myFeedbacks.filter(f => f.feedbackType === 'negative').length;
-                
-                document.getElementById('totalFeedbacksBadge').textContent = `${myFeedbacks.length} Feedbacks`;
-                document.getElementById('positiveCount').textContent = positive;
-                document.getElementById('neutralCount').textContent = neutral;
-                document.getElementById('negativeCount').textContent = negative;
-                
-                // Render feedbacks
-                renderFeedbacks();
-                
-            } catch (error) {
-                console.error('Error loading feedbacks:', error);
-                showToast('Failed to load feedbacks', 'error');
-            }
-        }
-
-        // Render feedbacks
-        function renderFeedbacks() {
-            const container = document.getElementById('feedbackListContainer');
-            
-            if (myFeedbacks.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="bi bi-chat-left-text"></i>
-                        <h5>No Feedback Yet</h5>
-                        <p>You haven't left any feedback yet.</p>
-                        <a href="my-orders.html" class="btn btn-primary mt-3">
-                            View My Orders
-                        </a>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = myFeedbacks.map(feedback => {
-                const daysSince = Math.floor((new Date() - new Date(feedback.createdAt)) / (1000 * 60 * 60 * 24));
-                const canEdit = daysSince <= 60;
-                
-                return `
-                    <div class="feedback-item">
-                        <div class="feedback-header">
-                            <div>
-                                <div class="fw-bold">
-                                    Feedback for 
-                                    <a href="seller-feedback.html?sellerId=${feedback.sellerId}" class="product-link">
-                                        ${feedback.sellerUsername}
-                                    </a>
-                                </div>
-                                <div class="text-muted small">
-                                    Order #${feedback.orderNumber} • ${formatDate(feedback.createdAt)}
-                                    ${feedback.isEdited ? '<span class="badge bg-secondary ms-2">Edited</span>' : ''}
-                                </div>
-                            </div>
-                            <span class="feedback-badge ${feedback.feedbackType}">
-                                ${feedback.feedbackType.charAt(0).toUpperCase() + feedback.feedbackType.slice(1)}
-                            </span>
-                        </div>
-                        
-                        ${feedback.comment ? `
-                            <div class="feedback-comment">${feedback.comment}</div>
-                        ` : ''}
-                        
-                        <div class="feedback-ratings-detail">
-                            <div class="feedback-rating-item">
-                                <span class="label">Item Description</span>
-                                <span class="value">${renderStars(feedback.itemDescriptionRating)}</span>
-                            </div>
-                            <div class="feedback-rating-item">
-                                <span class="label">Communication</span>
-                                <span class="value">${renderStars(feedback.communicationRating)}</span>
-                            </div>
-                            <div class="feedback-rating-item">
-                                <span class="label">Shipping Speed</span>
-                                <span class="value">${renderStars(feedback.shippingSpeedRating)}</span>
-                            </div>
-                            <div class="feedback-rating-item">
-                                <span class="label">Shipping Cost</span>
-                                <span class="value">${renderStars(feedback.shippingCostRating)}</span>
-                            </div>
-                        </div>
-                        
-                        <div class="feedback-actions">
-                            ${canEdit ? `
-                                <button class="btn btn-outline-primary btn-sm" onclick="openEditModal(${feedback.id})">
-                                    <i class="bi bi-pencil"></i> Edit
-                                </button>
-                                <button class="btn btn-outline-danger btn-sm" onclick="deleteFeedback(${feedback.id})">
-                                    <i class="bi bi-trash"></i> Delete
-                                </button>
-                                <div class="edit-within-60">
-                                    <i class="bi bi-info-circle"></i> Can edit within 60 days (${60 - daysSince} days left)
-                                </div>
-                            ` : `
-                                <div class="cannot-edit">
-                                    <i class="bi bi-lock"></i> Cannot edit (more than 60 days old)
-                                </div>
-                            `}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Open edit modal
-        window.openEditModal = function(feedbackId) {
-            const feedback = myFeedbacks.find(f => f.id === feedbackId);
-            if (!feedback) return;
-            
-            // Populate form
-            document.getElementById('editFeedbackId').value = feedbackId;
-            document.getElementById('editComment').value = feedback.comment || '';
-            
-            // Set feedback type
-            document.querySelectorAll('#editFeedbackModal .feedback-type-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.type === feedback.feedbackType) {
-                    btn.classList.add('active');
-                }
-            });
-            document.getElementById('editFeedbackType').value = feedback.feedbackType;
-            
-            // Set ratings
-            editRatings = {
-                editItemDescRating: feedback.itemDescriptionRating,
-                editCommRating: feedback.communicationRating,
-                editShipSpeedRating: feedback.shippingSpeedRating,
-                editShipCostRating: feedback.shippingCostRating
-            };
-            
-            // Update star displays
-            Object.keys(editRatings).forEach(key => {
-                const container = document.querySelector(`[data-rating-name="${key}"]`);
-                const stars = container.querySelectorAll('.star');
-                stars.forEach((star, idx) => {
-                    if (idx < editRatings[key]) {
-                        star.classList.add('active');
-                    } else {
-                        star.classList.remove('active');
-                    }
-                });
-            });
-            
-            // Show modal
-            editModal = new bootstrap.Modal(document.getElementById('editFeedbackModal'));
-            editModal.show();
-        };
-
-        // Delete feedback
-        window.deleteFeedback = async function(feedbackId) {
-            if (!confirm('Are you sure you want to delete this feedback?')) return;
-            
-            try {
-                await FeedbackAPI.deleteFeedback(feedbackId);
-                showToast('Feedback deleted successfully', 'success');
-                loadMyFeedbacks();
-            } catch (error) {
-                console.error('Error deleting feedback:', error);
-            }
-        };
-
-        // Save edit
-        document.getElementById('saveEditBtn').addEventListener('click', async function() {
-            const feedbackId = parseInt(document.getElementById('editFeedbackId').value);
-            const feedbackType = document.getElementById('editFeedbackType').value;
-            const comment = document.getElementById('editComment').value;
-            
-            if (!feedbackType) {
-                showToast('Please select feedback type', 'error');
-                return;
-            }
-            
-            const updateData = {
-                feedbackType: feedbackType,
-                comment: comment || null,
-                itemDescriptionRating: editRatings.editItemDescRating || null,
-                communicationRating: editRatings.editCommRating || null,
-                shippingSpeedRating: editRatings.editShipSpeedRating || null,
-                shippingCostRating: editRatings.editShipCostRating || null
-            };
-            
-            try {
-                await FeedbackAPI.updateFeedback(feedbackId, updateData);
-                showToast('Feedback updated successfully', 'success');
-                editModal.hide();
-                loadMyFeedbacks();
-            } catch (error) {
-                console.error('Error updating feedback:', error);
-            }
-        });
-
-        // Modal feedback type selector
-        document.querySelectorAll('#editFeedbackModal .feedback-type-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('#editFeedbackModal .feedback-type-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                document.getElementById('editFeedbackType').value = this.dataset.type;
-            });
-        });
-
-        // Modal star ratings
-        document.querySelectorAll('#editFeedbackModal .star-rating-input').forEach(ratingGroup => {
-            const stars = ratingGroup.querySelectorAll('.star');
-            const ratingName = ratingGroup.dataset.ratingName;
-            
-            stars.forEach(star => {
-                star.addEventListener('click', function() {
-                    const value = parseInt(this.dataset.value);
-                    editRatings[ratingName] = value;
-                    
-                    stars.forEach((s, idx) => {
-                        if (idx < value) {
-                            s.classList.add('active');
-                        } else {
-                            s.classList.remove('active');
-                        }
-                    });
-                });
-            });
-        });
-
-        // Load feedbacks on page load
-        loadMyFeedbacks();
-    </script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="assets/js/my-feedbacks.js"></script>
 </body>
+
 </html>
