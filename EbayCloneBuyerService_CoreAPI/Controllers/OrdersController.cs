@@ -2,6 +2,7 @@ using EbayCloneBuyerService_CoreAPI.Exceptions;
 using EbayCloneBuyerService_CoreAPI.Models.Requests;
 using EbayCloneBuyerService_CoreAPI.Models.Responses;
 using EbayCloneBuyerService_CoreAPI.Services.Interface;
+using EbayCloneBuyerService_CoreAPI.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -228,6 +229,61 @@ namespace EbayCloneBuyerService_CoreAPI.Controllers
                     ex.Message
                 );
                 return StatusCode(StatusCodes.Status500InternalServerError, response);
+            }
+        }
+
+        /// <summary>
+        /// Creates a new order for the authenticated user based on the specified order details.
+        /// </summary>
+        /// <remarks>This action requires the user to be authenticated. The order will only be placed if
+        /// the request contains at least one valid item. In case of business rule violations, a conflict response is
+        /// returned with a descriptive message.</remarks>
+        /// <param name="request">The order information to be placed, including the list of items and any additional order details. Must not
+        /// be null and must contain at least one item.</param>
+        /// <returns>An <see cref="IActionResult"/> that represents the result of the order placement operation. Returns <see
+        /// cref="OkResult"/> with order details if successful, <see cref="UnauthorizedResult"/> if the user is not
+        /// authenticated, <see cref="BadRequestResult"/> if the request is invalid, <see cref="ConflictResult"/> if the
+        /// order cannot be placed due to business constraints, or <see cref="StatusCodeResult"/> with status 500 for
+        /// unexpected errors.</returns>
+        [HttpPost]
+        public async Task<IActionResult> PlaceOrder([FromBody] PlaceOrderRequest request)
+        {
+            var userId = User.GetUserId();
+
+            if (userId <= 0)
+            {
+                return Unauthorized(new { Message = "No authen" });
+            }
+
+           
+            if (request.Items == null || !request.Items.Any())
+            {
+                return BadRequest(new { Message = "Empty list" });
+            }
+
+            try
+            {
+                var orderId = await _orderService.PlaceOrderAsync(userId, request);
+
+              
+                return Ok(new
+                {
+                    Message = "??t hàng thành công",
+                    OrderId = orderId,
+                 
+                    OrderNumber = $"ORD-{orderId}"
+                });
+            }
+            catch (InvalidOperationException ex)
+            {
+               
+                return Conflict(new { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+              
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { Message = "Server error" });
             }
         }
     }

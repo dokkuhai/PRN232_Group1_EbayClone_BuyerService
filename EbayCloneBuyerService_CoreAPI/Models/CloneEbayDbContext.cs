@@ -65,8 +65,9 @@ public partial class CloneEbayDbContext : DbContext
     public virtual DbSet<UserRememberToken> UserRememberTokens { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=13.229.143.154;port=3307;database=CloneEbayDB;user=root;password=root", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.44-mysql"));
+    {
+
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
