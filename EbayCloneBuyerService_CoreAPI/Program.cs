@@ -1,6 +1,7 @@
+using EbayCloneBuyerService_CoreAPI.Hubs;
+using EbayCloneBuyerService_CoreAPI.Models;
 using DotNetEnv;
 using EbayCloneBuyerService_CoreAPI.Exceptions;
-using EbayCloneBuyerService_CoreAPI.Models;
 using EbayCloneBuyerService_CoreAPI.MyProfile;
 using EbayCloneBuyerService_CoreAPI.Repositories.Impl;
 using EbayCloneBuyerService_CoreAPI.Repositories.Interface;
@@ -18,9 +19,15 @@ using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<HostOptions>(options =>
+{
+    options.ShutdownTimeout = TimeSpan.FromSeconds(20);
+});
+
+
 builder.Services.AddHttpClient();
-// Add services to the container.
-// Load file .env
+
 Env.Load();
 
 
@@ -33,6 +40,9 @@ builder.Services.AddControllers()
     .AddOData(options =>
         options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null)
             .AddRouteComponents("api", GetEdmModel()));
+
+builder.Services.AddHttpClient();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -74,6 +84,8 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddAuthorization();
 
+
+
 //==== AutoMapper =====
 builder.Services.AddAutoMapper(cfg => {
     cfg.AddProfile<UserProfile>();
@@ -96,6 +108,22 @@ builder.Services.AddDbContext<CloneEbayDbContext>(options =>
 
 // ===== DI: Repository & Service =====
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IProductRepo, ProductRepo>();
+builder.Services.AddScoped<IProductServices, ProductServices>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+// SignalR
+builder.Services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = true;
+    options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+});
+
+builder.Services.AddScoped<IFeedbackService, FeedbackService>();
+
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRememberTokenRepository, RememberTokenRepository>();
@@ -144,8 +172,9 @@ app.UseAuthorization();
 
 
 app.MapControllers();
-//====== Exception Middleware =====
-app.UseMiddleware<ExceptionMiddleware>();
+// ===== SignalR Hub =====
+app.MapHub<NotificationHub>("/hubs/notification");
+
 app.Run();
 
 static IEdmModel GetEdmModel()
